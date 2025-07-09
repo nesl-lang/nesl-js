@@ -13,9 +13,20 @@ export interface ParseOptions {
   maxValueLength?: number; // default: 1048576 (1MB)
 }
 
+export const defaultConfig: ParseOptions = {
+  stringOpen: 'R"""pv(',
+  stringClose: ')pv"""',
+  blockStart: '<<<<<<<<<nesl',
+  blockEnd: '=========nesl',
+  maxKeyLength: 256,
+  maxValueLength: 1048576
+};
+
 // Error codes from test cases
 export type ErrorCode = 
   | 'string_unterminated'
+  | 'string_not_found'
+  | 'string_not_at_value_position'
   | 'delimiter_mismatch'
   | 'invalid_context'
   | 'invalid_key'

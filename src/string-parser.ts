@@ -1,55 +1,48 @@
-import { StringResult, ParseOptions } from './types.js';
-
-const DEFAULT_MARKERS = {
-  stringOpen: 'R"""pv(',
-  stringClose: ')pv"""',
-};
+import { StringResult } from './types.js';
 
 /**
- * Parse a NESL string literal from a line.
- * Algorithm: Find first stringOpen, find LAST stringClose, extract content between.
+ * Parses a string literal from the given input.
  * 
- * @param line - The line to parse
- * @param options - Parser options with custom markers
- * @returns Parsed string value or error
+ * The entire input must be a valid string literal with optional surrounding whitespace.
+ * No content is allowed before the opening marker or after the closing marker.
+ * 
+ * @param input - The string to parse (should contain only the string literal)
+ * @param openMarker - Opening delimiter (default: 'R"""pv(')
+ * @param closeMarker - Closing delimiter (default: ')pv"""')
+ * @returns Either the extracted string value or an error
  */
-export function parseString(
-  line: string,
-  options: ParseOptions = {}
+export function parseStringLiteral(
+  input: string,
+  openMarker = 'R"""pv(',
+  closeMarker = ')pv"""'
 ): StringResult {
-  const markers = {
-    stringOpen: options.stringOpen || DEFAULT_MARKERS.stringOpen,
-    stringClose: options.stringClose || DEFAULT_MARKERS.stringClose,
-  };
-
-  const startIdx = line.indexOf(markers.stringOpen);
-  if (startIdx === -1) {
-    return { success: false, error: 'string_unterminated' };
+  const trimmed = input.trim();
+  
+  // Empty input
+  if (!trimmed) {
+    return { success: false, error: 'string_not_found' };
+  }
+  
+  // Must start with open marker
+  if (!trimmed.startsWith(openMarker)) {
+    return { success: false, error: 'string_not_found' };
   }
 
-  const lastEndIdx = line.lastIndexOf(markers.stringClose);
-  if (lastEndIdx === -1) {
+  // Find last occurrence of close marker (per spec)
+  const closeIndex = trimmed.lastIndexOf(closeMarker);
+  
+  // No close marker found
+  if (closeIndex === -1 || closeIndex <= openMarker.length - 1) {
     return { success: false, error: 'string_unterminated' };
   }
-
-  // Ensure closing marker comes after opening marker
-  const minEndPosition = startIdx + markers.stringOpen.length;
-  if (lastEndIdx < minEndPosition) {
-    return { success: false, error: 'string_unterminated' };
-  }
-
-  // Check for content after closing marker
-  const afterContent = line.slice(lastEndIdx + markers.stringClose.length);
-  if (afterContent.trim()) {
+  
+  // Content after close marker
+  if (closeIndex + closeMarker.length !== trimmed.length) {
     return { success: false, error: 'content_after_string' };
   }
 
-  const value = line.slice(startIdx + markers.stringOpen.length, lastEndIdx);
+  // Extract content between markers
+  const content = trimmed.substring(openMarker.length, closeIndex);
   
-  // Check max length if specified
-  if (options.maxValueLength && value.length > options.maxValueLength) {
-    return { success: false, error: 'string_unterminated' }; // No specific error code for length
-  }
-
-  return { success: true, value };
+  return { success: true, value: content };
 }

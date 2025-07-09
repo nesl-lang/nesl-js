@@ -1,4 +1,5 @@
-export { parseString } from './string-parser.js';
+export { parseStringLiteral } from './string-parser.js';
+export { defaultConfig } from './types.js';
 export type { 
   NeslValue, 
   NeslObject, 
