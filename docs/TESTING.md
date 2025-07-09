@@ -2,6 +2,8 @@
 
 Test suite for NESL parser implementations. All parsers must produce identical output for all test cases.
 
+TDD development - red/green/refactor
+
 ## Structure
 
 ```

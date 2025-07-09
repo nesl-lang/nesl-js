@@ -1,5 +1,7 @@
 # NESL Parser Architecture
 
+TDD development - red/green/refactor
+
 ## Overview
 
 Two-pass parser design:
@@ -16,6 +18,8 @@ This separation enables clean error boundaries and simplified line tracking.
 
 **Input**: Full document string  
 **Output**: Array of blocks with content and line numbers, or fatal errors
+
+**Testing**: Unit tests in `nesl-test/tests/unit/block-extraction/`. Tests verify block boundary detection, line number tracking, and error cases (unclosed blocks, orphaned markers) in isolation.
 
 **Algorithm**:
 - Line-by-line scan for block markers
@@ -46,6 +50,8 @@ Line 6: More text          [ignored]
 **Input**: Single line (trimmed or untrimmed)  
 **Output**: String value or specific error code
 
+**Testing**: Unit tests in `nesl-test/tests/unit/string-literals/`. Tests verify delimiter parsing, edge cases (multiple markers, unterminated strings), and custom delimiter support in isolation.
+
 **Algorithm**:
 1. Trim input
 2. Verify starts with `R"""pv(`
@@ -70,6 +76,11 @@ Line 6: More text          [ignored]
 
 **Input**: Block content (no markers), starting line number  
 **Output**: Parsed value tree and non-fatal errors
+
+**Testing**: No dedicated unit tests. Tested through integration tests in `nesl-test/tests/integration/` because:
+- State machine behavior is best verified through complete examples
+- Error recovery spans multiple lines, making isolated testing artificial
+- Integration tests already provide clear error localization
 
 **State machine design**:
 - Three states: OBJECT, ARRAY, MULTILINE
@@ -180,6 +191,8 @@ Example:
 ### 4. Main Parser (`parse`)
 
 **Purpose**: Orchestrate the two-pass parsing and merge results.
+
+**Testing**: Integration tests in `nesl-test/tests/integration/`. Tests verify the complete parsing pipeline including block extraction, parsing, and error aggregation across multiple blocks.
 
 **Algorithm**:
 1. Extract blocks
@@ -331,3 +344,90 @@ ParseOptions {
 ```
 
 This enables adjustment without code modification if requirements change.
+
+## Configuration Handling
+
+All parser components accept optional configuration through a unified `ParseOptions` interface:
+
+```typescript
+interface ParseOptions {
+  stringOpen?: string;   // default: 'R"""pv('
+  stringClose?: string;  // default: ')pv"""'
+  blockStart?: string;   // default: '<<<<<<<<<nesl'
+  blockEnd?: string;     // default: '=========nesl'
+  maxKeyLength?: number; // default: 256
+  maxValueLength?: number; // default: 1048576
+}
+```
+
+**Component responsibilities:**
+- `extractBlocks()` - uses `blockStart/blockEnd` only
+- `parseStringLiteral()` - uses `stringOpen/stringClose` only
+- `parseBlock()` - passes `stringOpen/stringClose` to string parser
+- `parse()` - passes full config to all components
+
+**Test configuration:**
+Test cases specify custom markers via JSON metadata:
+
+```json
+{
+  "config": {
+    "blockStart": "<<<START>>>",
+    "blockEnd": "===END===",
+    "stringOpen": "%%%[",
+    "stringClose": "]%%%"
+  },
+  "expected": [{"key": "value"}],
+  "errors": []
+}
+```
+
+Missing config fields use defaults. This enables testing parser behavior with arbitrary syntax markers while maintaining backward compatibility.
+
+**Implementation pattern:**
+```typescript
+function parseBlock(content: string, startLine: number, options?: ParseOptions) {
+  const config = { ...defaultConfig, ...options };
+  // Pass config.stringOpen/Close to parseStringLiteral()
+}
+```
+
+testing: Run entire test suite with different configs:
+
+Default markers
+Custom markers set 1: %%%[...]%%%, <<<START>>>/===END===
+Custom markers set 2: {{...}}, ---BEGIN---/---FINISH---
+
+This verifies parser doesn't hardcode delimiters anywhere.
+Implementation: Test runner accepts config override:
+bashnpm test -- --config custom1.json
+Catches hardcoded string literals that should use config.
+
+# future concerns:
+
+brainstorm more about this:Main Parser (parse)
+Purpose: Orchestrate the two-pass parsing and merge results.
+Testing: Integration tests in nesl-test/tests/integration/.will we need more test cases to cover this?  or we have enough already.  wdyt?EditLooking at the main parser's responsibilities:
+
+Call extractBlocks()
+If block errors → return them (fatal)
+For each block: call parseBlock()
+Merge values and errors
+Adjust line numbers to file-relative
+
+The existing integration tests don't explicitly verify orchestration edge cases:
+Missing coverage:
+
+Mixed success/failure across blocks - What if block 1 parses fine but block 2 has errors? The architecture says "If ANY block has errors, return only errors (no data array)" but I don't see tests for this.
+Line number adjustment - When block 2 starts at line 20 and has an error on its line 3, does the error report line 23? Integration tests might verify this implicitly, but it's not clear.
+Empty input - What does parse("") return? {data: [], errors: []} or error?
+Block extraction fatal vs parser non-fatal - Architecture distinguishes these but tests don't verify the boundary.
+
+Looking at the concatenated tests, most integration tests have either:
+
+Single block (no orchestration complexity)
+Multiple successful blocks
+Errors within a single block
+
+The /integration/blocks/ directory has multi-block tests but they're all successful parses. The /integration/errors/ directory has single-block error cases.
+Verdict: Need 2-3 more integration tests for orchestration edge cases, particularly mixed success/failure across multiple blocks.
