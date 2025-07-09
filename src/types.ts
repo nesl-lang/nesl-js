@@ -1,0 +1,73 @@
+// Core value types - everything is strings, objects, or arrays
+export type NeslValue = string | NeslObject | NeslArray;
+export type NeslObject = { [key: string]: NeslValue };
+export type NeslArray = NeslValue[];
+
+// Parser options for configurable syntax
+export interface ParseOptions {
+  stringOpen?: string;   // default: 'R"""pv('
+  stringClose?: string;  // default: ')pv"""'
+  blockStart?: string;   // default: '<<<<<<<<<nesl'
+  blockEnd?: string;     // default: '=========nesl'
+  maxKeyLength?: number; // default: 256
+  maxValueLength?: number; // default: 1048576 (1MB)
+}
+
+// Error codes from test cases
+export type ErrorCode = 
+  | 'string_unterminated'
+  | 'delimiter_mismatch'
+  | 'invalid_context'
+  | 'invalid_key'
+  | 'content_after_string'
+  | 'missing_block_wrapper'
+  | 'content_between_closing_and_block_end'
+  | 'unclosed_structure'
+  | 'eof_unexpected';
+
+export interface ParseError {
+  line: number;      // 1-based, file-relative
+  code: ErrorCode;
+  message: string;
+  content: string;   // the problematic line
+  context: string;   // multiline: before\nTARGET\nafter
+}
+
+// Parser always returns both data and errors
+export interface ParseResult {
+  data: NeslValue[];    // successfully parsed blocks
+  errors: ParseError[]; // all errors encountered
+}
+
+// Internal: State machine states
+export enum State {
+  OBJECT = 'OBJECT',
+  ARRAY = 'ARRAY',
+  MULTILINE = 'MULTILINE'
+}
+
+// Internal: Block extraction result
+export interface Block {
+  content: string;
+  contentStartLine: number; // line number of { or [ after <<<<<<<<<nesl
+  originalStartLine: number; // line number of <<<<<<<<<nesl itself
+}
+
+// Internal: String parse result
+export type StringResult = 
+  | { success: true; value: string }
+  | { success: false; error: ErrorCode };
+
+// Internal: Line classification
+export type LineType =
+  | { type: 'assignment'; key: string; rest: string }
+  | { type: 'array_element'; rest: string }
+  | { type: 'object_start' }
+  | { type: 'object_end' }
+  | { type: 'array_start' }
+  | { type: 'array_end' }
+  | { type: 'multiline_start' }
+  | { type: 'multiline_end' }
+  | { type: 'string_literal'; line: string }
+  | { type: 'blank' }
+  | { type: 'unknown'; line: string };
