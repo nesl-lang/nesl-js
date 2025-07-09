@@ -1,9 +1,0 @@
-[
-  {
-    "message": "hello world",
-    "empty": "",
-    "spaces": "  leading and trailing  ",
-    "unicode": "Hello 世界 🌍",
-    "punctuation": "!@#$%^&*()-_=+[]{};:'\"<>,.?/~`"
-  }
-]

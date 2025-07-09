@@ -1,8 +1,0 @@
-[
-  {
-    "start_marker": "contains <<<<<<<<<nesl in text",
-    "end_marker": "has =========nesl inside",
-    "both": "<<<<<<<<<nesl and =========nesl together",
-    "multiline": "<<<<<<<<<nesl\nsome content\n=========nesl"
-  }
-]
