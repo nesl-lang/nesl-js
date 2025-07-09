@@ -15,7 +15,7 @@
     "build": "tsc",
     "git-update-remote": "git submodule update --remote --merge",
     "OLDtest:setup": "git submodule update --init --recursive",
-    "test:setup": "git submodule update --remote --merge",
+    "test:setup": "git submodule update --remote --force --checkout",
     "test": "npm run test:setup && vitest run",
     "OLDtest": "npm run test:setup && vitest",
     "test:run": "npm run test:setup && vitest run",
