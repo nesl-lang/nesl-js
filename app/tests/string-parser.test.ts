@@ -5,7 +5,7 @@ import { parseStringLiteral } from '../src/string-parser';
 
 describe('string parser', () => {
   describe('line extraction tests', () => {
-    const testDir = join(__dirname, '../tests/nesl-test/tests/cases/string-literals');
+    const testDir = join(__dirname, '../../nesl-test/tests/cases/string-literals');
     
     // Test default delimiters
     it('handles standard NESL string literals', () => {
