@@ -72,10 +72,10 @@ Line 6: More text          [ignored]
 
 ### 3. NESL Parser (`parseBlock`)
 
-**Purpose**: Parse structured NESL content using recursive descent with explicit state tracking.
+**Purpose**: Parse structured NESL content using recursive descent with explicit state tracking. Each block must be a root-level object.
 
 **Input**: Block content (no markers), starting line number  
-**Output**: Parsed value tree and non-fatal errors
+**Output**: Parsed object tree and non-fatal errors
 
 **Testing**: No dedicated unit tests. Tested through integration tests in `nesl-test/tests/integration/` because:
 - State machine behavior is best verified through complete examples
