@@ -8,7 +8,7 @@
     "declarationMap": true,
     "sourceMap": true,
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "app/src",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -22,6 +22,6 @@
     "noUnusedParameters": true,
     "verbatimModuleSyntax": true
   },
-  "include": ["src/**/*", "tests/string-parser.test.ts"],
+  "include": ["app/src/**/*", "app/tests/string-parser.test.ts"],
   "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"]
 }
