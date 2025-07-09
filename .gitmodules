@@ -1,0 +1,3 @@
+[submodule "tests/nesl-test"]
+	path = tests/nesl-test
+	url = https://github.com/nesl-lang/nesl-test.git
