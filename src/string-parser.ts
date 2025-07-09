@@ -25,6 +25,10 @@ export function parseStringLiteral(
   
   // Must start with open marker
   if (!trimmed.startsWith(openMarker)) {
+    // Check if markers exist somewhere in input
+    if (trimmed.includes(openMarker)) {
+      return { success: false, error: 'invalid_string_start' };
+    }
     return { success: false, error: 'string_not_found' };
   }
 

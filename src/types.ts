@@ -26,6 +26,7 @@ export const defaultConfig: ParseOptions = {
 export type ErrorCode = 
   | 'string_unterminated'
   | 'string_not_found'
+  | 'invalid_string_start'
   | 'string_not_at_value_position'
   | 'delimiter_mismatch'
   | 'invalid_context'
