@@ -14,8 +14,10 @@
   "scripts": {
     "build": "tsc",
     "git-update-remote": "git submodule update --remote --merge",
-    "test:setup": "git submodule update --init --recursive",
-    "test": "npm run test:setup && vitest",
+    "OLDtest:setup": "git submodule update --init --recursive",
+    "test:setup": "git submodule update --remote --merge",
+    "test": "npm run test:setup && vitest run",
+    "OLDtest": "npm run test:setup && vitest",
     "test:run": "npm run test:setup && vitest run",
     "test:coverage": "npm run test:setup && vitest run --coverage",
     "dev": "npm run test:setup && vitest --watch",
