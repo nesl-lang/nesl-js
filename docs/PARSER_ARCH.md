@@ -77,10 +77,7 @@ Line 6: More text          [ignored]
 **Input**: Block content (no markers), starting line number  
 **Output**: Parsed object tree and non-fatal errors
 
-**Testing**: No dedicated unit tests. Tested through integration tests in `nesl-test/tests/integration/` because:
-- State machine behavior is best verified through complete examples
-- Error recovery spans multiple lines, making isolated testing artificial
-- Integration tests already provide clear error localization
+**Testing**: see unit test files in  /Users/stuart/repos/nesl-lang/nesl-test/tests/unit/block-parser
 
 **State machine design**:
 - Three states: OBJECT, ARRAY, MULTILINE
