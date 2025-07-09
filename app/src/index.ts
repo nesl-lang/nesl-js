@@ -1,4 +1,5 @@
 export { parseStringLiteral } from './string-parser.js';
+export { extractBlocks } from './block-extractor.js';
 export { defaultConfig } from './types.js';
 export type { 
   NeslValue, 
@@ -6,5 +7,6 @@ export type {
   NeslArray,
   ParseOptions,
   ParseResult,
-  ParseError
+  ParseError,
+  Block
 } from './types.js';

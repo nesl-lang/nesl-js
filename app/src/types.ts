@@ -35,6 +35,8 @@ export type ErrorCode =
   | 'missing_block_wrapper'
   | 'content_between_closing_and_block_end'
   | 'unclosed_structure'
+  | 'unclosed_block'
+  | 'orphaned_closing_marker'
   | 'eof_unexpected';
 
 export interface ParseError {
@@ -61,8 +63,7 @@ export enum State {
 // Internal: Block extraction result
 export interface Block {
   content: string;
-  contentStartLine: number; // line number of { or [ after <<<<<<<<<nesl
-  originalStartLine: number; // line number of <<<<<<<<<nesl itself
+  startLine: number; // 1-based line number of <<<<<<<<<nesl marker
 }
 
 // Internal: String parse result
