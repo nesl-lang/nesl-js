@@ -126,3 +126,23 @@ Key challenge: Assignment handler must detect structural values (`{`, `[`, `(`) 
 - How to handle `key = {}` vs `key = {` + newline + `}`?
 
 The hack approach fails. Must implement real parser.
+
+
+@#*&$#*@&$^
+
+note: " hack approach fails" is in reference to "export function parseBlock" in block-parser.ts
+
+we tried doing a sloppy approach.  im pretty sure it needs to be totally rewritten.
+
+and line-classifier is pretty good but first we need to fix thsi stuff in nesl-test/tests/unit/line-classification/test-cases.json
+
+    { "input": "{}", "expected": { "type": "unknown", "line": "{}" } },
+
+    ..... thsi should be functional inline empty object creation
+
+
+    and what about this?
+
+        { "input": "{x", "expected": { "type": "unknown", "line": "{x" } },
+
+... should'nt aht be "object_start" but then the system gives an error eventually because the start is invalid ?  idk tho. wdyt?

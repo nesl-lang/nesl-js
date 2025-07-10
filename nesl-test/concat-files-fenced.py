@@ -49,7 +49,8 @@ def process_file(file_path: Path, output_file, input_dir: Path, separator: str) 
     if is_binary_file(file_path):
         return False
     
-    rel_path = file_path.relative_to(Path.cwd()).as_posix()
+    # Get relative path from input_dir instead of cwd
+    rel_path = file_path.relative_to(input_dir).as_posix()
 
     extension = file_path.suffix[1:] if file_path.suffix else 'txt'
     
