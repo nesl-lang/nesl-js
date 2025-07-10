@@ -2,6 +2,10 @@
 
 TDD development - red/green/refactor
 
+## Purpose 
+
+a syntax language that LLMs can read and write with maximum ease.  so it needs to be simple and obvious but also restrictive enough that the internet wont get littered with variations in training data.  solves the problem of LLMs easily getting confused re: whitespace (especially leading whitespace) in strings and complex char escaping in json, yaml, etc
+
 ## Overview
 
 Two-pass parser design:

@@ -81,6 +81,5 @@ export type LineType =
   | { type: 'array_end' }
   | { type: 'multiline_start' }
   | { type: 'multiline_end' }
-  | { type: 'string_literal'; line: string }
   | { type: 'blank' }
   | { type: 'unknown'; line: string };
