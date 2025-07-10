@@ -1,3 +1,8 @@
+=== PROCESSED: 2025-07-10 10:37:33 ===
+SUCCESS Block 1: Overwrote /Users/stuart/repos/nesl-lang/nesl-js/replacer_demo_src/irrelevant/default/example/config.json
+ERROR Block 2: File not found: invalid/demo/path/to/file/routes/api.js
+===
+
 === PROCESSED: 2025-07-10 10:33:58 ===
 SUCCESS Block 1: Created /Users/stuart/repos/nesl-lang/nesl-js/replacer_demo_src/irrelevant/default/example/config.json
 ERROR Block 2: File not found: invalid/demo/path/to/file/routes/api.js
