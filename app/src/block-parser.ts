@@ -68,9 +68,31 @@ export function parseBlock(
   startLine: number, 
   options?: ParseOptions
 ): ParseResult {
-  // Stub implementation - all tests will fail
-  return { 
-    data: [], 
-    errors: [] 
-  };
+  const lines = content.split('\n');
+  const errors: ParseError[] = [];
+  
+  // Must start with object
+  if (lines.length === 0) {
+    return { data: [], errors };
+  }
+  
+  const firstLine = classifyLine(lines[0]);
+  if (firstLine.type !== 'object_start') {
+    errors.push({
+      line: startLine,
+      code: 'root_must_be_object',
+      message: `NESL blocks must contain a single root object. Found ${firstLine.type} instead`,
+      content: lines[0],
+      context: lines.slice(0, 5).join('\n')
+    });
+    return { data: [], errors };
+  }
+  
+  // Simple case: empty object
+  if (lines.length === 2 && classifyLine(lines[1]).type === 'object_end') {
+    return { data: [{}], errors };
+  }
+  
+  // TODO: Handle non-empty objects
+  return { data: [], errors };
 }

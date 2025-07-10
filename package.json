@@ -22,7 +22,8 @@
     "test:coverage": "npm run test:setup && vitest run --coverage",
     "dev": "npm run test:setup && vitest --watch",
     "clean": "rm -rf dist coverage",
-    "prepublishOnly": "npm run clean && npm run build && npm run test:run"
+    "prepublishOnly": "npm run clean && npm run build && npm run test:run",
+    "replacer": "pipx run https://raw.githubusercontent.com/stuartcrobinson/replacer/main/replacer/replacer.py"
   },
   "keywords": [
     "nesl",

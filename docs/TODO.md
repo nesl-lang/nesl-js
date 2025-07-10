@@ -78,3 +78,51 @@ Transition states
 This separation makes both components simpler and more testable.
 https://claude.ai/chat/9deecd4a-d0fd-4652-a891-beb2284ffb4c
 
+@#*$&^@#*&$^*@&#^$
+
+
+## NESL Parser Implementation Decisions
+
+### Architecture Clarifications
+- Line classification identifies structural syntax only (delimiters, assignments, array elements)
+- String literal detection happens in state handlers with access to options
+- State machine with explicit context stack, not recursive functions
+- Three states: OBJECT, ARRAY, MULTILINE
+
+### Line Classifier Design
+- Extracted to `line-classifier.ts` for testability
+- Returns exact content in `line` field for error reporting (no trimming)
+- Preserves exact spacing in `rest` field after `=` or `-`
+- Does NOT detect string literals (avoids options dependency)
+- Test cases saved in `nesl-test/tests/unit/line-classification/test-cases.json`
+
+### Implementation Status
+- ✅ Block extractor complete
+- ✅ String parser complete  
+- ✅ Line classifier complete with tests
+- ❌ Block parser stub only
+
+### Critical Realizations
+- `{}` on single line requires inline structure detection
+- Special cases proliferate without proper state machine
+- Architecture doc underspecifies key behaviors:
+  - How `key = {` transitions to OBJECT state
+  - Inline structure detection logic
+  - Empty assignment handling
+
+### Next Steps
+Implement proper state machine for block parser:
+
+1. **Context stack management** - push/pop for nesting
+2. **State handlers** - OBJECT, ARRAY, MULTILINE with proper transitions
+3. **Value parsing** - integrate string parser, handle structures
+4. **Error generation** - proper line numbers and context
+
+Key challenge: Assignment handler must detect structural values (`{`, `[`, `(`) and transition states appropriately while rejecting inline structures like `key = {}`.
+
+### Unresolved Questions
+- Max nesting depth check: on push or in handler?
+- Delimiter mismatch recovery: return partial structure or truly fatal?
+- How to handle `key = {}` vs `key = {` + newline + `}`?
+
+The hack approach fails. Must implement real parser.
