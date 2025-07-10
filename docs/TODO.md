@@ -109,7 +109,7 @@ https://claude.ai/chat/9deecd4a-d0fd-4652-a891-beb2284ffb4c
   - How `key = {` transitions to OBJECT state
   - Inline structure detection logic
   - Empty assignment handling
-
+  
 ### Next Steps
 Implement proper state machine for block parser:
 
@@ -118,31 +118,21 @@ Implement proper state machine for block parser:
 3. **Value parsing** - integrate string parser, handle structures
 4. **Error generation** - proper line numbers and context
 
-Key challenge: Assignment handler must detect structural values (`{`, `[`, `(`) and transition states appropriately while rejecting inline structures like `key = {}`.
+Key implementation details:
+- Assignment handler must detect structural values (`{`, `[`, `(`) and transition states appropriately
+- Assignment handler must also handle inline empty structures (`{}`, `[]`, `()`) by creating empty values immediately without state transition
+- Line classifier correctly identifies line patterns (working as designed - no changes needed)
 
-### Unresolved Questions
-- Max nesting depth check: on push or in handler?
-- Delimiter mismatch recovery: return partial structure or truly fatal?
-- How to handle `key = {}` vs `key = {` + newline + `}`?
+### Resolved Design Decisions
+- **Inline empty structures**: `key = {}` creates empty object immediately (no state change), while `key = {` transitions to OBJECT state for multi-line
+- **Line classification scope**: Classifier identifies line-level patterns only, not value parsing. `{}` alone is correctly "unknown" since it's not valid at root level
+- **Max nesting depth**: Check when pushing new context (per architecture doc)
+- **Delimiter mismatch recovery**: Return partial structure and continue in parent context (per architecture doc)
 
-The hack approach fails. Must implement real parser.
+### Implementation Status
+- ✅ Block extractor complete
+- ✅ String parser complete  
+- ✅ Line classifier complete with tests
+- ❌ Block parser stub only (needs complete rewrite)
 
-
-@#*&$#*@&$^
-
-note: " hack approach fails" is in reference to "export function parseBlock" in block-parser.ts
-
-we tried doing a sloppy approach.  im pretty sure it needs to be totally rewritten.
-
-and line-classifier is pretty good but first we need to fix thsi stuff in nesl-test/tests/unit/line-classification/test-cases.json
-
-    { "input": "{}", "expected": { "type": "unknown", "line": "{}" } },
-
-    ..... thsi should be functional inline empty object creation
-
-
-    and what about this?
-
-        { "input": "{x", "expected": { "type": "unknown", "line": "{x" } },
-
-... should'nt aht be "object_start" but then the system gives an error eventually because the start is invalid ?  idk tho. wdyt?
+The current parseBlock implementation is a hack that doesn't follow the state machine design. Must implement real parser with proper state handling.

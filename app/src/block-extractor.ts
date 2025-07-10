@@ -1,4 +1,5 @@
 import type { Block, ParseError } from './types.js';
+import { getContext } from './block-parser/value-parsers.js';
 
 export interface BlockExtractionResult {
   blocks: Block[];
@@ -30,27 +31,27 @@ export function extractBlocks(
   
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
-    const lineNum = i + 1; // 1-based
+    const fileLineNum = i + 1; // 1-based
     
     if (line.trim() === blockStart) {
       if (currentBlockStart !== null) {
         // Nested block start - this is an error
         errors.push({
-          line: lineNum,
+          line: fileLineNum,
           code: 'unclosed_block',
-          message: `Found ${blockStart} at line ${lineNum} while previous block at line ${currentBlockStart} is still open`,
+          message: `Found ${blockStart} at line ${fileLineNum} while previous block at line ${currentBlockStart} is still open`,
           content: line,
           context: getContext(lines, i)
         });
       } else {
-        currentBlockStart = lineNum;
+        currentBlockStart = fileLineNum;
         currentBlockLines = [];
       }
     } else if (line.trim() === blockEnd) {
       if (currentBlockStart === null) {
         // Orphaned closing marker
         errors.push({
-          line: lineNum,
+          line: fileLineNum,
           code: 'orphaned_closing_marker',
           message: `Found ${blockEnd} without matching ${blockStart}`,
           content: line,
@@ -60,7 +61,7 @@ export function extractBlocks(
         // Valid block end
         blocks.push({
           content: currentBlockLines.join('\n'),
-          startLine: currentBlockStart
+          startLine: currentBlockStart + 1  // Content starts on line after marker
         });
         currentBlockStart = null;
         currentBlockLines = [];
@@ -94,7 +95,7 @@ export function extractBlocks(
  * Returns 5 lines with target at line 2 (0-indexed) when possible.
  * Clamps to file boundaries.
  */
-function getContext(lines: string[], targetIndex: number): string {
+export function getContext(lines: string[], targetIndex: number): string {
   const start = Math.max(0, targetIndex - 2);
   const end = Math.min(lines.length, start + 5);
   return lines.slice(start, end).join('\n');

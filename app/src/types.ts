@@ -37,7 +37,13 @@ export type ErrorCode =
   | 'unclosed_structure'
   | 'unclosed_block'
   | 'orphaned_closing_marker'
-  | 'eof_unexpected';
+  | 'eof_unexpected'
+  | 'root_must_be_object'
+  | 'max_depth_exceeded'
+  | 'duplicate_key'
+  | 'key_too_long'
+  | 'multiple_roots'
+  | 'inline_structure_not_allowed';
 
 export interface ParseError {
   line: number;      // 1-based, file-relative
@@ -63,7 +69,7 @@ export enum State {
 // Internal: Block extraction result
 export interface Block {
   content: string;
-  startLine: number; // 1-based line number of <<<<<<<<<nesl marker
+  startLine: number; // 1-based file line number of the <<<<<<<<<nesl marker
 }
 
 // Internal: String parse result

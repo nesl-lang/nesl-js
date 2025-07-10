@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import { parseBlock } from '../src/block-parser';
+import { parseBlock } from '../src/block-parser/block-parser';
 import { extractBlocks } from '../src/block-extractor';
 import type { ParseOptions, ParseError } from '../src/types';
 
@@ -64,7 +64,9 @@ describe('block parser', () => {
       const block = extraction.blocks[0];
       
       // Parse the block
-      const result = parseBlock(block.content, block.startLine, config);
+      // For unit tests, create synthetic file lines from the full input
+      const fileLines = input.split('\n');
+      const result = parseBlock(block.content, block.startLine, fileLines, config);
       
       if (expectedErrors.length > 0) {
         // Error case - check errors match

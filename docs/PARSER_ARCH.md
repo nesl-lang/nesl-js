@@ -214,7 +214,7 @@ All errors include:
 - `code`: Specific error identifier
 - `message`: Human-readable description
 - `content`: The problematic line
-- `context`: 3-5 lines around error
+- `context`: 5 (if available) lines context window around error -- relative to the file, not just the code block
 
 Context generation:
 - Target line in middle when possible
@@ -236,6 +236,54 @@ Customizable markers:
 3. **Eager error collection** - Report all errors, don't stop at first
 4. **Explicit state** - No implicit state in variables, use context stack
 5. **UTF-8 throughout** - No special handling, JavaScript native
+
+## Line Number Conventions
+
+### Fundamental Rules
+
+1. **All line numbers are 1-based** - The first line of any file or string is line 1, not line 0.
+2. **All line numbers in the API are file-relative** - They refer to positions in the original input file, not relative to block boundaries.
+
+### Block.startLine Semantics
+
+The `startLine` field in a `Block` represents the line number where the `<<<<<<<<<nesl` marker appears, NOT the first content line.
+
+**Example:**
+```
+Line 1: Some text
+Line 2: <<<<<<<<<nesl
+Line 3: {
+Line 4:   key = value
+Line 5: }
+Line 6: =========nesl
+```
+
+This produces:
+```typescript
+{
+  content: "{\n  key = value\n}",  // Lines 3-5
+  startLine: 2                     // Line of <<<<<<<<<nesl marker
+}
+```
+
+### Error Line Numbers
+
+Error line numbers are always file-relative. When parsing block content:
+
+1. Block parser receives `block.startLine` (the marker line)
+2. For content line N (0-based index), the file line is: `block.startLine + N + 1`
+3. This accounts for: marker line + zero-based content index + 1 for next line
+
+**Example:**
+- Block marker at file line 10
+- Error on first line of block content (index 0)
+- File line for error: 10 + 0 + 1 = 11
+
+### Why This Design?
+
+- **Consistency**: All line numbers in the API refer to the same coordinate system (the original file)
+- **Debugging**: Errors can be traced directly to file positions without mental translation
+- **Block extraction**: The marker line is semantically where the block "starts" in the file
 
 ## Unresolved Questions
 
