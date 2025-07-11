@@ -69,7 +69,7 @@ export enum State {
 // Internal: Block extraction result
 export interface Block {
   content: string;
-  startLine: number; // 1-based file line number of the <<<<<<<<<nesl marker
+  startLine: number; // 1-based file line number where <<<<<<<<<nesl marker appears
 }
 
 // Internal: String parse result

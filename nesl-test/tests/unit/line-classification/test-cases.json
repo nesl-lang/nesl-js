@@ -11,7 +11,9 @@
     { "input": "]", "expected": { "type": "array_end" } },
     { "input": "  ]", "expected": { "type": "array_end" } },
     { "input": "(", "expected": { "type": "multiline_start" } },
-    { "input": "  (  ", "expected": { "type": "multiline_start" } },
+    { "input": "  (  ", "expected": { "type": "multiline_start" } }
+    
+    ,
     { "input": ")", "expected": { "type": "multiline_end" } },
     { "input": ")  ", "expected": { "type": "multiline_end" } }
   ],

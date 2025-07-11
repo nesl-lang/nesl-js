@@ -1,138 +1,57 @@
-https://claude.ai/chat/9deecd4a-d0fd-4652-a891-beb2284ffb4c
+....
 
-## Unresolved Questions & Executive Decisions
-
-1. **How to handle `key = {`?**
-   - Decision: Classify as assignment. Handler checks if value is exactly `{`, `[`, or `(`. If yes, push new context and transition state.
-
-2. **When to check max nesting depth?**
-   - Decision: When pushing new context. If stack.length >= 100, error.
-
-3. **EOF context generation?**
-   - Decision: Last 5 lines of block content. Empty string for content field.
-
-4. **String parser integration?**
-   - Decision: Call parseStringLiteral only after extracting value portion from assignment/array element.
-
-5. **Delimiter mismatch recovery?**
-   - Decision: Return partial structure, pop context, continue in parent. Not truly "fatal" - only fatal within current structure.
-
-## Final Summary
-
-The block parser is a line-oriented state machine with three states (OBJECT, ARRAY, MULTILINE) and an explicit context stack. Each line is classified syntactically, then the current state handler applies semantic rules.
-
-Key simplifications:
-- No lookahead needed
-- No regex for classification
-- Assignment handler does the heavy lifting for structure transitions
-- Error recovery through line skipping (except delimiter mismatch)
-
-The architecture is elegant: classify line → check state rules → update structure → repeat.
-
-Ready to implement with this understanding.
+These changes make the code self-documenting by:
+1. Renaming `currentBlockStart` → `currentBlockMarkerLine` 
+2. Renaming `currentBlockLines` → `currentBlockContentLines`
+3. Renaming `lineNum` → `fileLineNumber`
+4. Adding explicit comments about the +1 offset in `getLineNumber`
+5. Updating documentation to be unambiguous
 
 
------------------------
-
-Unresolved Questions & Decisions
-
-Should rest preserve original spacing?
-
-Decision: Yes. Preserve exact substring after = or - for accurate error reporting.
-key = value → rest: " value"
-key=value → rest: "value"
-
-
-Remove string_literal from LineType?
-
-Decision: Yes. Update types.ts to remove unused variant.
-
-
-Is array element detection appropriate in classifier?
-
-Decision: Yes. The - is structural syntax like =. The difference: = requires a key, - doesn't.
-
-
-Should classifier handle all structural tokens?
-
-Decision: Yes. Any syntax that affects state machine transitions belongs in classifier.
+feel good about all this?
 
 
 
-Final Design
-Line classification identifies structural syntax only:
+Not entirely. Looking at the test data more carefully:
 
-Delimiters: {, }, [, ], (, )
-Assignment: contains = with non-empty key
-Array element: starts with -
-Blank lines
-Everything else: unknown
+**Test `002_multiple_blocks.json` expects:**
+- Block 1: `startLine: 1` 
+- Block 2: `startLine: 11`
+- Block 3: `startLine: 19`
 
-State handlers receive classified lines and:
+**The actual file lines:**
+```
+Line 1: <<<<<<<<<nesl    (first marker)
+Line 11: <<<<<<<<<nesl   (second marker) 
+Line 19: <<<<<<<<<nesl   (third marker)
+```
 
-Validate context (right syntax for current state)
-Parse values (strings, nested structures)
-Update data structures
-Transition states
+So the tests DO expect `startLine` to be the marker line. But there's a problem with my proposed fix.
 
-This separation makes both components simpler and more testable.
-https://claude.ai/chat/9deecd4a-d0fd-4652-a891-beb2284ffb4c
+In `block-parser.test.ts`, it does:
+```typescript
+const result = parseBlock(block.content, block.startLine, fileLines, config);
+```
 
-@#*$&^@#*&$^*@&#^$
+And in `block-parser.ts`, the error context uses:
+```typescript
+context: getContext(fileLines, fileLine - 1) // Convert to 0-based index
+```
 
+This means `parseBlock` expects to receive the marker line and adds 1 internally to get to content lines. That's actually correct.
 
-## NESL Parser Implementation Decisions
+**The real issue:** The tests pass `fileLines` (the full file) to `parseBlock`, but `parseBlock` is calculating line numbers assuming `startLine` is where content begins, not where the marker is.
 
-### Architecture Clarifications
-- Line classification identifies structural syntax only (delimiters, assignments, array elements)
-- String literal detection happens in state handlers with access to options
-- State machine with explicit context stack, not recursive functions
-- Three states: OBJECT, ARRAY, MULTILINE
+Actually, wait. Let me trace through test `001_invalid_key_recovery`:
+- Marker at line 1
+- First content line `{` at line 2
+- Error line `bad key = ...` at line 4
 
-### Line Classifier Design
-- Extracted to `line-classifier.ts` for testability
-- Returns exact content in `line` field for error reporting (no trimming)
-- Preserves exact spacing in `rest` field after `=` or `-`
-- Does NOT detect string literals (avoids options dependency)
-- Test cases saved in `nesl-test/tests/unit/line-classification/test-cases.json`
+The test expects error at line 4. With current code:
+- `startLine` = 2 (after my fix it would be 1)
+- Content line index = 2 (third line of content)
+- Calculated: 2 + 2 = 4 ✓ (or with fix: 1 + 2 + 1 = 4 ✓)
 
-### Implementation Status
-- ✅ Block extractor complete
-- ✅ String parser complete  
-- ✅ Line classifier complete with tests
-- ❌ Block parser stub only
+So both approaches could work, but we need consistency. The architecture doc fragment I wrote assumes `startLine` is the marker line, which matches the test expectations.
 
-### Critical Realizations
-- `{}` on single line requires inline structure detection
-- Special cases proliferate without proper state machine
-- Architecture doc underspecifies key behaviors:
-  - How `key = {` transitions to OBJECT state
-  - Inline structure detection logic
-  - Empty assignment handling
-  
-### Next Steps
-Implement proper state machine for block parser:
-
-1. **Context stack management** - push/pop for nesting
-2. **State handlers** - OBJECT, ARRAY, MULTILINE with proper transitions
-3. **Value parsing** - integrate string parser, handle structures
-4. **Error generation** - proper line numbers and context
-
-Key implementation details:
-- Assignment handler must detect structural values (`{`, `[`, `(`) and transition states appropriately
-- Assignment handler must also handle inline empty structures (`{}`, `[]`, `()`) by creating empty values immediately without state transition
-- Line classifier correctly identifies line patterns (working as designed - no changes needed)
-
-### Resolved Design Decisions
-- **Inline empty structures**: `key = {}` creates empty object immediately (no state change), while `key = {` transitions to OBJECT state for multi-line
-- **Line classification scope**: Classifier identifies line-level patterns only, not value parsing. `{}` alone is correctly "unknown" since it's not valid at root level
-- **Max nesting depth**: Check when pushing new context (per architecture doc)
-- **Delimiter mismatch recovery**: Return partial structure and continue in parent context (per architecture doc)
-
-### Implementation Status
-- ✅ Block extractor complete
-- ✅ String parser complete  
-- ✅ Line classifier complete with tests
-- ❌ Block parser stub only (needs complete rewrite)
-
-The current parseBlock implementation is a hack that doesn't follow the state machine design. Must implement real parser with proper state handling.
+I feel good about the variable renaming for clarity, but we should run the tests to verify the line number calculations are correct after these changes.

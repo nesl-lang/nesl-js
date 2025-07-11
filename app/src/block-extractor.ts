@@ -61,7 +61,7 @@ export function extractBlocks(
         // Valid block end
         blocks.push({
           content: currentBlockLines.join('\n'),
-          startLine: currentBlockStart + 1  // Content starts on line after marker
+          startLine: currentBlockStart  // Line number of the marker itself
         });
         currentBlockStart = null;
         currentBlockLines = [];
