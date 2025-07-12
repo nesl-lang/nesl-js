@@ -21,22 +21,23 @@ eg:
 Line 1
 Line 2 with "quotes" and \backslashes
 	Tabbed line
--~~-9he,
+  -~~-9he,
   "array": [
     "normal",
     <<<-~~-sf2
 Multi
 Line
--~~-sf2,
+    -~~-sf2,
     42
   ],
   "nested": {
-    "code": 
-<<<-~~-87b
+    "code": <<<-~~-87b
 if (x > 0) {
     return "value";
+    
+
 }
--~~-87b
+    -~~-87b
   }
 }
 ```
@@ -53,7 +54,7 @@ if (x > 0) {
     42
   ],
   "nested": {
-    "code": "if (x > 0) {\n    return \"value\";\n}"
+    "code": "if (x > 0) {\n    return \"value\";\n    \n\n}"
   }
 }
 ```
