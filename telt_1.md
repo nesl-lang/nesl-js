@@ -123,3 +123,6 @@ And your parsed JSON becomes simply:
 Much cleaner! Everything's just a param, whether it came from a key-value line or a delimited block. Thanks for pushing back on the unnecessary complexity.
 
 https://claude.ai/chat/373e9f47-4004-4a3f-b31e-dce0d5f6dbef
+
+validation notes ^^
+
