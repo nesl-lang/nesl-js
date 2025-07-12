@@ -1,17 +1,46 @@
 
 
 #!telt delimHash3: abc
+// write the content to the file for various purposes
 --CREATE_FILE--
 file: path/to/new.txt
 --CONTENT abc--
 Hello, World!
 --END abc--
 
-#!telt delimHash3: def
---RUN_COMMAND--
---COMMAND def--
+
+#!telt delimHash3: h4t
+//here's a description of what we're doing
+--BASH--
+ls -al
+--END h4t--
+
+#!telt delimHash3: d83
+//here's a description of what we're doing
+--BASH:5.0--
+ls -al
+--END d83--
+
+#!telt delimHash3: a42
+//here's a description of what we're doing
+--EXEC--
 npm install
---END def--
+--END a42--
+
+
+#!telt delimHash3: g3s
+//here's a description of what we're doing
+--NODE:22--
+console.log('hi')
+--END g3s--
+
+
+
+#!telt delimHash3: h94
+//here's a description of what we're doing
+--NODE--
+console.log('hi')
+--END h94--
 
 
 
