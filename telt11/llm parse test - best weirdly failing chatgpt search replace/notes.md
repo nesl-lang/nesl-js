@@ -438,3 +438,5 @@ SCRIPT_END
 ------------
 
 abandon nesl! just use perl! chatgpt failing at 'replacer' format. smartest chatgpt. cant do it.  hereodc ahs to work.  cos aider style too dangerous for colliisons
+
+try this test in perl
