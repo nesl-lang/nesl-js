@@ -4,6 +4,7 @@ https://claude.ai/chat/3c1052ea-856a-46a8-aefc-47d703b220af
 https://claude.ai/chat/7d7c188a-64cf-4529-a13e-369517a349a2
 https://claude.ai/chat/37b832c6-b272-4b49-97b0-d47819fa0e47
 
+i think the only diff between this and telt10 is `3-char SHA`
 
 
 ```

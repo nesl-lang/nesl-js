@@ -23,13 +23,9 @@ for the file path, use as much of the path that you know of.  should be as speci
 make sure that file paths include the current main project dir
 
 <<<EXPLANATION>>>
-
 this is why the change should happen
-
 <<<FILE>>>
-
 package/replacer_demo_src/main.py
-
 <<<SEARCH>>>
 def old_function():
    x = 1
@@ -45,9 +41,7 @@ def new_function():
 
 
 <<<EXPLANATION>>>
-
 this is why this change should happen
-
 <<<FILE>>>
 july/coding/bobstuff/react/config/settings.json
 <<<OVERWRITE>>>
@@ -61,13 +55,9 @@ NOTE: if you want to remove a section of code, your replace block must contain a
 
 
 <<<EXPLANATION>>>
-
 remove the search code
-
 <<<FILE>>>
-
 package/replacer_demo_src/main.py
-
 <<<SEARCH>>>
 def old_function():
    x = 1
