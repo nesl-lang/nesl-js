@@ -1546,7 +1546,7 @@ This parser uses UTF-16 code unit positions for all offsets, matching:
             "error": {
               "code": "UNCLOSED_QUOTE",
               "position": 6,
-              "length": 6
+              "length": 13
             }
           }
         }
@@ -2439,7 +2439,7 @@ key = "value"
     "blockId": null,
     "content": "#!SHAM [@three-char-SHA-256: ab]",
     "context": "#!SHAM [@three-char-SHA-256: ab]\nkey = \"value\"\n#!END_SHAM_ab",
-    "message": "Block ID must be exactly 3 alphanumeric characters"
+    "message": "Block ID must be exactly 3 characters"
   }]
 }
 ```
@@ -2887,7 +2887,7 @@ key	name = "tab in middle"
     "blockId": "wsp",
     "content": "\tkey = \"tab at start\"",
     "context": "#!SHAM [@three-char-SHA-256: wsp]\n\tkey = \"tab at start\"\nkey\tname = \"tab in middle\"\n#!END_SHAM_wsp",
-    "message": "Key contains invalid character '	' at position 1"
+    "message": "Key contains invalid character '\t' at position 1"
   }, {
     "code": "INVALID_KEY",
     "line": 3,
@@ -2927,6 +2927,15 @@ line2"
     "content": "key = \"line1",
     "context": "#!SHAM [@three-char-SHA-256: nwl]\nkey = \"line1\nline2\"\n#!END_SHAM_nwl",
     "message": "Unclosed quoted string"
+  }, {
+    "code": "MALFORMED_ASSIGNMENT",
+    "line": 3,
+    "column": 1,
+    "length": 6,
+    "blockId": "nwl",
+    "content": "line2\"",
+    "context": "#!SHAM [@three-char-SHA-256: nwl]\nkey = \"line1\nline2\"\n#!END_SHAM_nwl",
+    "message": "Invalid line format in block 'nwl': not a valid key-value assignment or empty line"
   }]
 }
 ```
@@ -3009,7 +3018,7 @@ key = "value"
     "blockId": null,
     "content": "#!SHAM [@three-char-SHA-256: a-b]",
     "context": "#!SHAM [@three-char-SHA-256: a-b]\nkey = \"value\"\n#!END_SHAM_a-b",
-    "message": "Block ID must be exactly 3 alphanumeric characters"
+    "message": "Block ID must contain only alphanumeric characters"
   }]
 }
 ```
@@ -3265,21 +3274,35 @@ import type { AssignmentResult } from '../types';
  * - MALFORMED_ASSIGNMENT: Full line (position 0, length = line.length)
  */
 export function parseAssignment(line: string): AssignmentResult {
-  // Check for invalid operators like := or => first, as they're a more specific error
-  const invalidOp = line.match(/:=|=>/);
-  if (invalidOp && invalidOp.index !== undefined) {
-      const equalIndexCheck = line.indexOf('=');
-      // This is an error if there's no '=' or if the invalid op appears before it.
-      if (equalIndexCheck === -1 || invalidOp.index < equalIndexCheck) {
-          return {
-              success: false,
-              error: {
-                  code: 'INVALID_OPERATOR',
-                  position: invalidOp.index,
-                  length: invalidOp[0].length,
-              },
-          };
+  // Check for => operator specifically first
+  const arrowOp = line.indexOf('=>');
+  if (arrowOp !== -1) {
+    // Check if there's a standalone = before the =>
+    const equalIndex = line.indexOf('=');
+    if (equalIndex === -1 || equalIndex === arrowOp) {
+      // No standalone = found, so => is invalid
+      return {
+        success: false,
+        error: {
+          code: 'INVALID_VALUE',
+          position: arrowOp,
+          length: 2
+        }
+      };
+    }
+  }
+  
+  // Check for := operator
+  const colonEquals = line.indexOf(':=');
+  if (colonEquals !== -1) {
+    return {
+      success: false,
+      error: {
+        code: 'INVALID_OPERATOR',
+        position: colonEquals,
+        length: 2
       }
+    };
   }
 
   // Now, find the standard equals sign. If it's missing, it's a general malformed line.
@@ -3335,7 +3358,11 @@ export function parseAssignment(line: string): AssignmentResult {
     let closingQuoteIndex = -1;
     
     while (i < trimmedAfterEqual.length) {
-      if (trimmedAfterEqual[i] === '\\' && !escaped) {
+      if (trimmedAfterEqual[i] === '\n') {
+        // Newline found before closing quote
+        closingQuoteIndex = -1;
+        break;
+      } else if (trimmedAfterEqual[i] === '\\' && !escaped) {
         escaped = true;
       } else if (trimmedAfterEqual[i] === '"' && !escaped) {
         closingQuoteIndex = i;
@@ -3357,24 +3384,27 @@ export function parseAssignment(line: string): AssignmentResult {
       };
     }
     
-    // Check for trailing content after closing quote
-    const afterClosingQuote = trimmedAfterEqual.substring(closingQuoteIndex + 1);
-    if (afterClosingQuote.trim()) {
-      const trailingStartInTrimmed = closingQuoteIndex + 1 + afterClosingQuote.search(/\S/);
-      const trailingStartInLine = equalIndex + 1 + afterEqual.indexOf(trimmedAfterEqual) + trailingStartInTrimmed;
-      return {
-        success: false,
-        error: {
-          code: 'TRAILING_CONTENT',
-          position: trailingStartInLine,
-          length: line.length - trailingStartInLine
-        }
-      };
-    }
-    
     try {
       const quotedPart = trimmedAfterEqual.substring(0, closingQuoteIndex + 1);
       const value = JSON.parse(quotedPart);
+      
+      // Check for trailing content after closing quote AFTER successful parse
+      const afterClosingQuote = trimmedAfterEqual.substring(closingQuoteIndex + 1);
+      if (afterClosingQuote.trim()) {
+        // Find the position of first non-whitespace character after closing quote
+        const afterQuoteWhitespace = afterClosingQuote.match(/^\s*/)[0].length;
+        const trailingStartInTrimmed = closingQuoteIndex + 1 + afterQuoteWhitespace;
+        const trailingStartInLine = equalIndex + 1 + afterEqual.indexOf(trimmedAfterEqual) + trailingStartInTrimmed;
+        return {
+          success: false,
+          error: {
+            code: 'TRAILING_CONTENT',
+            position: trailingStartInLine,
+            length: line.length - trailingStartInLine
+          }
+        };
+      }
+      
       return { success: true, type: 'key-value', key, value };
     } catch {
       return {
@@ -3666,10 +3696,25 @@ export function parseSHAM(content: string): ParseResult {
           
           if (assignment.success) {
             if (assignment.type === 'key-value') {
+              // Check for leading whitespace in the original line
+              const equalIndex = line.indexOf('=');
+              const rawKey = line.substring(0, equalIndex);
+              const hasLeadingWhitespace = rawKey.length > 0 && rawKey[0] !== rawKey.trimStart()[0];
+              
               const keyValidation = validateKey(assignment.key);
-              if (!keyValidation.valid) {
+              if (!keyValidation.valid || hasLeadingWhitespace) {
                 const invalidChar = findInvalidCharPosition(assignment.key);
-                if (invalidChar) {
+                if (hasLeadingWhitespace) {
+                  // Report error for leading whitespace
+                  const leadingChar = rawKey[0];
+                  addError(
+                    'INVALID_KEY',
+                    lineNum,
+                    `Key contains invalid character '${leadingChar}' at position 1`,
+                    0,
+                    rawKey.trimEnd().length
+                  );
+                } else if (invalidChar) {
                   addError(
                     'INVALID_KEY',
                     lineNum,
@@ -3700,10 +3745,25 @@ export function parseSHAM(content: string): ParseResult {
                 currentBlock.properties[assignment.key] = assignment.value;
               }
             } else if (assignment.type === 'heredoc') {
+              // Check for leading whitespace in the original line
+              const equalIndex = line.indexOf('=');
+              const rawKey = line.substring(0, equalIndex);
+              const hasLeadingWhitespace = rawKey.length > 0 && rawKey[0] !== rawKey.trimStart()[0];
+              
               const keyValidation = validateKey(assignment.key);
-              if (!keyValidation.valid) {
+              if (!keyValidation.valid || hasLeadingWhitespace) {
                 const invalidChar = findInvalidCharPosition(assignment.key);
-                if (invalidChar) {
+                if (hasLeadingWhitespace) {
+                  // Report error for leading whitespace
+                  const leadingChar = rawKey[0];
+                  addError(
+                    'INVALID_KEY',
+                    lineNum,
+                    `Key contains invalid character '${leadingChar}' at position 1`,
+                    0,
+                    rawKey.trimEnd().length
+                  );
+                } else if (invalidChar) {
                   addError(
                     'INVALID_KEY',
                     lineNum,
@@ -3722,7 +3782,7 @@ export function parseSHAM(content: string): ParseResult {
                 }
               }
               
-              if (keyValidation.valid && assignment.key in currentBlock.properties) {
+              if (keyValidation.valid && !hasLeadingWhitespace && assignment.key in currentBlock.properties) {
                 addError(
                   'DUPLICATE_KEY',
                   lineNum,
@@ -3765,6 +3825,39 @@ export function parseSHAM(content: string): ParseResult {
                 'INVALID_ASSIGNMENT_OPERATOR',
                 lineNum,
                 `Invalid assignment operator '${operator}' - only '=' is allowed`,
+                error.position,
+                error.length
+              );
+            } else if (error.code === 'TRAILING_CONTENT') {
+              // For trailing content, we can still parse the key-value part
+              // Try to extract just the valid part
+              const equalIndex = line.indexOf('=');
+              const afterEqual = line.substring(equalIndex + 1).trim();
+              if (afterEqual.startsWith('"')) {
+                let i = 1;
+                let escaped = false;
+                while (i < afterEqual.length && (afterEqual[i] !== '"' || escaped)) {
+                  escaped = afterEqual[i] === '\\' && !escaped;
+                  i++;
+                }
+                if (i < afterEqual.length && afterEqual[i] === '"') {
+                  try {
+                    const quotedPart = afterEqual.substring(0, i + 1);
+                    const value = JSON.parse(quotedPart);
+                    const keyPart = line.substring(0, equalIndex).trim();
+                    const keyValidation = validateKey(keyPart);
+                    if (keyValidation.valid && !(keyPart in currentBlock.properties)) {
+                      currentBlock.properties[keyPart] = value;
+                    }
+                  } catch {
+                    // Ignore parse errors, we already have TRAILING_CONTENT error
+                  }
+                }
+              }
+              addError(
+                error.code,
+                lineNum,
+                getErrorMessage(error.code, line, currentBlock?.id),
                 error.position,
                 error.length
               );
