@@ -221,7 +221,16 @@ EOT_SHAM_col
     "length": 19,
     "blockId": "col",
     "content": "This breaks parsing",
-    "context": "content = <<'EOT_SHAM_col'\nThis line is fine\nEOT_SHAM_col\nThis breaks parsing\nEOT_SHAM_col",
+    "context": "This line is fine\nEOT_SHAM_col\nThis breaks parsing\nEOT_SHAM_col\n#!END_SHAM_col",
+    "message": "Invalid line format in block 'col': not a valid key-value assignment or empty line"
+  }, {
+    "code": "MALFORMED_ASSIGNMENT",
+    "line": 6,
+    "column": 1,
+    "length": 12,
+    "blockId": "col",
+    "content": "EOT_SHAM_col",
+    "context": "EOT_SHAM_col\nThis breaks parsing\nEOT_SHAM_col\n#!END_SHAM_col",
     "message": "Invalid line format in block 'col': not a valid key-value assignment or empty line"
   }]
 }
@@ -242,7 +251,7 @@ key = "value"
     "code": "MALFORMED_HEADER",
     "line": 1,
     "column": 1,
-    "length": 30,
+    "length": 29,
     "blockId": null,
     "content": "#!SHAM [missing-at-sign: bad]",
     "context": "#!SHAM [missing-at-sign: bad]\nkey = \"value\"\n#!END_SHAM_bad",
@@ -890,7 +899,7 @@ key = "value" // inline not allowed
     "length": 21,
     "blockId": "ncm",
     "content": "key = \"value\" // inline not allowed",
-    "context": "//not a comment without space\n// not a comment with space\nkey = \"value\" // inline not allowed\n#!END_SHAM_ncm",
+    "context": "#!SHAM [@three-char-SHA-256: ncm]\n//not a comment without space\n// not a comment with space\nkey = \"value\" // inline not allowed\n#!END_SHAM_ncm",
     "message": "Unexpected content after quoted value"
   }]
 }

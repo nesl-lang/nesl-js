@@ -13,7 +13,24 @@ import type { AssignmentResult } from '../types';
  * - MALFORMED_ASSIGNMENT: Full line (position 0, length = line.length)
  */
 export function parseAssignment(line: string): AssignmentResult {
-  // Find equals sign first - it's the anchor for everything else
+  // Check for invalid operators like := or => first, as they're a more specific error
+  const invalidOp = line.match(/:=|=>/);
+  if (invalidOp && invalidOp.index !== undefined) {
+      const equalIndexCheck = line.indexOf('=');
+      // This is an error if there's no '=' or if the invalid op appears before it.
+      if (equalIndexCheck === -1 || invalidOp.index < equalIndexCheck) {
+          return {
+              success: false,
+              error: {
+                  code: 'INVALID_OPERATOR',
+                  position: invalidOp.index,
+                  length: invalidOp[0].length,
+              },
+          };
+      }
+  }
+
+  // Now, find the standard equals sign. If it's missing, it's a general malformed line.
   const equalIndex = line.indexOf('=');
   if (equalIndex === -1) {
     return {
@@ -37,19 +54,6 @@ export function parseAssignment(line: string): AssignmentResult {
         code: 'EMPTY_KEY',
         position: equalIndex,
         length: 1
-      }
-    };
-  }
-  
-  // Check for invalid operators BEFORE the equals
-  const invalidOp = line.match(/:=|=>/);
-  if (invalidOp && invalidOp.index !== undefined && invalidOp.index < equalIndex + 1) {
-    return {
-      success: false,
-      error: {
-        code: 'INVALID_OPERATOR',
-        position: invalidOp.index,
-        length: invalidOp[0].length
       }
     };
   }
