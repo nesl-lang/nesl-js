@@ -249,10 +249,12 @@ export function parseSHAM(content: string): ParseResult {
             // Handle assignment parse errors
             const error = assignment.error;
             if (error.code === 'INVALID_OPERATOR') {
+              // Extract the operator from the line
+              const operator = line.substring(error.position, error.position + error.length);
               addError(
                 'INVALID_ASSIGNMENT_OPERATOR',
                 lineNum,
-                "Invalid assignment operator - only '=' is allowed",
+                `Invalid assignment operator '${operator}' - only '=' is allowed`,
                 error.position,
                 error.length
               );

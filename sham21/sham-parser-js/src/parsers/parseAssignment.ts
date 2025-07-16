@@ -13,21 +13,35 @@ import type { AssignmentResult } from '../types';
  * - MALFORMED_ASSIGNMENT: Full line (position 0, length = line.length)
  */
 export function parseAssignment(line: string): AssignmentResult {
-  // Check for invalid operators like := or => first, as they're a more specific error
-  const invalidOp = line.match(/:=|=>/);
-  if (invalidOp && invalidOp.index !== undefined) {
-      const equalIndexCheck = line.indexOf('=');
-      // This is an error if there's no '=' or if the invalid op appears before it.
-      if (equalIndexCheck === -1 || invalidOp.index < equalIndexCheck) {
-          return {
-              success: false,
-              error: {
-                  code: 'INVALID_OPERATOR',
-                  position: invalidOp.index,
-                  length: invalidOp[0].length,
-              },
-          };
+  // Check for => operator specifically first
+  const arrowOp = line.indexOf('=>');
+  if (arrowOp !== -1) {
+    // Check if there's a standalone = before the =>
+    const equalIndex = line.indexOf('=');
+    if (equalIndex === -1 || equalIndex === arrowOp) {
+      // No standalone = found, so => is invalid
+      return {
+        success: false,
+        error: {
+          code: 'INVALID_VALUE',
+          position: arrowOp,
+          length: 2
+        }
+      };
+    }
+  }
+  
+  // Check for := operator
+  const colonEquals = line.indexOf(':=');
+  if (colonEquals !== -1) {
+    return {
+      success: false,
+      error: {
+        code: 'INVALID_OPERATOR',
+        position: colonEquals,
+        length: 2
       }
+    };
   }
 
   // Now, find the standard equals sign. If it's missing, it's a general malformed line.
@@ -83,7 +97,11 @@ export function parseAssignment(line: string): AssignmentResult {
     let closingQuoteIndex = -1;
     
     while (i < trimmedAfterEqual.length) {
-      if (trimmedAfterEqual[i] === '\\' && !escaped) {
+      if (trimmedAfterEqual[i] === '\n') {
+        // Newline found before closing quote
+        closingQuoteIndex = -1;
+        break;
+      } else if (trimmedAfterEqual[i] === '\\' && !escaped) {
         escaped = true;
       } else if (trimmedAfterEqual[i] === '"' && !escaped) {
         closingQuoteIndex = i;
@@ -108,7 +126,9 @@ export function parseAssignment(line: string): AssignmentResult {
     // Check for trailing content after closing quote
     const afterClosingQuote = trimmedAfterEqual.substring(closingQuoteIndex + 1);
     if (afterClosingQuote.trim()) {
-      const trailingStartInTrimmed = closingQuoteIndex + 1 + afterClosingQuote.search(/\S/);
+      // Find the position of first non-whitespace character after closing quote
+      const afterQuoteWhitespace = afterClosingQuote.match(/^\s*/)[0].length;
+      const trailingStartInTrimmed = closingQuoteIndex + 1 + afterQuoteWhitespace;
       const trailingStartInLine = equalIndex + 1 + afterEqual.indexOf(trimmedAfterEqual) + trailingStartInTrimmed;
       return {
         success: false,

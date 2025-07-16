@@ -230,7 +230,7 @@ EOT_SHAM_col
     "length": 12,
     "blockId": "col",
     "content": "EOT_SHAM_col",
-    "context": "EOT_SHAM_col\nThis breaks parsing\nEOT_SHAM_col\n#!END_SHAM_col",
+    "context": "This line is fine\nEOT_SHAM_col\nThis breaks parsing\nEOT_SHAM_col\n#!END_SHAM_col",
     "message": "Invalid line format in block 'col': not a valid key-value assignment or empty line"
   }]
 }
@@ -726,7 +726,7 @@ key	name = "tab in middle"
     "length": 4,
     "blockId": "wsp",
     "content": "\tkey = \"tab at start\"",
-    "context": "#!SHAM [@three-char-SHA-256: wsp]\n\tkey = \"tab at start\"\nkey\tname = \"tab in middle\"\n#!END_SHAM_wsp",
+    "context": "#!SHAM [@three-char-SHA-256: wsp]\\n\\tkey = \\"tab at start\\"\\nkey\\tname = \\"tab in middle\\"\\n#!END_SHAM_wsp",
     "message": "Key contains invalid character '	' at position 1"
   }, {
     "code": "INVALID_KEY",
@@ -735,8 +735,8 @@ key	name = "tab in middle"
     "length": 8,
     "blockId": "wsp",
     "content": "key\tname = \"tab in middle\"",
-    "context": "#!SHAM [@three-char-SHA-256: wsp]\n\tkey = \"tab at start\"\nkey\tname = \"tab in middle\"\n#!END_SHAM_wsp",
-    "message": "Key contains invalid character '	' at position 4"
+    "context": "#!SHAM [@three-char-SHA-256: wsp]\\n\\tkey = \\"tab at start\\"\\nkey\\tname = \\"tab in middle\\"\\n#!END_SHAM_wsp",
+    "message": "Key contains invalid character '\t' at position 4"
   }]
 }
 ```

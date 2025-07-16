@@ -37,7 +37,7 @@
           "expected": {
             "success": false,
             "error": {
-              "code": "INVALID_OPERATOR",
+              "code": "INVALID_VALUE",
               "position": 4,
               "length": 2
             }
@@ -162,6 +162,23 @@
               "code": "EMPTY_KEY",
               "position": 1,
               "length": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "newline-handling",
+      "tests": [
+        {
+          "name": "newline-in-string",
+          "input": ["key = \"line1\nline2\""],
+          "expected": {
+            "success": false,
+            "error": {
+              "code": "UNCLOSED_QUOTE",
+              "position": 6,
+              "length": 6
             }
           }
         }
