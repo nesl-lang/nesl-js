@@ -17,8 +17,9 @@ export function validateKey(key: string): ValidationResult {
     return { valid: false, error: `Key exceeds ${KEY_MAX_LENGTH} character limit` };
   }
   
-  // Check first character
-  if (!KEY_START_PATTERN.test(key[0])) {
+  // Check first character using iterator to handle surrogate pairs
+  const firstChar = [...key][0];
+  if (!firstChar.match(/[\p{L}_]/u)) {
     return { valid: false, error: 'Key must start with letter or underscore' };
   }
   

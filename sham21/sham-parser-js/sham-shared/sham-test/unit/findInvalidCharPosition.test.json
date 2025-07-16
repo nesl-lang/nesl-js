@@ -58,6 +58,22 @@
             "position": 0,
             "char": "$"
           }
+        },
+        {
+          "name": "emoji-at-start",
+          "input": ["😀key"],
+          "expected": {
+            "position": 0,
+            "char": "😀"
+          }
+        },
+        {
+          "name": "emoji-in-middle",
+          "input": ["key😀name"],
+          "expected": {
+            "position": 3,
+            "char": "😀"
+          }
         }
       ]
     },

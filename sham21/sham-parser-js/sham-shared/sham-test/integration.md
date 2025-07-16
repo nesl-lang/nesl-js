@@ -31,6 +31,10 @@
 - 029-block-id-special-chars
 - 030-no-comments-variations
 - 031-heredoc-with-end-marker
+- 032-emoji-in-keys
+- 033-surrogate-pairs-in-values
+- 034-utf8-replacement-chars
+- 035-malformed-utf8-in-header
 
 # Tests
 
@@ -935,6 +939,253 @@ EOT_SHAM_abc
     },
     "startLine": 1,
     "endLine": 7
+  }],
+  "errors": []
+}
+```
+
+### 032-emoji-in-keys
+
+```sh sham
+#!SHAM [@three-char-SHA-256: emj]
+😀_key = "emoji at start"
+key_😀 = "emoji at end"
+normal = "control case"
+#!END_SHAM_emj
+```
+
+```json
+{
+  "blocks": [{
+    "id": "emj",
+    "properties": {
+      "normal": "control case"
+    },
+    "startLine": 1,
+    "endLine": 5
+  }],
+  "errors": [{
+    "code": "INVALID_KEY",
+    "line": 2,
+    "column": 1,
+    "length": 6,
+    "blockId": "emj",
+    "content": "😀_key = \"emoji at start\"",
+    "context": "#!SHAM [@three-char-SHA-256: emj]\n😀_key = \"emoji at start\"\nkey_😀 = \"emoji at end\"\nnormal = \"control case\"\n#!END_SHAM_emj",
+    "message": "Key contains invalid character '😀' at position 1"
+  }, {
+    "code": "INVALID_KEY",
+    "line": 3,
+    "column": 1,
+    "length": 6,
+    "blockId": "emj",
+    "content": "key_😀 = \"emoji at end\"",
+    "context": "#!SHAM [@three-char-SHA-256: emj]\n😀_key = \"emoji at start\"\nkey_😀 = \"emoji at end\"\nnormal = \"control case\"\n#!END_SHAM_emj",
+    "message": "Key contains invalid character '😀' at position 5"
+  }]
+}
+```
+
+### 033-surrogate-pairs-in-values
+
+```sh sham
+#!SHAM [@three-char-SHA-256: spv]
+emoji = "👨‍👩‍👧‍👦"
+mathematical = "𝐀𝐁𝐂"
+content = <<'EOT_SHAM_spv'
+Emoji: 👍🏽
+Math: 𝕏 = 𝕐
+EOT_SHAM_spv
+#!END_SHAM_spv
+```
+
+```json
+{
+  "blocks": [{
+    "id": "spv",
+    "properties": {
+      "emoji": "👨‍👩‍👧‍👦",
+      "mathematical": "𝐀𝐁𝐂",
+      "content": "Emoji: 👍🏽\nMath: 𝕏 = 𝕐"
+    },
+    "startLine": 1,
+    "endLine": 8
+  }],
+  "errors": []
+}
+```
+
+### 034-utf8-replacement-chars
+
+```sh sham
+#!SHAM [@three-char-SHA-256: rep]
+key = "contains � replacement"
+�_invalid = "key with replacement"
+content = <<'EOT_SHAM_rep'
+Line with � char
+EOT_SHAM_rep
+#!END_SHAM_rep
+```
+
+```json
+{
+  "blocks": [{
+    "id": "rep",
+    "properties": {
+      "key": "contains � replacement",
+      "content": "Line with � char"
+    },
+    "startLine": 1,
+    "endLine": 7
+  }],
+  "errors": [{
+    "code": "INVALID_KEY",
+    "line": 3,
+    "column": 1,
+    "length": 9,
+    "blockId": "rep",
+    "content": "�_invalid = \"key with replacement\"",
+    "context": "#!SHAM [@three-char-SHA-256: rep]\nkey = \"contains � replacement\"\n�_invalid = \"key with replacement\"\ncontent = <<'EOT_SHAM_rep'\nLine with � char",
+    "message": "Key contains invalid character '�' at position 1"
+  }]
+}
+```
+
+### 035-malformed-utf8-in-header
+
+```sh sham
+#!SHAM [@three-char-SHA-256: �bc]
+key = "value"
+#!END_SHAM_�bc
+```
+
+```json
+{
+  "blocks": [],
+  "errors": [{
+    "code": "INVALID_BLOCK_ID",
+    "line": 1,
+    "column": 30,
+    "length": 3,
+    "blockId": null,
+    "content": "#!SHAM [@three-char-SHA-256: �bc]",
+    "context": "#!SHAM [@three-char-SHA-256: �bc]\nkey = \"value\"\n#!END_SHAM_�bc",
+    "message": "Block ID must contain only alphanumeric characters"
+  }]
+}
+```
+
+### 036-multiple-blocks-with-text
+
+```sh sham
+random text before sham blocks is fine
+
+#!SHAM [@three-char-SHA-256: k7m]
+action = "create_file"
+path = "/tmp/hello.txt"
+content = <<'EOT_SHAM_k7m'
+Hello world!
+how are you?
+EOT_SHAM_k7m
+#!END_SHAM_k7m
+
+random text between sham blocks is fine
+
+# create the hello2 file for other reasons
+
+#!SHAM [@three-char-SHA-256: h7d]
+action = "create_file"
+path = "/tmp/hello2.txt"
+content = <<'EOT_SHAM_h7d'
+Hello other world!
+ how are you?
+EOT_SHAM_h7d
+#!END_SHAM_h7d
+
+random text after sham blocks is fine
+```
+
+```json
+{
+  "blocks": [{
+    "id": "k7m",
+    "properties": {
+      "action": "create_file",
+      "path": "/tmp/hello.txt",
+      "content": "Hello world!\nhow are you?"
+    },
+    "startLine": 3,
+    "endLine": 10
+  }, {
+    "id": "h7d",
+    "properties": {
+      "action": "create_file",
+      "path": "/tmp/hello2.txt",
+      "content": "Hello other world!\n how are you?"
+    },
+    "startLine": 16,
+    "endLine": 23
+  }],
+  "errors": []
+}
+```
+
+### 037-multiple-blocks-no-spacing
+
+```sh sham
+#!SHAM [@three-char-SHA-256: a1b]
+key1 = "value1"
+#!END_SHAM_a1b
+#!SHAM [@three-char-SHA-256: c2d]
+key2 = "value2"
+#!END_SHAM_c2d
+```
+
+```json
+{
+  "blocks": [{
+    "id": "a1b",
+    "properties": {
+      "key1": "value1"
+    },
+    "startLine": 1,
+    "endLine": 3
+  }, {
+    "id": "c2d",
+    "properties": {
+      "key2": "value2"
+    },
+    "startLine": 4,
+    "endLine": 6
+  }],
+  "errors": []
+}
+```
+
+### 038-text-looks-like-sham
+
+```sh sham
+This line mentions #!SHAM but isn't a header
+
+#!SHAM [@three-char-SHA-256: tst]
+doc = <<'EOT_SHAM_tst'
+Example of #!SHAM [@three-char-SHA-256: fake]
+And #!END_SHAM_fake
+EOT_SHAM_tst
+#!END_SHAM_tst
+
+More text with #!END_SHAM_xyz that isn't real
+```
+
+```json
+{
+  "blocks": [{
+    "id": "tst",
+    "properties": {
+      "doc": "Example of #!SHAM [@three-char-SHA-256: fake]\nAnd #!END_SHAM_fake"
+    },
+    "startLine": 3,
+    "endLine": 8
   }],
   "errors": []
 }

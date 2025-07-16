@@ -11,24 +11,27 @@ interface InvalidChar {
  * Note: For characters outside BMP, position may point to a surrogate pair
  */
 export function findInvalidCharPosition(key: string): InvalidChar | null {
-  // Check all characters in order
-  for (let i = 0; i < key.length; i++) {
-    const char = key[i];
-    
+  let position = 0;
+  
+  // Use string iterator to handle surrogate pairs correctly
+  for (const char of key) {
     // First position must be letter or underscore
-    if (i === 0 && !char.match(/[\p{L}_]/u)) {
-      return { position: i, char };
+    if (position === 0 && !char.match(/[\p{L}_]/u)) {
+      return { position, char };
     }
     
     // Other positions must be letter, number, or underscore
-    if (i > 0 && !char.match(/[\p{L}\p{N}_]/u)) {
-      return { position: i, char };
+    if (position > 0 && !char.match(/[\p{L}\p{N}_]/u)) {
+      return { position, char };
     }
     
     // Check for excluded characters (control, zero-width)
     if (EXCLUDE_CHARS_PATTERN.test(char)) {
-      return { position: i, char };
+      return { position, char };
     }
+    
+    // Advance position by the number of code units this character uses
+    position += char.length;
   }
   
   return null;

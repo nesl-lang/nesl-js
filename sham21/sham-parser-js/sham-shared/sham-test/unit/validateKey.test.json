@@ -62,6 +62,19 @@
           }
         },
         {
+          "name": "emoji-in-middle",
+          "input": ["key😀name"],
+          "expected": {
+            "valid": false,
+            "error": "Key contains invalid characters"
+          }
+        },
+        {
+          "name": "mathematical-alphanumeric",
+          "input": ["𝐀𝐁𝐂"],
+          "expected": { "valid": true }
+        },
+        {
           "name": "arabic-valid",
           "input": ["متغير"],
           "expected": { "valid": true }
