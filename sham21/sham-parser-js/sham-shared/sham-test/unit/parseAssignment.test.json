@@ -178,7 +178,7 @@
             "error": {
               "code": "UNCLOSED_QUOTE",
               "position": 6,
-              "length": 6
+              "length": 13
             }
           }
         }

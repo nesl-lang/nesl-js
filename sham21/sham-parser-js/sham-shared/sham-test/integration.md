@@ -279,7 +279,7 @@ key = "value"
     "blockId": null,
     "content": "#!SHAM [@three-char-SHA-256: ab]",
     "context": "#!SHAM [@three-char-SHA-256: ab]\nkey = \"value\"\n#!END_SHAM_ab",
-    "message": "Block ID must be exactly 3 alphanumeric characters"
+    "message": "Block ID must be exactly 3 characters"
   }]
 }
 ```
@@ -726,8 +726,8 @@ key	name = "tab in middle"
     "length": 4,
     "blockId": "wsp",
     "content": "\tkey = \"tab at start\"",
-    "context": "#!SHAM [@three-char-SHA-256: wsp]\\n\\tkey = \\"tab at start\\"\\nkey\\tname = \\"tab in middle\\"\\n#!END_SHAM_wsp",
-    "message": "Key contains invalid character '	' at position 1"
+    "context": "#!SHAM [@three-char-SHA-256: wsp]\n\tkey = \"tab at start\"\nkey\tname = \"tab in middle\"\n#!END_SHAM_wsp",
+    "message": "Key contains invalid character '\t' at position 1"
   }, {
     "code": "INVALID_KEY",
     "line": 3,
@@ -735,7 +735,7 @@ key	name = "tab in middle"
     "length": 8,
     "blockId": "wsp",
     "content": "key\tname = \"tab in middle\"",
-    "context": "#!SHAM [@three-char-SHA-256: wsp]\\n\\tkey = \\"tab at start\\"\\nkey\\tname = \\"tab in middle\\"\\n#!END_SHAM_wsp",
+    "context": "#!SHAM [@three-char-SHA-256: wsp]\n\tkey = \"tab at start\"\nkey\tname = \"tab in middle\"\n#!END_SHAM_wsp",
     "message": "Key contains invalid character '\t' at position 4"
   }]
 }
@@ -767,6 +767,15 @@ line2"
     "content": "key = \"line1",
     "context": "#!SHAM [@three-char-SHA-256: nwl]\nkey = \"line1\nline2\"\n#!END_SHAM_nwl",
     "message": "Unclosed quoted string"
+  }, {
+    "code": "MALFORMED_ASSIGNMENT",
+    "line": 3,
+    "column": 1,
+    "length": 6,
+    "blockId": "nwl",
+    "content": "line2\"",
+    "context": "#!SHAM [@three-char-SHA-256: nwl]\nkey = \"line1\nline2\"\n#!END_SHAM_nwl",
+    "message": "Invalid line format in block 'nwl': not a valid key-value assignment or empty line"
   }]
 }
 ```
@@ -849,7 +858,7 @@ key = "value"
     "blockId": null,
     "content": "#!SHAM [@three-char-SHA-256: a-b]",
     "context": "#!SHAM [@three-char-SHA-256: a-b]\nkey = \"value\"\n#!END_SHAM_a-b",
-    "message": "Block ID must be exactly 3 alphanumeric characters"
+    "message": "Block ID must contain only alphanumeric characters"
   }]
 }
 ```

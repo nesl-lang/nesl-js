@@ -123,26 +123,27 @@ export function parseAssignment(line: string): AssignmentResult {
       };
     }
     
-    // Check for trailing content after closing quote
-    const afterClosingQuote = trimmedAfterEqual.substring(closingQuoteIndex + 1);
-    if (afterClosingQuote.trim()) {
-      // Find the position of first non-whitespace character after closing quote
-      const afterQuoteWhitespace = afterClosingQuote.match(/^\s*/)[0].length;
-      const trailingStartInTrimmed = closingQuoteIndex + 1 + afterQuoteWhitespace;
-      const trailingStartInLine = equalIndex + 1 + afterEqual.indexOf(trimmedAfterEqual) + trailingStartInTrimmed;
-      return {
-        success: false,
-        error: {
-          code: 'TRAILING_CONTENT',
-          position: trailingStartInLine,
-          length: line.length - trailingStartInLine
-        }
-      };
-    }
-    
     try {
       const quotedPart = trimmedAfterEqual.substring(0, closingQuoteIndex + 1);
       const value = JSON.parse(quotedPart);
+      
+      // Check for trailing content after closing quote AFTER successful parse
+      const afterClosingQuote = trimmedAfterEqual.substring(closingQuoteIndex + 1);
+      if (afterClosingQuote.trim()) {
+        // Find the position of first non-whitespace character after closing quote
+        const afterQuoteWhitespace = afterClosingQuote.match(/^\s*/)[0].length;
+        const trailingStartInTrimmed = closingQuoteIndex + 1 + afterQuoteWhitespace;
+        const trailingStartInLine = equalIndex + 1 + afterEqual.indexOf(trimmedAfterEqual) + trailingStartInTrimmed;
+        return {
+          success: false,
+          error: {
+            code: 'TRAILING_CONTENT',
+            position: trailingStartInLine,
+            length: line.length - trailingStartInLine
+          }
+        };
+      }
+      
       return { success: true, type: 'key-value', key, value };
     } catch {
       return {
