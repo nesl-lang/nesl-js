@@ -30,7 +30,7 @@ export const BLOCK_ID_LENGTH = ${config.limits.blockIdLength};
 export const MAX_FILE_SIZE = ${config.limits.maxFileSize};
 
 export const ERROR_CONTEXT_WINDOW = ${config.parser.errorContextWindow};
-export const LINE_ENDING = '${config.parser.lineEnding}';
+export const LINE_ENDING = '${config.parser.lineEnding.replace(/\n/g, '\\n').replace(/\r/g, '\\r')}';
 `;
 
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });

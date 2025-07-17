@@ -131,7 +131,7 @@ export function parseAssignment(line: string): AssignmentResult {
       const afterClosingQuote = trimmedAfterEqual.substring(closingQuoteIndex + 1);
       if (afterClosingQuote.trim()) {
         // Find the position of first non-whitespace character after closing quote
-        const afterQuoteWhitespace = afterClosingQuote.match(/^\s*/)[0].length;
+        const afterQuoteWhitespace = afterClosingQuote.match(/^\s*/)?.[0].length ?? 0;
         const trailingStartInTrimmed = closingQuoteIndex + 1 + afterQuoteWhitespace;
         const trailingStartInLine = equalIndex + 1 + afterEqual.indexOf(trimmedAfterEqual) + trailingStartInTrimmed;
         return {
