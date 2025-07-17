@@ -22,6 +22,7 @@ for the file path, use as much of the path that you know of.  should be as speci
 
 make sure that file paths include the current main project dir
 
+```
 <<<EXPLANATION>>>
 this is why the change should happen
 <<<FILE>>>
@@ -36,10 +37,9 @@ def new_function():
    result = 3
    return result
 <<<END>>>
+```
 
-
-
-
+```
 <<<EXPLANATION>>>
 this is why this change should happen
 <<<FILE>>>
@@ -66,6 +66,7 @@ def old_function():
 <<<REPLACE>>>
  
 <<<END>>>
+```
 
 see how the REPLACE block can never be totally empty. must contain blank line and whitespace (space(s)) too
 

@@ -37,11 +37,11 @@ SHAM search/replace block format:
 
 #!SHAM [@three-char-SHA-256: k7m]
 {
-search = <<'EOT_SHAM'
+SEARCH = <<'EOT_SHAM'
  Hello world!
  how are you?
 EOT_SHAM
-replace = <<'EOT_SHAM'
+REPLACE = <<'EOT_SHAM'
 
    
  asdf "awef" 'lkj'
