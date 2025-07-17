@@ -13,6 +13,10 @@
     "test:ui": "vitest --ui",
     "clean": "rm -rf dist"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nesl-lang/nesl-js.git"
+  },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "marked": "^16.0.0",
