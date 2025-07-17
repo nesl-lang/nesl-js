@@ -1,7 +1,0 @@
-<<<<<<<<<nesl
-{
-  first = R"""pv(value one)pv"""
-  second = R"""pv(value two)pv"""
-  third = R"""pv(value three)pv"""
-}
-=========nesl

@@ -1,9 +1,0 @@
-%%%[simple]%%%
-%%%[empty]%%%
-%%%[contains ]%%% in middle]%%%
-prefix %%%[with prefix]%%%
-%%%[with suffix]%%% suffix
-%%%[first]%%% %%%[second]%%%
-%%%[unterminated
-%%%[valid]%%% extra
-no markers

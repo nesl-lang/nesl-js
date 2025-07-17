@@ -1,9 +1,0 @@
-<<<<<<<<<nesl
-{
-  message = (
-    R"""pv(line one)pv"""
-    R"""pv(line two)pv"""
-    R"""pv(line three)pv"""
-  )
-}
-=========nesl

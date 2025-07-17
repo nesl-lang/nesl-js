@@ -1,8 +1,0 @@
-<<<START>>>
-{
-  key = %%%[value]%%%
-  nested = {
-    inner = %%%[custom markers work]%%%
-  }
-}
-===END===

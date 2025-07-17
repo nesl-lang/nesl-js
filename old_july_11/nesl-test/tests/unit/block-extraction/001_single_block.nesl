@@ -1,9 +1,0 @@
-Some text before the block
-
-<<<<<<<<<nesl
-{
-  key = R"""pv(value)pv"""
-}
-=========nesl
-
-Text after the block
