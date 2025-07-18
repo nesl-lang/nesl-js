@@ -1,3 +1,15 @@
+
+
+stuart@Stuarts-MacBook-Pro /t/test-nesl> # Test actual parsing
+                                         node -e "
+                                         const { parseSHAM } = require('nesl-js');
+                                         const result = parseSHAM('key=value');
+                                         console.log(JSON.stringify(result, null, 2));
+                                         "
+
+thsi file is probably oudated.  need to start putting dates on this stuff
+
+
 # SHAM Parser for JavaScript
 
 JavaScript parser implementation for the SHAM (Structured Hashed-marker) format.
