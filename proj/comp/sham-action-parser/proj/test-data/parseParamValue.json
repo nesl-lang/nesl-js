@@ -1,0 +1,96 @@
+{
+  "cases": [
+    {
+      "name": "string type passthrough",
+      "input": ["hello world", { "type": "string" }, "message"],
+      "expected": {
+        "success": true,
+        "value": "hello world"
+      }
+    },
+    {
+      "name": "boolean true",
+      "input": ["true", { "type": "boolean" }, "enabled"],
+      "expected": {
+        "success": true,
+        "value": true
+      }
+    },
+    {
+      "name": "boolean false",
+      "input": ["false", { "type": "boolean" }, "enabled"],
+      "expected": {
+        "success": true,
+        "value": false
+      }
+    },
+    {
+      "name": "boolean invalid",
+      "input": ["yes", { "type": "boolean" }, "enabled"],
+      "expected": {
+        "success": false,
+        "error": {
+          "code": "INVALID_TYPE",
+          "message": "Parameter 'enabled' must be 'true' or 'false', got 'yes'",
+          "param": "enabled"
+        }
+      }
+    },
+    {
+      "name": "integer valid",
+      "input": ["42", { "type": "integer" }, "count"],
+      "expected": {
+        "success": true,
+        "value": 42
+      }
+    },
+    {
+      "name": "integer zero",
+      "input": ["0", { "type": "integer" }, "count"],
+      "expected": {
+        "success": true,
+        "value": 0
+      }
+    },
+    {
+      "name": "integer negative",
+      "input": ["-10", { "type": "integer" }, "offset"],
+      "expected": {
+        "success": true,
+        "value": -10
+      }
+    },
+    {
+      "name": "integer invalid",
+      "input": ["42.5", { "type": "integer" }, "count"],
+      "expected": {
+        "success": false,
+        "error": {
+          "code": "INVALID_TYPE",
+          "message": "Parameter 'count' must be an integer, got '42.5'",
+          "param": "count"
+        }
+      }
+    },
+    {
+      "name": "enum valid",
+      "input": ["read", { "type": "enum", "values": ["read", "write", "execute"] }, "permission"],
+      "expected": {
+        "success": true,
+        "value": "read"
+      }
+    },
+    {
+      "name": "enum invalid",
+      "input": ["delete", { "type": "enum", "values": ["read", "write", "execute"] }, "permission"],
+      "expected": {
+        "success": false,
+        "error": {
+          "code": "INVALID_ENUM",
+          "message": "Parameter 'permission' must be one of [read, write, execute], got 'delete'",
+          "param": "permission"
+        }
+      }
+    }
+  ]
+}

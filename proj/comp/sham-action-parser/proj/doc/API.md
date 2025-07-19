@@ -1,20 +1,38 @@
-# SHAM Action Parser API
+# Component: sham-action-parser
 
-## Purpose
-Parse SHAM block string values into typed data and validate against action schemas in a single pass.
+## Component Type
+standard
 
-## Public Interface
+## Documentation Debt
+[Must be empty before implementation]
 
-### parseAction(block: ShamBlock, schemas: ActionSchemas): ParseResult
+## Dependencies
 
-Parses a SHAM block's string properties into typed values according to the action schema.
+```yaml
+dependencies:
+  external/js-yaml:
+    functions: [load]
+  
+  external/fs:
+    functions: [readFileSync]
+  
+  external/path:
+    functions: [join]
+```
 
-**Parameters:**
-- `block`: ShamBlock with all string values from SHAM parser
-- `schemas`: Action schemas loaded from unified-design.yaml
+## Exports
 
-**Returns:**
-- `ParseResult`: Either success with typed action or failure with errors
+### parseAction
+- **Signature**: `parseAction(block: ShamBlock, schemas?: ActionSchemas) -> ParseResult`
+- **Purpose**: Parse SHAM block string values into typed data and validate against action schemas.
+- **Throws**: Never (errors returned in result)
+- **Test-data**: `test-data/parseAction.json`
+
+### Types Exported
+- `ShamBlock`: Input block with string properties from SHAM parser
+- `ParseResult`: Success/failure result with typed action or errors
+- `ParseError`: Error details with code, message, and parameter
+- `TypedAction`: Parsed action with typed parameters
 
 ## Types
 
@@ -38,15 +56,23 @@ interface TypedAction {
 }
 
 interface ParseError {
-  code: string;
+  code: 'UNKNOWN_ACTION' | 'MISSING_REQUIRED' | 'INVALID_TYPE' | 'INVALID_ENUM' | 'UNKNOWN_PARAMETER';
   message: string;
   param?: string;  // Which parameter had the error
 }
-```
 
-## Error Codes
-- `UNKNOWN_ACTION`: Action type not found in schema
-- `MISSING_REQUIRED`: Required parameter missing
-- `INVALID_TYPE`: Value cannot be parsed to expected type
-- `INVALID_ENUM`: Value not in allowed enum values
-- `PARSE_ERROR`: General parsing failure
+// Internal types (not exported)
+interface ActionSchema {
+  params: Record<string, ParamSchema>;
+}
+
+interface ParamSchema {
+  type: 'string' | 'boolean' | 'integer' | 'enum';
+  required?: boolean;
+  values?: string[];  // For enum type
+}
+
+interface ActionSchemas {
+  [actionName: string]: ActionSchema;
+}
+```

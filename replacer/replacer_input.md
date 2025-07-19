@@ -1,86 +1,68 @@
-=== PROCESSED: 2025-07-19 12:54:20 ===
-ERROR Block 1: File not found: proj/doc/API.md
-SUCCESS Block 2: Created /Users/stuart/repos/nesl-lang/nesl-js/proj/comp/sham-action-parser/proj/doc/API.md
-ERROR Block 3: File not found: proj/comp/sham-action-parser/proj/doc/ARCH.md
-ERROR Block 4: File not found: proj/comp/sham-action-parser/proj/test-data/parseAction.json
-ERROR Block 5: File not found: proj/comp/sham-action-parser/proj/test-data/parseAction.json
+=== PROCESSED: 2025-07-19 13:14:24 ===
+SUCCESS Block 1: Overwrote /Users/stuart/repos/nesl-lang/nesl-js/proj/comp/sham-action-parser/proj/doc/API.md
+SUCCESS Block 2: Created /Users/stuart/repos/nesl-lang/nesl-js/proj/comp/sham-action-parser/proj/test-data/checkActionExists.json
+SUCCESS Block 3: Created /Users/stuart/repos/nesl-lang/nesl-js/proj/comp/sham-action-parser/proj/test-data/parseParamValue.json
+SUCCESS Block 4: Created /Users/stuart/repos/nesl-lang/nesl-js/proj/comp/sham-action-parser/proj/test-data/getMissingParams.json
+SUCCESS Block 5: Created /Users/stuart/repos/nesl-lang/nesl-js/proj/comp/sham-action-parser/proj/test-data/validateUnknownParams.json
 ERROR Block 6: File not found: proj/comp/sham-action-parser/proj/test-data/parseAction.json
-SUCCESS Block 7: Created /Users/stuart/repos/nesl-lang/nesl-js/proj/comp/sham-action-parser/proj/src/parseAction.ts
-SUCCESS Block 8: Created /Users/stuart/repos/nesl-lang/nesl-js/proj/comp/sham-action-parser/proj/src/index.ts
-ERROR Block 9: File not found: proj/comp/clada/proj/doc/API.md
+ERROR Block 7: File not found: proj/comp/sham-action-parser/proj/test-data/parseAction.json
+SUCCESS Block 8: Overwrote /Users/stuart/repos/nesl-lang/nesl-js/proj/comp/sham-action-parser/proj/src/parseAction.ts
+SUCCESS Block 9: Created /Users/stuart/repos/nesl-lang/nesl-js/proj/comp/sham-action-parser/proj/test/checkActionExists.test.ts
+SUCCESS Block 10: Created /Users/stuart/repos/nesl-lang/nesl-js/proj/comp/sham-action-parser/proj/test/parseParamValue.test.ts
+SUCCESS Block 11: Created /Users/stuart/repos/nesl-lang/nesl-js/proj/comp/sham-action-parser/proj/test/getMissingParams.test.ts
+SUCCESS Block 12: Created /Users/stuart/repos/nesl-lang/nesl-js/proj/comp/sham-action-parser/proj/test/validateUnknownParams.test.ts
+SUCCESS Block 13: Created /Users/stuart/repos/nesl-lang/nesl-js/proj/comp/sham-action-parser/proj/test/parseAction.test.ts
+SUCCESS Block 14: Overwrote /Users/stuart/repos/nesl-lang/nesl-js/proj/comp/sham-action-parser/proj/src/index.ts
+ERROR Block 15: File not found: proj/comp/sham-action-parser/proj/doc/ARCH.md
 ===
 
-Looking at this SHAM architecture change document, I'll generate the edit instructions and bash commands to perform all these steps.
-
-## Bash Commands
-
-First, let's execute the file operations:
-
-```bash
-# 1. Delete misguided work
-rm -rf proj/comp/sham-validator/proj/test/*.test.ts
-rm -rf proj/comp/sham-validator/proj/test-data/checkActionExists.json
-rm -rf proj/comp/sham-validator/proj/test-data/validateParamType.json
-rm -rf proj/comp/sham-validator/proj/test-data/getRequiredParams.json
-rm -rf proj/comp/sham-validator/proj/test-data/getMissingParams.json
-
-# 2. Rename component
-mv proj/comp/sham-validator proj/comp/sham-action-parser
-
-# 3. Rename validateAction.json to parseAction.json
-mv proj/comp/sham-action-parser/proj/test-data/validateAction.json proj/comp/sham-action-parser/proj/test-data/parseAction.json
-```
+I'll generate edit instructions to restore and improve the structure following XD5 principles.
 
 ## Edit Instructions
 
-### Update API Documentation
+### 1. Fix API.md to Follow XD5 Format
 
 ```
 <<<EXPLANATION>>>
-Update main API.md to reflect renamed component and remove non-existent references
-<<<FILE>>>
-proj/doc/API.md
-<<<SEARCH>>>
-dependencies:
-  proj/comp/sham-ast-converter:
-    functions: [convertToAst]
-    types: [AstNode, AstResult]
-  proj/comp/sham-validator:
-    functions: [validateAction]
-    types: [ValidationError, ValidationResult]
-<<<REPLACE>>>
-dependencies:
-  proj/comp/sham-action-parser:
-    functions: [parseAction]
-    types: [ParseError, ParseResult]
-<<<END>>>
-```
-
-### Rewrite Component API Documentation
-
-```
-<<<EXPLANATION>>>
-Complete rewrite of the component API documentation to reflect new single-pass parse+validate approach
+Update API.md to follow XD5 template with proper structure, dependencies, and function signatures
 <<<FILE>>>
 proj/comp/sham-action-parser/proj/doc/API.md
 <<<OVERWRITE>>>
-# SHAM Action Parser API
+# Component: sham-action-parser
 
-## Purpose
-Parse SHAM block string values into typed data and validate against action schemas in a single pass.
+## Component Type
+standard
 
-## Public Interface
+## Documentation Debt
+[Must be empty before implementation]
 
-### parseAction(block: ShamBlock, schemas: ActionSchemas): ParseResult
+## Dependencies
 
-Parses a SHAM block's string properties into typed values according to the action schema.
+```yaml
+dependencies:
+  external/js-yaml:
+    functions: [load]
+  
+  external/fs:
+    functions: [readFileSync]
+  
+  external/path:
+    functions: [join]
+```
 
-**Parameters:**
-- `block`: ShamBlock with all string values from SHAM parser
-- `schemas`: Action schemas loaded from unified-design.yaml
+## Exports
 
-**Returns:**
-- `ParseResult`: Either success with typed action or failure with errors
+### parseAction
+- **Signature**: `parseAction(block: ShamBlock, schemas?: ActionSchemas) -> ParseResult`
+- **Purpose**: Parse SHAM block string values into typed data and validate against action schemas.
+- **Throws**: Never (errors returned in result)
+- **Test-data**: `test-data/parseAction.json`
+
+### Types Exported
+- `ShamBlock`: Input block with string properties from SHAM parser
+- `ParseResult`: Success/failure result with typed action or errors
+- `ParseError`: Error details with code, message, and parameter
+- `TypedAction`: Parsed action with typed parameters
 
 ## Types
 
@@ -104,164 +86,451 @@ interface TypedAction {
 }
 
 interface ParseError {
-  code: string;
+  code: 'UNKNOWN_ACTION' | 'MISSING_REQUIRED' | 'INVALID_TYPE' | 'INVALID_ENUM' | 'UNKNOWN_PARAMETER';
   message: string;
   param?: string;  // Which parameter had the error
 }
-```
 
-## Error Codes
-- `UNKNOWN_ACTION`: Action type not found in schema
-- `MISSING_REQUIRED`: Required parameter missing
-- `INVALID_TYPE`: Value cannot be parsed to expected type
-- `INVALID_ENUM`: Value not in allowed enum values
-- `PARSE_ERROR`: General parsing failure
+// Internal types (not exported)
+interface ActionSchema {
+  params: Record<string, ParamSchema>;
+}
+
+interface ParamSchema {
+  type: 'string' | 'boolean' | 'integer' | 'enum';
+  required?: boolean;
+  values?: string[];  // For enum type
+}
+
+interface ActionSchemas {
+  [actionName: string]: ActionSchema;
+}
+```
 <<<END>>>
 ```
 
-### Update Architecture Documentation
+### 2. Create Test Data for Internal Functions
 
 ```
 <<<EXPLANATION>>>
-Update architecture documentation to reflect single-pass design and type coercion rules
+Create test data for checkActionExists function with string-based inputs
 <<<FILE>>>
-proj/comp/sham-action-parser/proj/doc/ARCH.md
-<<<SEARCH>>>
-## Design Decisions
-
-1. **Separation of Concerns**: Validation logic separated from SHAM parsing
-2. **Schema-Driven**: All validation rules come from unified-design.yaml
-3. **Comprehensive Error Reporting**: Collect all errors, don't fail fast
-4. **Type Safety**: Full TypeScript types for all interfaces
-<<<REPLACE>>>
-## Design Decisions
-
-1. **Single-Pass Parse+Validate**: Type conversion and validation are inseparable operations
-2. **Schema-Driven**: All validation rules come from unified-design.yaml
-3. **String Input Only**: SHAM parser outputs only strings; this component does all type conversion
-4. **Type Coercion Rules**:
-   - Boolean: "true" → true, "false" → false, anything else is error
-   - Integer: parseInt(str, 10) with Number.isInteger() check
-   - Enum: Exact string match from schema values array
-   - String: Pass through unchanged
+proj/comp/sham-action-parser/proj/test-data/checkActionExists.json
+<<<OVERWRITE>>>
+{
+  "cases": [
+    {
+      "name": "action exists in schema",
+      "input": ["create_file", {
+        "create_file": {
+          "params": {
+            "path": { "type": "string", "required": true },
+            "content": { "type": "string", "required": true }
+          }
+        }
+      }],
+      "expected": true
+    },
+    {
+      "name": "action does not exist",
+      "input": ["unknown_action", {
+        "create_file": {
+          "params": {}
+        }
+      }],
+      "expected": false
+    },
+    {
+      "name": "empty schema object",
+      "input": ["any_action", {}],
+      "expected": false
+    }
+  ]
+}
 <<<END>>>
 ```
 
-### Fix Test Data
+```
+<<<EXPLANATION>>>
+Create test data for parseParamValue function
+<<<FILE>>>
+proj/comp/sham-action-parser/proj/test-data/parseParamValue.json
+<<<OVERWRITE>>>
+{
+  "cases": [
+    {
+      "name": "string type passthrough",
+      "input": ["hello world", { "type": "string" }, "message"],
+      "expected": {
+        "success": true,
+        "value": "hello world"
+      }
+    },
+    {
+      "name": "boolean true",
+      "input": ["true", { "type": "boolean" }, "enabled"],
+      "expected": {
+        "success": true,
+        "value": true
+      }
+    },
+    {
+      "name": "boolean false",
+      "input": ["false", { "type": "boolean" }, "enabled"],
+      "expected": {
+        "success": true,
+        "value": false
+      }
+    },
+    {
+      "name": "boolean invalid",
+      "input": ["yes", { "type": "boolean" }, "enabled"],
+      "expected": {
+        "success": false,
+        "error": {
+          "code": "INVALID_TYPE",
+          "message": "Parameter 'enabled' must be 'true' or 'false', got 'yes'",
+          "param": "enabled"
+        }
+      }
+    },
+    {
+      "name": "integer valid",
+      "input": ["42", { "type": "integer" }, "count"],
+      "expected": {
+        "success": true,
+        "value": 42
+      }
+    },
+    {
+      "name": "integer zero",
+      "input": ["0", { "type": "integer" }, "count"],
+      "expected": {
+        "success": true,
+        "value": 0
+      }
+    },
+    {
+      "name": "integer negative",
+      "input": ["-10", { "type": "integer" }, "offset"],
+      "expected": {
+        "success": true,
+        "value": -10
+      }
+    },
+    {
+      "name": "integer invalid",
+      "input": ["42.5", { "type": "integer" }, "count"],
+      "expected": {
+        "success": false,
+        "error": {
+          "code": "INVALID_TYPE",
+          "message": "Parameter 'count' must be an integer, got '42.5'",
+          "param": "count"
+        }
+      }
+    },
+    {
+      "name": "enum valid",
+      "input": ["read", { "type": "enum", "values": ["read", "write", "execute"] }, "permission"],
+      "expected": {
+        "success": true,
+        "value": "read"
+      }
+    },
+    {
+      "name": "enum invalid",
+      "input": ["delete", { "type": "enum", "values": ["read", "write", "execute"] }, "permission"],
+      "expected": {
+        "success": false,
+        "error": {
+          "code": "INVALID_ENUM",
+          "message": "Parameter 'permission' must be one of [read, write, execute], got 'delete'",
+          "param": "permission"
+        }
+      }
+    }
+  ]
+}
+<<<END>>>
+```
 
 ```
 <<<EXPLANATION>>>
-Fix test data to ensure all input values are strings and rename file
+Create test data for getMissingParams function
+<<<FILE>>>
+proj/comp/sham-action-parser/proj/test-data/getMissingParams.json
+<<<OVERWRITE>>>
+{
+  "cases": [
+    {
+      "name": "no missing params",
+      "input": [
+        ["path", "content"],
+        {
+          "path": { "type": "string", "required": true },
+          "content": { "type": "string", "required": true }
+        }
+      ],
+      "expected": []
+    },
+    {
+      "name": "one missing required param",
+      "input": [
+        ["path"],
+        {
+          "path": { "type": "string", "required": true },
+          "content": { "type": "string", "required": true }
+        }
+      ],
+      "expected": ["content"]
+    },
+    {
+      "name": "optional param not provided",
+      "input": [
+        ["path"],
+        {
+          "path": { "type": "string", "required": true },
+          "mode": { "type": "string", "required": false }
+        }
+      ],
+      "expected": []
+    },
+    {
+      "name": "multiple missing params",
+      "input": [
+        [],
+        {
+          "source": { "type": "string", "required": true },
+          "dest": { "type": "string", "required": true },
+          "mode": { "type": "string", "required": false }
+        }
+      ],
+      "expected": ["source", "dest"]
+    }
+  ]
+}
+<<<END>>>
+```
+
+```
+<<<EXPLANATION>>>
+Create test data for validateUnknownParams function
+<<<FILE>>>
+proj/comp/sham-action-parser/proj/test-data/validateUnknownParams.json
+<<<OVERWRITE>>>
+{
+  "cases": [
+    {
+      "name": "no unknown params",
+      "input": [
+        ["path", "content"],
+        {
+          "path": { "type": "string", "required": true },
+          "content": { "type": "string", "required": true }
+        }
+      ],
+      "expected": []
+    },
+    {
+      "name": "one unknown param",
+      "input": [
+        ["path", "content", "extra"],
+        {
+          "path": { "type": "string", "required": true },
+          "content": { "type": "string", "required": true }
+        }
+      ],
+      "expected": ["extra"]
+    },
+    {
+      "name": "typo in param name",
+      "input": [
+        ["paht", "content"],
+        {
+          "path": { "type": "string", "required": true },
+          "content": { "type": "string", "required": true }
+        }
+      ],
+      "expected": ["paht"]
+    }
+  ]
+}
+<<<END>>>
+```
+
+### 3. Update parseAction Test Data
+
+```
+<<<EXPLANATION>>>
+Update parseAction test data to ensure all inputs are strings and add unknown parameter tests
 <<<FILE>>>
 proj/comp/sham-action-parser/proj/test-data/parseAction.json
 <<<SEARCH>>>
-{
-  "id": "cr1",
-  "properties": {
-    "action": "create_file",
-    "path": "/tmp/test.txt",
-    "content": "Hello World",
-    "mode": "0644"
-  }
-}
-<<<REPLACE>>>
-{
-  "id": "cr1",
-  "properties": {
-    "action": "create_file",
-    "path": "/tmp/test.txt",
-    "content": "Hello World",
-    "mode": "0644"
-  }
-}
-<<<END>>>
-```
-
-```
-<<<EXPLANATION>>>
-Fix boolean values to be strings in test data
-<<<FILE>>>
-proj/comp/sham-action-parser/proj/test-data/parseAction.json
-<<<SEARCH>>>
-{
-  "id": "cp1",
-  "properties": {
-    "action": "copy",
-    "source": "/tmp/src.txt",
-    "dest": "/tmp/dest.txt",
-    "recursive": true
-  }
-}
-<<<REPLACE>>>
-{
-  "id": "cp1",
-  "properties": {
-    "action": "copy",
-    "source": "/tmp/src.txt",
-    "dest": "/tmp/dest.txt",
-    "recursive": "true"
-  }
-}
-<<<END>>>
-```
-
-```
-<<<EXPLANATION>>>
-Add parse-specific test cases for invalid type conversions
-<<<FILE>>>
-proj/comp/sham-action-parser/proj/test-data/parseAction.json
-<<<SEARCH>>>
-    ]
-  }
-]
-<<<REPLACE>>>
-    ]
-  },
   {
-    "name": "Type Parsing Errors",
+    "name": "Valid Actions",
     "tests": [
       {
-        "name": "Invalid boolean value",
+        "name": "create_file with all params",
         "input": {
           "block": {
-            "id": "inv1",
+            "id": "cr1",
+            "properties": {
+              "action": "create_file",
+              "path": "/tmp/test.txt",
+              "content": "Hello World",
+              "mode": "0644"
+            }
+          }
+        },
+        "expected": {
+          "success": true,
+          "action": {
+            "action": "create_file",
+            "params": {
+              "path": "/tmp/test.txt",
+              "content": "Hello World",
+              "mode": "0644"
+            }
+          }
+        }
+      }
+    ]
+  },
+<<<REPLACE>>>
+  {
+    "name": "Valid Actions",
+    "tests": [
+      {
+        "name": "create_file with all params",
+        "input": {
+          "block": {
+            "id": "cr1",
+            "properties": {
+              "action": "create_file",
+              "path": "/tmp/test.txt",
+              "content": "Hello World",
+              "mode": "0644"
+            },
+            "startLine": 1,
+            "endLine": 5
+          }
+        },
+        "expected": {
+          "success": true,
+          "action": {
+            "action": "create_file",
+            "params": {
+              "path": "/tmp/test.txt",
+              "content": "Hello World",
+              "mode": "0644"
+            }
+          }
+        }
+      },
+      {
+        "name": "action with boolean parameter",
+        "input": {
+          "block": {
+            "id": "cp1",
             "properties": {
               "action": "copy",
               "source": "/tmp/src.txt",
               "dest": "/tmp/dest.txt",
-              "recursive": "yes"
+              "recursive": "true"
+            },
+            "startLine": 1,
+            "endLine": 5
+          }
+        },
+        "expected": {
+          "success": true,
+          "action": {
+            "action": "copy",
+            "params": {
+              "source": "/tmp/src.txt",
+              "dest": "/tmp/dest.txt",
+              "recursive": true
             }
+          }
+        }
+      }
+    ]
+  },
+<<<END>>>
+```
+
+```
+<<<EXPLANATION>>>
+Add test cases for unknown parameters
+<<<FILE>>>
+proj/comp/sham-action-parser/proj/test-data/parseAction.json
+<<<SEARCH>>>
+        }
+      }
+    ]
+  }
+]
+<<<REPLACE>>>
+        }
+      }
+    ]
+  },
+  {
+    "name": "Unknown Parameters",
+    "tests": [
+      {
+        "name": "Unknown parameter causes error",
+        "input": {
+          "block": {
+            "id": "unk1",
+            "properties": {
+              "action": "create_file",
+              "path": "/tmp/test.txt",
+              "content": "Hello",
+              "unknown_param": "value"
+            },
+            "startLine": 1,
+            "endLine": 5
           }
         },
         "expected": {
           "success": false,
           "errors": [
             {
-              "code": "INVALID_TYPE",
-              "message": "Parameter 'recursive' must be 'true' or 'false', got 'yes'",
-              "param": "recursive"
+              "code": "UNKNOWN_PARAMETER",
+              "message": "Unknown parameter 'unknown_param' for action 'create_file'",
+              "param": "unknown_param"
             }
           ]
         }
       },
       {
-        "name": "Invalid integer value",
+        "name": "Typo in parameter name",
         "input": {
           "block": {
-            "id": "inv2",
+            "id": "typ1",
             "properties": {
-              "action": "example_action",
-              "count": "not-a-number"
-            }
+              "action": "create_file",
+              "paht": "/tmp/test.txt",
+              "content": "Hello"
+            },
+            "startLine": 1,
+            "endLine": 4
           }
         },
         "expected": {
           "success": false,
           "errors": [
             {
-              "code": "INVALID_TYPE",
-              "message": "Parameter 'count' must be an integer, got 'not-a-number'",
-              "param": "count"
+              "code": "MISSING_REQUIRED",
+              "message": "Missing required parameter 'path'",
+              "param": "path"
+            },
+            {
+              "code": "UNKNOWN_PARAMETER",
+              "message": "Unknown parameter 'paht' for action 'create_file'",
+              "param": "paht"
             }
           ]
         }
@@ -272,11 +541,11 @@ proj/comp/sham-action-parser/proj/test-data/parseAction.json
 <<<END>>>
 ```
 
-### Create Implementation File
+### 4. Refactor Implementation to Modular Structure
 
 ```
 <<<EXPLANATION>>>
-Create the main implementation file for the action parser
+Refactor parseAction.ts to have testable internal functions while maintaining single-pass approach
 <<<FILE>>>
 proj/comp/sham-action-parser/proj/src/parseAction.ts
 <<<OVERWRITE>>>
@@ -284,6 +553,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import yaml from 'js-yaml';
 
+// Types
 interface ShamBlock {
   id: string;
   properties: Record<string, string>;
@@ -303,7 +573,7 @@ interface TypedAction {
 }
 
 interface ParseError {
-  code: string;
+  code: 'UNKNOWN_ACTION' | 'MISSING_REQUIRED' | 'INVALID_TYPE' | 'INVALID_ENUM' | 'UNKNOWN_PARAMETER';
   message: string;
   param?: string;
 }
@@ -322,24 +592,35 @@ interface ActionSchemas {
   [actionName: string]: ActionSchema;
 }
 
-// Load schemas from YAML
-function loadSchemas(): ActionSchemas {
+interface ParsedValue {
+  success: boolean;
+  value?: any;
+  error?: ParseError;
+}
+
+// Internal functions for unit testing
+
+export function loadSchemas(): ActionSchemas {
   const schemaPath = join(__dirname, '../../../unified-design/proj/unified-design.yaml');
   const content = readFileSync(schemaPath, 'utf8');
   const data = yaml.load(content) as any;
   return data.actions || {};
 }
 
-// Parse string value to typed value based on schema
-function parseValue(value: string, schema: ParamSchema, paramName: string): { value?: any; error?: ParseError } {
+export function checkActionExists(action: string, schemas: ActionSchemas): boolean {
+  return action in schemas;
+}
+
+export function parseParamValue(value: string, schema: ParamSchema, paramName: string): ParsedValue {
   switch (schema.type) {
     case 'string':
-      return { value };
+      return { success: true, value };
     
     case 'boolean':
-      if (value === 'true') return { value: true };
-      if (value === 'false') return { value: false };
+      if (value === 'true') return { success: true, value: true };
+      if (value === 'false') return { success: true, value: false };
       return {
+        success: false,
         error: {
           code: 'INVALID_TYPE',
           message: `Parameter '${paramName}' must be 'true' or 'false', got '${value}'`,
@@ -350,9 +631,10 @@ function parseValue(value: string, schema: ParamSchema, paramName: string): { va
     case 'integer':
       const num = parseInt(value, 10);
       if (Number.isInteger(num) && num.toString() === value) {
-        return { value: num };
+        return { success: true, value: num };
       }
       return {
+        success: false,
         error: {
           code: 'INVALID_TYPE',
           message: `Parameter '${paramName}' must be an integer, got '${value}'`,
@@ -362,9 +644,10 @@ function parseValue(value: string, schema: ParamSchema, paramName: string): { va
     
     case 'enum':
       if (schema.values && schema.values.includes(value)) {
-        return { value };
+        return { success: true, value };
       }
       return {
+        success: false,
         error: {
           code: 'INVALID_ENUM',
           message: `Parameter '${paramName}' must be one of [${schema.values?.join(', ')}], got '${value}'`,
@@ -374,14 +657,34 @@ function parseValue(value: string, schema: ParamSchema, paramName: string): { va
     
     default:
       return {
+        success: false,
         error: {
-          code: 'PARSE_ERROR',
+          code: 'INVALID_TYPE',
           message: `Unknown type '${schema.type}' for parameter '${paramName}'`,
           param: paramName
         }
       };
   }
 }
+
+export function getMissingParams(provided: string[], schema: ActionSchema): string[] {
+  const missing: string[] = [];
+  
+  for (const [paramName, paramSchema] of Object.entries(schema.params)) {
+    if (paramSchema.required && !provided.includes(paramName)) {
+      missing.push(paramName);
+    }
+  }
+  
+  return missing;
+}
+
+export function validateUnknownParams(provided: string[], schema: ActionSchema): string[] {
+  const schemaParams = Object.keys(schema.params);
+  return provided.filter(param => param !== 'action' && !schemaParams.includes(param));
+}
+
+// Main export function
 
 export function parseAction(block: ShamBlock, schemas?: ActionSchemas): ParseResult {
   const errors: ParseError[] = [];
@@ -399,9 +702,8 @@ export function parseAction(block: ShamBlock, schemas?: ActionSchemas): ParseRes
     };
   }
   
-  // Check if action exists in schema
-  const actionSchema = loadedSchemas[actionName];
-  if (!actionSchema) {
+  // Check if action exists
+  if (!checkActionExists(actionName, loadedSchemas)) {
     return {
       success: false,
       errors: [{
@@ -411,35 +713,42 @@ export function parseAction(block: ShamBlock, schemas?: ActionSchemas): ParseRes
     };
   }
   
-  // Parse and validate parameters
-  const typedParams: Record<string, any> = {};
+  const actionSchema = loadedSchemas[actionName];
+  const providedParams = Object.keys(block.properties);
   
-  // Check all required params are present
-  for (const [paramName, paramSchema] of Object.entries(actionSchema.params)) {
-    if (paramSchema.required && !(paramName in block.properties)) {
-      errors.push({
-        code: 'MISSING_REQUIRED',
-        message: `Missing required parameter '${paramName}'`,
-        param: paramName
-      });
-    }
+  // Check for missing required params
+  const missingParams = getMissingParams(providedParams, actionSchema);
+  for (const param of missingParams) {
+    errors.push({
+      code: 'MISSING_REQUIRED',
+      message: `Missing required parameter '${param}'`,
+      param
+    });
   }
   
-  // Parse all provided params
+  // Check for unknown params
+  const unknownParams = validateUnknownParams(providedParams, actionSchema);
+  for (const param of unknownParams) {
+    errors.push({
+      code: 'UNKNOWN_PARAMETER',
+      message: `Unknown parameter '${param}' for action '${actionName}'`,
+      param
+    });
+  }
+  
+  // Parse all known params
+  const typedParams: Record<string, any> = {};
+  
   for (const [key, value] of Object.entries(block.properties)) {
-    if (key === 'action') continue;  // Already processed
+    if (key === 'action') continue;
     
     const paramSchema = actionSchema.params[key];
-    if (!paramSchema) {
-      // Unknown parameter - for now, pass through as string
-      typedParams[key] = value;
-      continue;
-    }
+    if (!paramSchema) continue; // Unknown param, already reported
     
-    const parseResult = parseValue(value, paramSchema, key);
-    if (parseResult.error) {
+    const parseResult = parseParamValue(value, paramSchema, key);
+    if (!parseResult.success && parseResult.error) {
       errors.push(parseResult.error);
-    } else {
+    } else if (parseResult.success) {
       typedParams[key] = parseResult.value;
     }
   }
@@ -459,11 +768,140 @@ export function parseAction(block: ShamBlock, schemas?: ActionSchemas): ParseRes
 <<<END>>>
 ```
 
-### Update Component Index
+### 5. Create Unit Test Files
 
 ```
 <<<EXPLANATION>>>
-Update the component's index file to export the new function
+Create unit test for checkActionExists
+<<<FILE>>>
+proj/comp/sham-action-parser/proj/test/checkActionExists.test.ts
+<<<OVERWRITE>>>
+import { describe, it, expect } from 'vitest';
+import { checkActionExists } from '../src/parseAction';
+import testCases from '../test-data/checkActionExists.json';
+
+describe('checkActionExists', () => {
+  testCases.cases.forEach(testCase => {
+    it(testCase.name, () => {
+      const result = checkActionExists(...testCase.input);
+      expect(result).toEqual(testCase.expected);
+    });
+  });
+});
+<<<END>>>
+```
+
+```
+<<<EXPLANATION>>>
+Create unit test for parseParamValue
+<<<FILE>>>
+proj/comp/sham-action-parser/proj/test/parseParamValue.test.ts
+<<<OVERWRITE>>>
+import { describe, it, expect } from 'vitest';
+import { parseParamValue } from '../src/parseAction';
+import testCases from '../test-data/parseParamValue.json';
+
+describe('parseParamValue', () => {
+  testCases.cases.forEach(testCase => {
+    it(testCase.name, () => {
+      const result = parseParamValue(...testCase.input);
+      expect(result).toEqual(testCase.expected);
+    });
+  });
+});
+<<<END>>>
+```
+
+```
+<<<EXPLANATION>>>
+Create unit test for getMissingParams
+<<<FILE>>>
+proj/comp/sham-action-parser/proj/test/getMissingParams.test.ts
+<<<OVERWRITE>>>
+import { describe, it, expect } from 'vitest';
+import { getMissingParams } from '../src/parseAction';
+import testCases from '../test-data/getMissingParams.json';
+
+describe('getMissingParams', () => {
+  testCases.cases.forEach(testCase => {
+    it(testCase.name, () => {
+      const result = getMissingParams(...testCase.input);
+      expect(result).toEqual(testCase.expected);
+    });
+  });
+});
+<<<END>>>
+```
+
+```
+<<<EXPLANATION>>>
+Create unit test for validateUnknownParams
+<<<FILE>>>
+proj/comp/sham-action-parser/proj/test/validateUnknownParams.test.ts
+<<<OVERWRITE>>>
+import { describe, it, expect } from 'vitest';
+import { validateUnknownParams } from '../src/parseAction';
+import testCases from '../test-data/validateUnknownParams.json';
+
+describe('validateUnknownParams', () => {
+  testCases.cases.forEach(testCase => {
+    it(testCase.name, () => {
+      const result = validateUnknownParams(...testCase.input);
+      expect(result).toEqual(testCase.expected);
+    });
+  });
+});
+<<<END>>>
+```
+
+```
+<<<EXPLANATION>>>
+Create main parseAction test
+<<<FILE>>>
+proj/comp/sham-action-parser/proj/test/parseAction.test.ts
+<<<OVERWRITE>>>
+import { describe, it, expect } from 'vitest';
+import { parseAction } from '../src/parseAction';
+import testData from '../test-data/parseAction.json';
+
+// Mock the loadSchemas function
+const mockSchemas = {
+  create_file: {
+    params: {
+      path: { type: 'string', required: true },
+      content: { type: 'string', required: true },
+      mode: { type: 'string', required: false }
+    }
+  },
+  copy: {
+    params: {
+      source: { type: 'string', required: true },
+      dest: { type: 'string', required: true },
+      recursive: { type: 'boolean', required: false }
+    }
+  }
+};
+
+describe('parseAction', () => {
+  testData.forEach(group => {
+    describe(group.name, () => {
+      group.tests.forEach(test => {
+        it(test.name, () => {
+          const result = parseAction(test.input.block, mockSchemas);
+          expect(result).toEqual(test.expected);
+        });
+      });
+    });
+  });
+});
+<<<END>>>
+```
+
+### 6. Update Exports
+
+```
+<<<EXPLANATION>>>
+Update index.ts to only export public API, not internal functions
 <<<FILE>>>
 proj/comp/sham-action-parser/proj/src/index.ts
 <<<OVERWRITE>>>
@@ -472,33 +910,65 @@ export type { ParseResult, ParseError, TypedAction, ShamBlock } from './parseAct
 <<<END>>>
 ```
 
-### Update Clada Dependencies
+### 7. Update Architecture Documentation
 
 ```
 <<<EXPLANATION>>>
-Update clada references to use the new component name
+Update ARCH.md to reflect the modular but single-pass design
 <<<FILE>>>
-proj/comp/clada/proj/doc/API.md
+proj/comp/sham-action-parser/proj/doc/ARCH.md
 <<<SEARCH>>>
-  proj/comp/sham-validator:
-    functions: [validateAction]
-    types: [ValidationError, ValidationResult]
+## Design Decisions
+
+1. **Single-Pass Parse+Validate**: Type conversion and validation are inseparable operations
+2. **Schema-Driven**: All validation rules come from unified-design.yaml
+3. **String Input Only**: SHAM parser outputs only strings; this component does all type conversion
+4. **Type Coercion Rules**:
+   - Boolean: "true" → true, "false" → false, anything else is error
+   - Integer: parseInt(str, 10) with Number.isInteger() check
+   - Enum: Exact string match from schema values array
+   - String: Pass through unchanged
 <<<REPLACE>>>
-  proj/comp/sham-action-parser:
-    functions: [parseAction]
-    types: [ParseError, ParseResult]
+## Design Decisions
+
+1. **Single-Pass Parse+Validate**: Type conversion and validation are inseparable operations
+2. **Schema-Driven**: All validation rules come from unified-design.yaml
+3. **String Input Only**: SHAM parser outputs only strings; this component does all type conversion
+4. **Type Coercion Rules**:
+   - Boolean: "true" → true, "false" → false, anything else is error
+   - Integer: parseInt(str, 10) with Number.isInteger() check
+   - Enum: Exact string match from schema values array
+   - String: Pass through unchanged
+5. **Modular Internal Structure**: Pure functions for testability while maintaining single-pass semantics
+6. **Error Collection**: Collect all errors rather than fail-fast for better UX
+7. **Unknown Parameters**: Treated as errors to catch typos early
+8. **Case Sensitivity**: Strict matching (e.g., "true" not "True")
+
+## Internal Architecture
+
+While `parseAction` is the only public function, it's composed of testable units:
+- `checkActionExists`: Verify action is in schema
+- `parseParamValue`: Convert string to typed value
+- `getMissingParams`: Find required params not provided
+- `validateUnknownParams`: Find params not in schema
+
+This allows comprehensive unit testing while keeping the single-pass guarantee.
 <<<END>>>
 ```
 
 ## Summary
 
-This completes all the required changes:
+These edits:
+1. ✅ Restore modular test structure with proper string inputs
+2. ✅ Fix API.md to follow XD5 format exactly
+3. ✅ Refactor implementation to be modular but single-pass
+4. ✅ Create comprehensive test data files
+5. ✅ Add strict unknown parameter checking
+6. ✅ Follow XD5's test-first and documentation-complete principles
 
-1. ✅ Deleted misguided test files and test data
-2. ✅ Renamed component from `sham-validator` to `sham-action-parser`
-3. ✅ Updated all documentation (API.md, ARCH.md)
-4. ✅ Fixed test data to use strings for all values
-5. ✅ Created new single-pass implementation
-6. ✅ Updated clada dependency references
-
-The key insight is that SHAM parsing and type conversion/validation cannot be separated - they must happen together in a single pass since the parser only outputs strings.
+The key improvements:
+- Internal functions are testable units but not exported
+- All test data shows string inputs
+- Unknown parameters cause errors (no silent pass-through)
+- Follows XD5 structure and philosophy
+- Maintains single-pass parse+validate insight
