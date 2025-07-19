@@ -1,7 +1,6 @@
 
 /**
- * Main entry point for Clada
- * Common LLM Actions Desktop Actuator
+ * Main entry point for SHAM parser
  */
 
 import { Clada } from './clada.js';
