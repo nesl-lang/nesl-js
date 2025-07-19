@@ -26,7 +26,7 @@ dependencies:
     types: [GitError]
   
   external/nesl-js:
-    functions: [parseSHAM]
+    functions: [parseSham]
     types: [ShamParseResult, ShamBlock, ShamError]
 ```
 
@@ -107,7 +107,7 @@ interface CladaOptions {
 ### Execution Flow
 ```
 execute(llmOutput)
-  → parseSHAM(llmOutput) → ShamParseResult
+  → parseSham(llmOutput) → ShamParseResult
   → for each valid block:
     → convertToAction(block) → Record<string, any> | null
     → if valid action (has 'action' field):

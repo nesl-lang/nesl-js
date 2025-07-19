@@ -1,4 +1,4 @@
-import { parseSHAM } from '../src/parser.js';
+import { parseSham } from '../src/parser.js';
 import fs from 'fs';
 
 const input = `#!SHAM [@three-char-SHA-256: nwl]
@@ -14,7 +14,7 @@ lines.forEach((line, i) => {
   console.log(`Line ${i+1}: ${JSON.stringify(line)}`);
 });
 
-const result = parseSHAM(input);
+const result = parseSham(input);
 
 console.log('\n=== ACTUAL RESULT ===');
 console.log(JSON.stringify(result, null, 2));

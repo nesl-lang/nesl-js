@@ -45,5 +45,5 @@ Then test installation works:
 cd /tmp && mkdir test-nesl && cd test-nesl
 npm init -y
 npm install git+https://github.com/nesl-lang/nesl-js.git
-node -e "const { parseSHAM } = require('nesl-js'); console.log(typeof parseSHAM)"
+node -e "const { parseSham } = require('nesl-js'); console.log(typeof parseSham)"
 ```

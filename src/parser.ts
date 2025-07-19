@@ -22,7 +22,7 @@ interface HeredocInfo {
  * Parse SHAM format content into blocks and errors
  * All parsing uses 0-based indices internally, converted to 1-based for output
  */
-export function parseSHAM(content: string): ParseResult {
+export function parseSham(content: string): ParseResult {
   const lines = content.split(/\r?\n/);
   let state: ParserState = 'SEEKING_HEADER';
   const blocks: Block[] = [];

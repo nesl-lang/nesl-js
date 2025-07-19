@@ -2,8 +2,8 @@
 
 stuart@Stuarts-MacBook-Pro /t/test-nesl> # Test actual parsing
                                          node -e "
-                                         const { parseSHAM } = require('nesl-js');
-                                         const result = parseSHAM('key=value');
+                                         const { parseSham } = require('nesl-js');
+                                         const result = parseSham('key=value');
                                          console.log(JSON.stringify(result, null, 2));
                                          "
 
@@ -23,9 +23,9 @@ npm install sham-parser-js
 ## Usage
 
 ```javascript
-import { parseSHAM } from 'sham-parser-js';
+import { parseSham } from 'sham-parser-js';
 
-const result = parseSHAM(shamContent);
+const result = parseSham(shamContent);
 console.log(result.blocks);
 console.log(result.errors);
 ```

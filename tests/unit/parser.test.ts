@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { parseSHAM } from '../../src/parser';
+import { parseSham } from '../../src/parser';
 import type { ParseResult } from '../../src/types';
 
-describe('parseSHAM unit tests', () => {
+describe('parseSham unit tests', () => {
   it('should correctly parse test case 007 (heredoc-after-valid-end)', () => {
     const input = `#!SHAM [@three-char-SHA-256: col]
 content = <<'EOT_SHAM_col'
@@ -42,7 +42,7 @@ EOT_SHAM_col
       }]
     };
 
-    const result = parseSHAM(input);
+    const result = parseSham(input);
     expect(result).toEqual(expected);
   });
 });
