@@ -13,6 +13,21 @@
           "name": "uppercase-ok",
           "input": ["XYZ"],
           "expected": { "valid": true }
+        },
+        {
+          "name": "four-to-eight-chars-secretly-okay-4",
+          "input": ["a3f5"],
+          "expected": { "valid": true }
+        },
+        {
+          "name": "four-to-eight-chars-secretly-okay-6",
+          "input": ["a3f5d7"],
+          "expected": { "valid": true }
+        },
+        {
+          "name": "four-to-eight-chars-secretly-okay-8",
+          "input": ["a7dj39f6"],
+          "expected": { "valid": true }
         }
       ]
     },
@@ -22,14 +37,6 @@
         {
           "name": "too-short",
           "input": ["ab"],
-          "expected": {
-            "valid": false,
-            "error": "Block ID must be exactly 3 characters"
-          }
-        },
-        {
-          "name": "too-long",
-          "input": ["abcd"],
           "expected": {
             "valid": false,
             "error": "Block ID must be exactly 3 characters"

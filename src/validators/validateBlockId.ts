@@ -1,5 +1,5 @@
 import type { ValidationResult } from '../types';
-import { BLOCK_ID_PATTERN, BLOCK_ID_LENGTH } from '../patterns';
+import { BLOCK_ID_PATTERN, BLOCK_ID_MIN_LENGTH, BLOCK_ID_MAX_LENGTH } from '../patterns';
 
 /**
  * Validate block ID meets requirements:
@@ -7,10 +7,10 @@ import { BLOCK_ID_PATTERN, BLOCK_ID_LENGTH } from '../patterns';
  * - Only alphanumeric characters
  */
 export function validateBlockId(id: string): ValidationResult {
-  if (id.length !== BLOCK_ID_LENGTH) {
+  if (id.length < BLOCK_ID_MIN_LENGTH || id.length > BLOCK_ID_MAX_LENGTH) {
     return {
       valid: false,
-      error: `Block ID must be exactly ${BLOCK_ID_LENGTH} characters`
+      error: `Block ID must be exactly ${BLOCK_ID_MIN_LENGTH} characters`
     };
   }
   

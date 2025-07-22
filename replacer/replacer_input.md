@@ -1,49 +1,26 @@
-=== PROCESSED: 2025-07-17 01:39:27 ===
-SUCCESS Block 1: Updated /Users/stuart/repos/nesl-lang/nesl-js/package.json
-🚨🚨🚨 ERROR Block 2: 2 matches found in /Users/stuart/repos/nesl-lang/nesl-js/.gitignore - ABORTING 🚨🚨🚨
+=== PROCESSED: 2025-07-22 18:12:00 ===
+SUCCESS Block 1: Updated /Users/stuart/repos/nesl-lang/nesl-js/sham-shared/config.json
 ===
 
-```
+I see the issue! The config.json has a hardcoded regex pattern `"^[A-Za-z0-9]{3}$"` that only matches exactly 3 characters, but it should be using the `blockIdMinLength` and `blockIdMaxLength` values (3 and 8) to create a pattern that matches 3-8 characters.
+
+We need to fix the config.json file:
+
 <<<EXPLANATION>>>
-Add repository field to package.json for GitHub installation support
+Update the blockId pattern in config.json to use the range {3,8} instead of exactly {3} to match the blockIdMinLength and blockIdMaxLength values
+
 <<<FILE>>>
-/Users/stuart/repos/nesl-lang/nesl-js/package.json
+/Users/stuart/repos/nesl-lang/nesl-js/sham-shared/config.json
+
 <<<SEARCH>>>
-  },
-  "devDependencies": {
+    "blockId": "^[A-Za-z0-9]{3}$",
 <<<REPLACE>>>
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nesl-lang/nesl-js.git"
-  },
-  "devDependencies": {
+    "blockId": "^[A-Za-z0-9]{3,8}$",
 <<<END>>>
-```
 
-```
-<<<EXPLANATION>>>
-Remove dist from gitignore since we're committing built files for direct GitHub consumption
-<<<FILE>>>
-/Users/stuart/repos/nesl-lang/nesl-js/.gitignore
-<<<SEARCH>>>
-dist
-<<<REPLACE>>>
- 
-<<<END>>>
-```
-
-After applying these edits:
+After this change, you'll need to regenerate the patterns.ts file by running:
 ```bash
-git add .gitignore package.json
-git commit -m "Configure package for GitHub installation"
-git push origin main
+node scripts/generate-patterns.js
 ```
 
-Then test installation works:
-```bash
-cd /tmp && mkdir test-nesl && cd test-nesl
-npm init -y
-npm install git+https://github.com/nesl-lang/nesl-js.git
-node -e "const { parseSham } = require('nesl-js'); console.log(typeof parseSham)"
-```
+This will update the generated `src/patterns.ts` file with the correct regex pattern that matches 3-8 character block IDs.
