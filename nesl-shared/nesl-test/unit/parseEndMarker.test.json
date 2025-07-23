@@ -6,7 +6,7 @@
       "tests": [
         {
           "name": "normal-case",
-          "input": ["#!END_SHAM_xyz"],
+          "input": ["#!END_NESL_xyz"],
           "expected": {
             "isEnd": true,
             "blockId": "xyz"
@@ -14,7 +14,7 @@
         },
          {
           "name": "normal-case",
-          "input": ["#!END_SHAM_xy"],
+          "input": ["#!END_NESL_xy"],
           "expected": {
             "isEnd": true,
             "blockId": "xy"
@@ -22,7 +22,7 @@
         },
          {
           "name": "normal-case",
-          "input": ["#!END_SHAM_12345678"],
+          "input": ["#!END_NESL_12345678"],
           "expected": {
             "isEnd": true,
             "blockId": "12345678"
@@ -35,28 +35,28 @@
       "tests": [
         {
           "name": "missing-sharp",
-          "input": ["END_SHAM_abc"],
+          "input": ["END_NESL_abc"],
           "expected": {
             "isEnd": false
           }
         },
         {
           "name": "lowercase-end",
-          "input": ["#!end_sham_abc"],
+          "input": ["#!end_nesl_abc"],
           "expected": {
             "isEnd": false
           }
         },
         {
           "name": "extra-text-after",
-          "input": ["#!END_SHAM_abc extra"],
+          "input": ["#!END_NESL_abc extra"],
           "expected": {
             "isEnd": false
           }
         },
         {
           "name": "special-chars-in-id",
-          "input": ["#!END_SHAM_a-b"],
+          "input": ["#!END_NESL_a-b"],
           "expected": {
             "isEnd": false
           }

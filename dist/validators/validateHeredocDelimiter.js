@@ -4,7 +4,7 @@ exports.validateHeredocDelimiter = validateHeredocDelimiter;
 const patterns_1 = require("../patterns");
 /**
  * Validate heredoc delimiter matches expected format
- * Must be exactly 'EOT_SHAM_' + blockId
+ * Must be exactly 'EOT_NESL_' + blockId
  */
 function validateHeredocDelimiter(delimiter, blockId) {
     const expected = `${patterns_1.HEREDOC_PREFIX}${blockId}`;

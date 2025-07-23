@@ -2,8 +2,8 @@ stuart@Stuarts-MacBook-Pro ~/r/n/nesl-js (main)> ./fs
 === 'pwd' ===
 /Users/stuart/repos/nesl-lang/nesl-js
 -e 
-=== sham21/ contents ('find sham21 ...') ===
-sham21
+=== nesl21/ contents ('find nesl21 ...') ===
+nesl21
 nesl-parser-js
 - README.md
 - docs
@@ -62,7 +62,7 @@ nesl-parser-js
 - - - validateHeredocDelimiter.test.ts
 - - - validateKey.test.ts
 - tsconfig.json
-sham21_3 example.md
+nesl21_3 example.md
 -e 
 === 'ls -1' ===
 11-hldd-2.md
@@ -72,8 +72,8 @@ fs
 g
 old_july_11
 replacer
-sham21
-sham21_old
+nesl21
+nesl21_old
 studies
 telts
 trash

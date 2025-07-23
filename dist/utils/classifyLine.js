@@ -11,7 +11,7 @@ function classifyLine(line) {
         return 'empty';
     }
     // Check in priority order from config
-    if (trimmed.startsWith('#!END_SHAM_')) {
+    if (trimmed.startsWith('#!END_NESL_')) {
         return 'end_marker';
     }
     if (trimmed.startsWith('#!NESL ')) {

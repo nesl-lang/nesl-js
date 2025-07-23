@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parseSham = void 0;
+exports.parseNesl = void 0;
 var parser_1 = require("./parser");
-Object.defineProperty(exports, "parseSham", { enumerable: true, get: function () { return parser_1.parseSham; } });
+Object.defineProperty(exports, "parseNesl", { enumerable: true, get: function () { return parser_1.parseNesl; } });
 //# sourceMappingURL=index.js.map

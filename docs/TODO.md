@@ -1,9 +1,9 @@
 
 TODO 
 
-- replace EOT_SHAM_... with EOT_... and replace END_SHAM_... with just END_...
+- replace EOT_NESL_... with EOT_... and replace END_NESL_... with just END_...
 
-that extra _SHAM_ is annoying and unnecessary
+that extra _NESL_ is annoying and unnecessary
 
 - rename nesl to nesl
 

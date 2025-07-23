@@ -9,12 +9,12 @@ Parse NESL block string values into typed data and validate against action schem
 
 ## Public Interface
 
-### parseAction(block: ShamBlock, schemas: ActionSchemas): ParseResult
+### parseAction(block: NeslBlock, schemas: ActionSchemas): ParseResult
 
 Parses a NESL block's string properties into typed values according to the action schema.
 
 **Parameters:**
-- `block`: ShamBlock with all string values from NESL parser
+- `block`: NeslBlock with all string values from NESL parser
 - `schemas`: Action schemas loaded from unified-design.yaml
 
 **Returns:**
@@ -23,7 +23,7 @@ Parses a NESL block's string properties into typed values according to the actio
 ## Types
 
 ```typescript
-interface ShamBlock {
+interface NeslBlock {
   id: string;
   properties: Record<string, string>;  // ALL values are strings
   startLine: number;
@@ -58,7 +58,7 @@ interface ParseError {
 ==== proj/comp/nesl-action-parser/proj/src/index.ts ====
 
 export { parseAction } from './parseAction';
-export type { ParseResult, ParseError, TypedAction, ShamBlock } from './parseAction';
+export type { ParseResult, ParseError, TypedAction, NeslBlock } from './parseAction';
 
 ==== proj/comp/nesl-action-parser/proj/src/parseAction.ts ====
 
@@ -66,7 +66,7 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import yaml from 'js-yaml';
 
-interface ShamBlock {
+interface NeslBlock {
   id: string;
   properties: Record<string, string>;
   startLine: number;
@@ -165,7 +165,7 @@ function parseValue(value: string, schema: ParamSchema, paramName: string): { va
   }
 }
 
-export function parseAction(block: ShamBlock, schemas?: ActionSchemas): ParseResult {
+export function parseAction(block: NeslBlock, schemas?: ActionSchemas): ParseResult {
   const errors: ParseError[] = [];
   const loadedSchemas = schemas || loadSchemas();
   

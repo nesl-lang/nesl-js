@@ -1,16 +1,16 @@
 import { describe, it, expect } from 'vitest';
-import { parseSham } from '../../src/parser';
+import { parseNesl } from '../../src/parser';
 import type { ParseResult } from '../../src/types';
 
-describe('parseSham unit tests', () => {
+describe('parseNesl unit tests', () => {
   it('should correctly parse test case 007 (heredoc-after-valid-end)', () => {
     const input = `#!NESL [@three-char-SHA-256: col]
-content = <<'EOT_SHAM_col'
+content = <<'EOT_NESL_col'
 This line is fine
-EOT_SHAM_col
+EOT_NESL_col
 This breaks parsing
-EOT_SHAM_col
-#!END_SHAM_col`;
+EOT_NESL_col
+#!END_NESL_col`;
 
     const expected: ParseResult = {
       blocks: [{
@@ -28,7 +28,7 @@ EOT_SHAM_col
         length: 19,
         blockId: 'col',
         content: 'This breaks parsing',
-        context: "This line is fine\nEOT_SHAM_col\nThis breaks parsing\nEOT_SHAM_col\n#!END_SHAM_col",
+        context: "This line is fine\nEOT_NESL_col\nThis breaks parsing\nEOT_NESL_col\n#!END_NESL_col",
         message: "Invalid line format in block 'col': not a valid key-value assignment or empty line"
       }, {
         code: 'MALFORMED_ASSIGNMENT',
@@ -36,13 +36,13 @@ EOT_SHAM_col
         column: 1,
         length: 12,
         blockId: 'col',
-        content: 'EOT_SHAM_col',
-        context: "This line is fine\nEOT_SHAM_col\nThis breaks parsing\nEOT_SHAM_col\n#!END_SHAM_col",
+        content: 'EOT_NESL_col',
+        context: "This line is fine\nEOT_NESL_col\nThis breaks parsing\nEOT_NESL_col\n#!END_NESL_col",
         message: "Invalid line format in block 'col': not a valid key-value assignment or empty line"
       }]
     };
 
-    const result = parseSham(input);
+    const result = parseNesl(input);
     expect(result).toEqual(expected);
   });
 });

@@ -50,17 +50,17 @@
       "tests": [
         {
           "name": "valid-heredoc",
-          "input": ["content = <<'EOT_SHAM_abc'"],
+          "input": ["content = <<'EOT_NESL_abc'"],
           "expected": {
             "success": true,
             "type": "heredoc",
             "key": "content",
-            "delimiter": "EOT_SHAM_abc"
+            "delimiter": "EOT_NESL_abc"
           }
         },
         {
           "name": "heredoc-no-quotes",
-          "input": ["content = <<EOT_SHAM_abc"],
+          "input": ["content = <<EOT_NESL_abc"],
           "expected": {
             "success": false,
             "error": {

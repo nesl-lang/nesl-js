@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.parseSham = parseSham;
+exports.parseNesl = parseNesl;
 const validateBlockId_1 = require("./validators/validateBlockId");
 const validateKey_1 = require("./validators/validateKey");
 const findInvalidCharPosition_1 = require("./validators/findInvalidCharPosition");
@@ -14,7 +14,7 @@ const getContextWindow_1 = require("./utils/getContextWindow");
  * Parse NESL format content into blocks and errors
  * All parsing uses 0-based indices internally, converted to 1-based for output
  */
-function parseSham(content) {
+function parseNesl(content) {
     const lines = content.split(/\r?\n/);
     let state = 'SEEKING_HEADER';
     const blocks = [];

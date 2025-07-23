@@ -1,10 +1,10 @@
-import { parseSham } from '../src/parser.js';
+import { parseNesl } from '../src/parser.js';
 import fs from 'fs';
 
 const input = `#!NESL [@three-char-SHA-256: nwl]
 key = "line1
 line2"
-#!END_SHAM_nwl`;
+#!END_NESL_nwl`;
 
 console.log('=== INPUT ===');
 console.log(JSON.stringify(input));
@@ -14,7 +14,7 @@ lines.forEach((line, i) => {
   console.log(`Line ${i+1}: ${JSON.stringify(line)}`);
 });
 
-const result = parseSham(input);
+const result = parseNesl(input);
 
 console.log('\n=== ACTUAL RESULT ===');
 console.log(JSON.stringify(result, null, 2));

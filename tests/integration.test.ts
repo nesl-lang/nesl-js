@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 import { marked } from 'marked';
-import { parseSham } from '../src/parser';
+import { parseNesl } from '../src/parser';
 
 const testPath = join(__dirname, '../nesl-shared/nesl-test/integration.md');
 
@@ -18,7 +18,7 @@ describe('NESL Parser Integration Tests', () => {
     it(name, () => {
       const input = codeBlocks[baseIndex].text;
       const expected = JSON.parse(codeBlocks[baseIndex + 1].text);
-      const result = parseSham(input);
+      const result = parseNesl(input);
       expect(result).toEqual(expected);
     });
   });

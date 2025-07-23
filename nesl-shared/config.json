@@ -10,7 +10,7 @@
     "keyStart": "^[\\p{L}_]",
     "keyChars": "^[\\p{L}\\p{N}_]*$",
     "excludeChars": "[\\u200B-\\u200D\\u2060\\uFEFF\\u0000-\\u001F\\u007F-\\u009F]",
-    "heredocPrefix": "EOT_SHAM_"
+    "heredocPrefix": "EOT_NESL_"
   },
   "parser": {
     "errorContextWindow": 5,
