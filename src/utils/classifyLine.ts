@@ -16,7 +16,7 @@ export function classifyLine(line: string): LineType {
     return 'end_marker';
   }
   
-  if (trimmed.startsWith('#!SHAM ')) {
+  if (trimmed.startsWith('#!NESL ')) {
     return 'header';
   }
   

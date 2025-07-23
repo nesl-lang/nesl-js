@@ -1,15 +1,15 @@
-// Generated from sham-shared/config.json - DO NOT EDIT
-// Generated from sham-shared/config.json - DO NOT EDIT
-// Generated from sham-shared/config.json - DO NOT EDIT
-// Generated from sham-shared/config.json - DO NOT EDIT
-// Generated from sham-shared/config.json - DO NOT EDIT
-// Generated from sham-shared/config.json - DO NOT EDIT
-// Generated from sham-shared/config.json - DO NOT EDIT!!!!!!!! 
-// Generated from sham-shared/config.json - DO NOT EDIT!!!!!!!! 
-// Generated from sham-shared/config.json - DO NOT EDIT!!!!!!!! 
-// Generated from sham-shared/config.json - DO NOT EDIT!!!!!!!! 
-// Generated from sham-shared/config.json - DO NOT EDIT!!!!!!!! 
-// Generated from sham-shared/config.json - DO NOT EDIT!!!!!!!! 
+// Generated from nesl-shared/config.json - DO NOT EDIT
+// Generated from nesl-shared/config.json - DO NOT EDIT
+// Generated from nesl-shared/config.json - DO NOT EDIT
+// Generated from nesl-shared/config.json - DO NOT EDIT
+// Generated from nesl-shared/config.json - DO NOT EDIT
+// Generated from nesl-shared/config.json - DO NOT EDIT
+// Generated from nesl-shared/config.json - DO NOT EDIT!!!!!!!! 
+// Generated from nesl-shared/config.json - DO NOT EDIT!!!!!!!! 
+// Generated from nesl-shared/config.json - DO NOT EDIT!!!!!!!! 
+// Generated from nesl-shared/config.json - DO NOT EDIT!!!!!!!! 
+// Generated from nesl-shared/config.json - DO NOT EDIT!!!!!!!! 
+// Generated from nesl-shared/config.json - DO NOT EDIT!!!!!!!! 
 export const BLOCK_ID_PATTERN = /^[A-Za-z0-9]{2,8}$/;
 export const KEY_START_PATTERN = /^[\p{L}_]/u;
 export const KEY_CHARS_PATTERN = /^[\p{L}\p{N}_]*$/u;

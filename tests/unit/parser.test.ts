@@ -4,7 +4,7 @@ import type { ParseResult } from '../../src/types';
 
 describe('parseSham unit tests', () => {
   it('should correctly parse test case 007 (heredoc-after-valid-end)', () => {
-    const input = `#!SHAM [@three-char-SHA-256: col]
+    const input = `#!NESL [@three-char-SHA-256: col]
 content = <<'EOT_SHAM_col'
 This line is fine
 EOT_SHAM_col

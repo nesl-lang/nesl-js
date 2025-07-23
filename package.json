@@ -1,7 +1,7 @@
 {
   "name": "nesl-js",
-  "version": "0.1.6",
-  "description": "JavaScript parser for SHAM format",
+  "version": "0.1.7",
+  "description": "JavaScript parser for NESL format",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {

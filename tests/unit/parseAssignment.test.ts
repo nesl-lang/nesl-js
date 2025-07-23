@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { parseAssignment } from '../../src/parsers/parseAssignment';
-import testCases from '../../sham-shared/sham-test/unit/parseAssignment.test.json';
+import testCases from '../../nesl-shared/nesl-test/unit/parseAssignment.test.json';
 
 describe('parseAssignment', () => {
   testCases.groups.forEach(group => {

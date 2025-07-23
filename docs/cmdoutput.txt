@@ -4,7 +4,7 @@ stuart@Stuarts-MacBook-Pro ~/r/n/nesl-js (main)> ./fs
 -e 
 === sham21/ contents ('find sham21 ...') ===
 sham21
-sham-parser-js
+nesl-parser-js
 - README.md
 - docs
 - - cmdoutput.txt
@@ -16,9 +16,9 @@ sham-parser-js
 - scripts
 - - generate-patterns.js
 - - generate-tests.js
-- sham-shared
+- nesl-shared
 - - config.json
-- - sham-test
+- - nesl-test
 - - - .DS_Store
 - - - integration.md
 - - - unit

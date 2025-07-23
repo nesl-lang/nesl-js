@@ -14,7 +14,7 @@ function classifyLine(line) {
     if (trimmed.startsWith('#!END_SHAM_')) {
         return 'end_marker';
     }
-    if (trimmed.startsWith('#!SHAM ')) {
+    if (trimmed.startsWith('#!NESL ')) {
         return 'header';
     }
     if (trimmed.includes('=')) {

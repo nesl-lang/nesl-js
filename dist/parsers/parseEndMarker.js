@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.parseEndMarker = parseEndMarker;
 /**
- * Parse SHAM end marker line
+ * Parse NESL end marker line
  * Expected format: #!END_SHAM_XXX
  */
 function parseEndMarker(line) {

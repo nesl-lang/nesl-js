@@ -6,7 +6,7 @@
       "tests": [
         {
           "name": "basic-header",
-          "input": ["#!SHAM [@three-char-SHA-256: abc]"],
+          "input": ["#!NESL [@three-char-SHA-256: abc]"],
           "expected": "header"
         }
       ]
@@ -81,7 +81,7 @@
         },
         {
           "name": "malformed-header",
-          "input": ["#!SHAM without brackets"],
+          "input": ["#!NESL without brackets"],
           "expected": "header"
         },
         {

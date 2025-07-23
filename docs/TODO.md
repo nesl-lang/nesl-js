@@ -5,7 +5,7 @@ TODO
 
 that extra _SHAM_ is annoying and unnecessary
 
-- rename sham to nesl
+- rename nesl to nesl
 
 ---> do this later.  this stuff should be in the config
 

@@ -1,20 +1,20 @@
 
 
-==== proj/comp/sham-action-parser/proj/doc/API.md ====
+==== proj/comp/nesl-action-parser/proj/doc/API.md ====
 
-# SHAM Action Parser API
+# NESL Action Parser API
 
 ## Purpose
-Parse SHAM block string values into typed data and validate against action schemas in a single pass.
+Parse NESL block string values into typed data and validate against action schemas in a single pass.
 
 ## Public Interface
 
 ### parseAction(block: ShamBlock, schemas: ActionSchemas): ParseResult
 
-Parses a SHAM block's string properties into typed values according to the action schema.
+Parses a NESL block's string properties into typed values according to the action schema.
 
 **Parameters:**
-- `block`: ShamBlock with all string values from SHAM parser
+- `block`: ShamBlock with all string values from NESL parser
 - `schemas`: Action schemas loaded from unified-design.yaml
 
 **Returns:**
@@ -55,12 +55,12 @@ interface ParseError {
 - `INVALID_ENUM`: Value not in allowed enum values
 - `PARSE_ERROR`: General parsing failure
 
-==== proj/comp/sham-action-parser/proj/src/index.ts ====
+==== proj/comp/nesl-action-parser/proj/src/index.ts ====
 
 export { parseAction } from './parseAction';
 export type { ParseResult, ParseError, TypedAction, ShamBlock } from './parseAction';
 
-==== proj/comp/sham-action-parser/proj/src/parseAction.ts ====
+==== proj/comp/nesl-action-parser/proj/src/parseAction.ts ====
 
 import { readFileSync } from 'fs';
 import { join } from 'path';

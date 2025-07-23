@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const configPath = path.join(__dirname, '../sham-shared/config.json');
+const configPath = path.join(__dirname, '../nesl-shared/config.json');
 
 if (!fs.existsSync(configPath)) {
   console.error(`Config file not found: ${configPath}`);
@@ -18,18 +18,18 @@ try {
 
 const outputPath = path.join(__dirname, '../src/patterns.ts');
 
-const content = `// Generated from sham-shared/config.json - DO NOT EDIT
-// Generated from sham-shared/config.json - DO NOT EDIT
-// Generated from sham-shared/config.json - DO NOT EDIT
-// Generated from sham-shared/config.json - DO NOT EDIT
-// Generated from sham-shared/config.json - DO NOT EDIT
-// Generated from sham-shared/config.json - DO NOT EDIT
-// Generated from sham-shared/config.json - DO NOT EDIT!!!!!!!! 
-// Generated from sham-shared/config.json - DO NOT EDIT!!!!!!!! 
-// Generated from sham-shared/config.json - DO NOT EDIT!!!!!!!! 
-// Generated from sham-shared/config.json - DO NOT EDIT!!!!!!!! 
-// Generated from sham-shared/config.json - DO NOT EDIT!!!!!!!! 
-// Generated from sham-shared/config.json - DO NOT EDIT!!!!!!!! 
+const content = `// Generated from nesl-shared/config.json - DO NOT EDIT
+// Generated from nesl-shared/config.json - DO NOT EDIT
+// Generated from nesl-shared/config.json - DO NOT EDIT
+// Generated from nesl-shared/config.json - DO NOT EDIT
+// Generated from nesl-shared/config.json - DO NOT EDIT
+// Generated from nesl-shared/config.json - DO NOT EDIT
+// Generated from nesl-shared/config.json - DO NOT EDIT!!!!!!!! 
+// Generated from nesl-shared/config.json - DO NOT EDIT!!!!!!!! 
+// Generated from nesl-shared/config.json - DO NOT EDIT!!!!!!!! 
+// Generated from nesl-shared/config.json - DO NOT EDIT!!!!!!!! 
+// Generated from nesl-shared/config.json - DO NOT EDIT!!!!!!!! 
+// Generated from nesl-shared/config.json - DO NOT EDIT!!!!!!!! 
 export const BLOCK_ID_PATTERN = /${config.patterns.blockId}/;
 export const KEY_START_PATTERN = /${config.patterns.keyStart}/u;
 export const KEY_CHARS_PATTERN = /${config.patterns.keyChars}/u;

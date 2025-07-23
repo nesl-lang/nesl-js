@@ -1,11 +1,11 @@
 import type { HeaderResult } from '../types';
 
 /**
- * Parse SHAM header line
- * Expected format: #!SHAM [@three-char-SHA-256: XXX]
+ * Parse NESL header line
+ * Expected format: #!NESL [@three-char-SHA-256: XXX]
  */
 export function parseHeader(line: string): HeaderResult {
-  const match = line.match(/^#!SHAM \[@three-char-SHA-256: ([^\]]+)\]$/);
+  const match = line.match(/^#!NESL \[@three-char-SHA-256: ([^\]]+)\]$/);
   
   if (!match) {
     return { isValid: false };

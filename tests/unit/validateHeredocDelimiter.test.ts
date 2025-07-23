@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { validateHeredocDelimiter } from '../../src/validators/validateHeredocDelimiter';
-import testCases from '../../sham-shared/sham-test/unit/validateHeredocDelimiter.test.json';
+import testCases from '../../nesl-shared/nesl-test/unit/validateHeredocDelimiter.test.json';
 
 describe('validateHeredocDelimiter', () => {
   testCases.groups.forEach(group => {

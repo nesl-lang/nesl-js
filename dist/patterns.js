@@ -1,18 +1,18 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LINE_ENDING = exports.ERROR_CONTEXT_WINDOW = exports.MAX_FILE_SIZE = exports.BLOCK_ID_MAX_LENGTH = exports.BLOCK_ID_MIN_LENGTH = exports.KEY_MAX_LENGTH = exports.HEREDOC_PREFIX = exports.EXCLUDE_CHARS_PATTERN = exports.KEY_CHARS_PATTERN = exports.KEY_START_PATTERN = exports.BLOCK_ID_PATTERN = void 0;
-// Generated from sham-shared/config.json - DO NOT EDIT
-// Generated from sham-shared/config.json - DO NOT EDIT
-// Generated from sham-shared/config.json - DO NOT EDIT
-// Generated from sham-shared/config.json - DO NOT EDIT
-// Generated from sham-shared/config.json - DO NOT EDIT
-// Generated from sham-shared/config.json - DO NOT EDIT
-// Generated from sham-shared/config.json - DO NOT EDIT!!!!!!!! 
-// Generated from sham-shared/config.json - DO NOT EDIT!!!!!!!! 
-// Generated from sham-shared/config.json - DO NOT EDIT!!!!!!!! 
-// Generated from sham-shared/config.json - DO NOT EDIT!!!!!!!! 
-// Generated from sham-shared/config.json - DO NOT EDIT!!!!!!!! 
-// Generated from sham-shared/config.json - DO NOT EDIT!!!!!!!! 
+// Generated from nesl-shared/config.json - DO NOT EDIT
+// Generated from nesl-shared/config.json - DO NOT EDIT
+// Generated from nesl-shared/config.json - DO NOT EDIT
+// Generated from nesl-shared/config.json - DO NOT EDIT
+// Generated from nesl-shared/config.json - DO NOT EDIT
+// Generated from nesl-shared/config.json - DO NOT EDIT
+// Generated from nesl-shared/config.json - DO NOT EDIT!!!!!!!! 
+// Generated from nesl-shared/config.json - DO NOT EDIT!!!!!!!! 
+// Generated from nesl-shared/config.json - DO NOT EDIT!!!!!!!! 
+// Generated from nesl-shared/config.json - DO NOT EDIT!!!!!!!! 
+// Generated from nesl-shared/config.json - DO NOT EDIT!!!!!!!! 
+// Generated from nesl-shared/config.json - DO NOT EDIT!!!!!!!! 
 exports.BLOCK_ID_PATTERN = /^[A-Za-z0-9]{2,8}$/;
 exports.KEY_START_PATTERN = /^[\p{L}_]/u;
 exports.KEY_CHARS_PATTERN = /^[\p{L}\p{N}_]*$/u;

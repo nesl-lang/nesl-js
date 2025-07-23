@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { classifyLine } from '../../src/utils/classifyLine';
-import testCases from '../../sham-shared/sham-test/unit/classifyLine.test.json';
+import testCases from '../../nesl-shared/nesl-test/unit/classifyLine.test.json';
 
 describe('classifyLine', () => {
   testCases.groups.forEach(group => {

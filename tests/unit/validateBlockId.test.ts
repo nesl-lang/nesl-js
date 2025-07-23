@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { validateBlockId } from '../../src/validators/validateBlockId';
-import testCases from '../../sham-shared/sham-test/unit/validateBlockId.test.json';
+import testCases from '../../nesl-shared/nesl-test/unit/validateBlockId.test.json';
 
 describe('validateBlockId', () => {
   testCases.groups.forEach(group => {

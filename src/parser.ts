@@ -19,7 +19,7 @@ interface HeredocInfo {
 }
 
 /**
- * Parse SHAM format content into blocks and errors
+ * Parse NESL format content into blocks and errors
  * All parsing uses 0-based indices internally, converted to 1-based for output
  */
 export function parseSham(content: string): ParseResult {
@@ -73,8 +73,8 @@ export function parseSham(content: string): ParseResult {
               state = 'IN_BLOCK';
             } else {
               // Calculate position based on known header format
-              const prefixLength = '#!SHAM [@three-char-SHA-256: '.length;
-              const blockIdPosition = line.startsWith('#!SHAM [@three-char-SHA-256: ') 
+              const prefixLength = '#!NESL [@three-char-SHA-256: '.length;
+              const blockIdPosition = line.startsWith('#!NESL [@three-char-SHA-256: ') 
                 ? prefixLength 
                 : 0;
               addError(
@@ -86,7 +86,7 @@ export function parseSham(content: string): ParseResult {
               );
             }
           } else {
-            addError('MALFORMED_HEADER', lineNum, 'Invalid SHAM header format');
+            addError('MALFORMED_HEADER', lineNum, 'Invalid NESL header format');
           }
         } else if (lineType !== 'empty') {
           // Non-empty line outside of block - skip silently
@@ -146,8 +146,8 @@ export function parseSham(content: string): ParseResult {
               currentBlock = null;
               state = 'SEEKING_HEADER';
               // Calculate position based on known header format
-              const prefixLength = '#!SHAM [@three-char-SHA-256: '.length;
-              const blockIdPosition = line.startsWith('#!SHAM [@three-char-SHA-256: ') 
+              const prefixLength = '#!NESL [@three-char-SHA-256: '.length;
+              const blockIdPosition = line.startsWith('#!NESL [@three-char-SHA-256: ') 
                 ? prefixLength 
                 : 0;
               addError(

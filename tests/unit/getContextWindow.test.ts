@@ -4,7 +4,7 @@ import { join } from 'path';
 import { marked } from 'marked';
 import { getContextWindow } from '../../src/utils/getContextWindow';
 
-const testPath = join(__dirname, '../../sham-shared/sham-test/unit/getContextWindow.test.md');
+const testPath = join(__dirname, '../../nesl-shared/nesl-test/unit/getContextWindow.test.md');
 const mdContent = readFileSync(testPath, 'utf8');
 
 const tokens = marked.lexer(mdContent);

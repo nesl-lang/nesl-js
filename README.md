@@ -10,20 +10,20 @@ stuart@Stuarts-MacBook-Pro /t/test-nesl> # Test actual parsing
 thsi file is probably oudated.  need to start putting dates on this stuff
 
 
-# SHAM Parser for JavaScript
+# NESL Parser for JavaScript
 
-JavaScript parser implementation for the SHAM (Structured Hashed-marker) format.
+JavaScript parser implementation for the NESL (Structured Hashed-marker) format.
 
 ## Installation
 
 ```bash
-npm install sham-parser-js
+npm install nesl-parser-js
 ```
 
 ## Usage
 
 ```javascript
-import { parseSham } from 'sham-parser-js';
+import { parseSham } from 'nesl-parser-js';
 
 const result = parseSham(shamContent);
 console.log(result.blocks);

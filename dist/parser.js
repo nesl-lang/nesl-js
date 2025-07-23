@@ -11,7 +11,7 @@ const parseAssignment_1 = require("./parsers/parseAssignment");
 const classifyLine_1 = require("./utils/classifyLine");
 const getContextWindow_1 = require("./utils/getContextWindow");
 /**
- * Parse SHAM format content into blocks and errors
+ * Parse NESL format content into blocks and errors
  * All parsing uses 0-based indices internally, converted to 1-based for output
  */
 function parseSham(content) {
@@ -57,15 +57,15 @@ function parseSham(content) {
                         }
                         else {
                             // Calculate position based on known header format
-                            const prefixLength = '#!SHAM [@three-char-SHA-256: '.length;
-                            const blockIdPosition = line.startsWith('#!SHAM [@three-char-SHA-256: ')
+                            const prefixLength = '#!NESL [@three-char-SHA-256: '.length;
+                            const blockIdPosition = line.startsWith('#!NESL [@three-char-SHA-256: ')
                                 ? prefixLength
                                 : 0;
                             addError('INVALID_BLOCK_ID', lineNum, validation.error || 'Invalid block ID', blockIdPosition, headerResult.blockId.length);
                         }
                     }
                     else {
-                        addError('MALFORMED_HEADER', lineNum, 'Invalid SHAM header format');
+                        addError('MALFORMED_HEADER', lineNum, 'Invalid NESL header format');
                     }
                 }
                 else if (lineType !== 'empty') {
@@ -118,8 +118,8 @@ function parseSham(content) {
                             currentBlock = null;
                             state = 'SEEKING_HEADER';
                             // Calculate position based on known header format
-                            const prefixLength = '#!SHAM [@three-char-SHA-256: '.length;
-                            const blockIdPosition = line.startsWith('#!SHAM [@three-char-SHA-256: ')
+                            const prefixLength = '#!NESL [@three-char-SHA-256: '.length;
+                            const blockIdPosition = line.startsWith('#!NESL [@three-char-SHA-256: ')
                                 ? prefixLength
                                 : 0;
                             addError('INVALID_BLOCK_ID', lineNum, validation.error || 'Invalid block ID', blockIdPosition, headerResult.blockId.length);

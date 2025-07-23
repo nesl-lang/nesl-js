@@ -1,6 +1,6 @@
 import type { EndMarkerResult } from '../types';
 /**
- * Parse SHAM end marker line
+ * Parse NESL end marker line
  * Expected format: #!END_SHAM_XXX
  */
 export declare function parseEndMarker(line: string): EndMarkerResult;
