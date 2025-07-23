@@ -11,6 +11,22 @@
             "isEnd": true,
             "blockId": "xyz"
           }
+        },
+         {
+          "name": "normal-case",
+          "input": ["#!END_SHAM_xy"],
+          "expected": {
+            "isEnd": true,
+            "blockId": "xy"
+          }
+        },
+         {
+          "name": "normal-case",
+          "input": ["#!END_SHAM_12345678"],
+          "expected": {
+            "isEnd": true,
+            "blockId": "12345678"
+          }
         }
       ]
     },
@@ -34,13 +50,6 @@
         {
           "name": "extra-text-after",
           "input": ["#!END_SHAM_abc extra"],
-          "expected": {
-            "isEnd": false
-          }
-        },
-        {
-          "name": "wrong-id-length",
-          "input": ["#!END_SHAM_ab"],
           "expected": {
             "isEnd": false
           }

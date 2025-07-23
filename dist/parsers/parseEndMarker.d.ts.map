@@ -1,1 +1,1 @@
-{"version":3,"file":"parseEndMarker.d.ts","sourceRoot":"","sources":["../../src/parsers/parseEndMarker.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,eAAe,EAAE,MAAM,UAAU,CAAC;AAEhD;;;GAGG;AACH,wBAAgB,cAAc,CAAC,IAAI,EAAE,MAAM,GAAG,eAAe,CAW5D"}
+{"version":3,"file":"parseEndMarker.d.ts","sourceRoot":"","sources":["../../src/parsers/parseEndMarker.ts"],"names":[],"mappings":"AAAA,OAAO,KAAK,EAAE,eAAe,EAAE,MAAM,UAAU,CAAC;AAEhD;;;GAGG;AACH,wBAAgB,cAAc,CAAC,IAAI,EAAE,MAAM,GAAG,eAAe,CAY5D"}
