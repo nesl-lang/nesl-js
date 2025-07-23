@@ -11,7 +11,7 @@ function validateBlockId(id) {
     if (id.length < patterns_1.BLOCK_ID_MIN_LENGTH || id.length > patterns_1.BLOCK_ID_MAX_LENGTH) {
         return {
             valid: false,
-            error: `Block ID must be exactly ${patterns_1.BLOCK_ID_MIN_LENGTH} characters`
+            error: `Block ID must be exactly 3 characters`
         };
     }
     if (!patterns_1.BLOCK_ID_PATTERN.test(id)) {

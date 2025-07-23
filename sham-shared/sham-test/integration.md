@@ -267,9 +267,9 @@ key = "value"
 ### 009-invalid-block-id
 
 ```sh sham
-#!SHAM [@three-char-SHA-256: ab]
+#!SHAM [@three-char-SHA-256: a]
 key = "value"
-#!END_SHAM_ab
+#!END_SHAM_a
 ```
 
 ```json
@@ -279,10 +279,10 @@ key = "value"
     "code": "INVALID_BLOCK_ID",
     "line": 1,
     "column": 30,
-    "length": 2,
+    "length": 1,
     "blockId": null,
-    "content": "#!SHAM [@three-char-SHA-256: ab]",
-    "context": "#!SHAM [@three-char-SHA-256: ab]\nkey = \"value\"\n#!END_SHAM_ab",
+    "content": "#!SHAM [@three-char-SHA-256: a]",
+    "context": "#!SHAM [@three-char-SHA-256: a]\nkey = \"value\"\n#!END_SHAM_a",
     "message": "Block ID must be exactly 3 characters"
   }]
 }

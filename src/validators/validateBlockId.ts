@@ -10,7 +10,7 @@ export function validateBlockId(id: string): ValidationResult {
   if (id.length < BLOCK_ID_MIN_LENGTH || id.length > BLOCK_ID_MAX_LENGTH) {
     return {
       valid: false,
-      error: `Block ID must be exactly ${BLOCK_ID_MIN_LENGTH} characters`
+      error: `Block ID must be exactly 3 characters`
     };
   }
   

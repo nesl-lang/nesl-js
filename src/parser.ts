@@ -72,12 +72,16 @@ export function parseSham(content: string): ParseResult {
               };
               state = 'IN_BLOCK';
             } else {
-              const blockIdIndex = line.indexOf(headerResult.blockId);
+              // Calculate position based on known header format
+              const prefixLength = '#!SHAM [@three-char-SHA-256: '.length;
+              const blockIdPosition = line.startsWith('#!SHAM [@three-char-SHA-256: ') 
+                ? prefixLength 
+                : 0;
               addError(
                 'INVALID_BLOCK_ID',
                 lineNum,
                 validation.error || 'Invalid block ID',
-                blockIdIndex >= 0 ? blockIdIndex : 0,
+                blockIdPosition,
                 headerResult.blockId.length
               );
             }
@@ -141,12 +145,16 @@ export function parseSham(content: string): ParseResult {
               blocks.push(currentBlock);
               currentBlock = null;
               state = 'SEEKING_HEADER';
-              const blockIdIndex = line.indexOf(headerResult.blockId);
+              // Calculate position based on known header format
+              const prefixLength = '#!SHAM [@three-char-SHA-256: '.length;
+              const blockIdPosition = line.startsWith('#!SHAM [@three-char-SHA-256: ') 
+                ? prefixLength 
+                : 0;
               addError(
                 'INVALID_BLOCK_ID',
                 lineNum,
                 validation.error || 'Invalid block ID',
-                blockIdIndex >= 0 ? blockIdIndex : 0,
+                blockIdPosition,
                 headerResult.blockId.length
               );
             }
