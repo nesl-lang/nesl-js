@@ -55,10 +55,10 @@
 ### 002-single-block-basic
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: abc]
+#!nesl [@three-char-SHA-256: abc]
 path = "/tmp/test.txt"
 name = "example"
-#!END_NESL_abc
+#!end_abc
 ```
 
 ```json
@@ -79,8 +79,8 @@ name = "example"
 ### 003-empty-block
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: xyz]
-#!END_NESL_xyz
+#!nesl [@three-char-SHA-256: xyz]
+#!end_xyz
 ```
 
 ```json
@@ -98,12 +98,12 @@ name = "example"
 ### 004-heredoc-basic
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: h3r]
-content = <<'EOT_NESL_h3r'
+#!nesl [@three-char-SHA-256: h3r]
+content = <<'EOT_h3r'
 Line one
 Line two
-EOT_NESL_h3r
-#!END_NESL_h3r
+EOT_h3r
+#!end_h3r
 ```
 
 ```json
@@ -123,10 +123,10 @@ EOT_NESL_h3r
 ### 005-duplicate-key
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: dup]
+#!nesl [@three-char-SHA-256: dup]
 key = "first"
 key = "second"
-#!END_NESL_dup
+#!end_dup
 ```
 
 ```json
@@ -146,7 +146,7 @@ key = "second"
     "length": 3,
     "blockId": "dup",
     "content": "key = \"second\"",
-    "context": "#!NESL [@three-char-SHA-256: dup]\nkey = \"first\"\nkey = \"second\"\n#!END_NESL_dup",
+    "context": "#!nesl [@three-char-SHA-256: dup]\nkey = \"first\"\nkey = \"second\"\n#!end_dup",
     "message": "Duplicate key 'key' in block 'dup'"
   }]
 }
@@ -155,12 +155,12 @@ key = "second"
 ### 006-no-comments-allowed
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: cmt]
+#!nesl [@three-char-SHA-256: cmt]
 // This is not a comment
 key1 = "value1"
   // Not a comment with leading spaces
 key2 = "value2"
-#!END_NESL_cmt
+#!end_cmt
 ```
 
 ```json
@@ -181,7 +181,7 @@ key2 = "value2"
     "length": 24,
     "blockId": "cmt",
     "content": "// This is not a comment",
-    "context": "#!NESL [@three-char-SHA-256: cmt]\n// This is not a comment\nkey1 = \"value1\"\n  // Not a comment with leading spaces\nkey2 = \"value2\"",
+    "context": "#!nesl [@three-char-SHA-256: cmt]\n// This is not a comment\nkey1 = \"value1\"\n  // Not a comment with leading spaces\nkey2 = \"value2\"",
     "message": "Invalid line format in block 'cmt': not a valid key-value assignment or empty line"
   }, {
     "code": "MALFORMED_ASSIGNMENT",
@@ -190,7 +190,7 @@ key2 = "value2"
     "length": 38,
     "blockId": "cmt",
     "content": "  // Not a comment with leading spaces",
-    "context": "// This is not a comment\nkey1 = \"value1\"\n  // Not a comment with leading spaces\nkey2 = \"value2\"\n#!END_NESL_cmt",
+    "context": "// This is not a comment\nkey1 = \"value1\"\n  // Not a comment with leading spaces\nkey2 = \"value2\"\n#!end_cmt",
     "message": "Invalid line format in block 'cmt': not a valid key-value assignment or empty line"
   }]
 }
@@ -199,13 +199,13 @@ key2 = "value2"
 ### 007-heredoc-after-valid-end
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: col]
-content = <<'EOT_NESL_col'
+#!nesl [@three-char-SHA-256: col]
+content = <<'EOT_col'
 This line is fine
-EOT_NESL_col
+EOT_col
 This breaks parsing
-EOT_NESL_col
-#!END_NESL_col
+EOT_col
+#!end_col
 ```
 
 ```json
@@ -225,16 +225,16 @@ EOT_NESL_col
     "length": 19,
     "blockId": "col",
     "content": "This breaks parsing",
-    "context": "This line is fine\nEOT_NESL_col\nThis breaks parsing\nEOT_NESL_col\n#!END_NESL_col",
+    "context": "This line is fine\nEOT_col\nThis breaks parsing\nEOT_col\n#!end_col",
     "message": "Invalid line format in block 'col': not a valid key-value assignment or empty line"
   }, {
     "code": "MALFORMED_ASSIGNMENT",
     "line": 6,
     "column": 1,
-    "length": 12,
+    "length": 7,
     "blockId": "col",
-    "content": "EOT_NESL_col",
-    "context": "This line is fine\nEOT_NESL_col\nThis breaks parsing\nEOT_NESL_col\n#!END_NESL_col",
+    "content": "EOT_col",
+    "context": "This line is fine\nEOT_col\nThis breaks parsing\nEOT_col\n#!end_col",
     "message": "Invalid line format in block 'col': not a valid key-value assignment or empty line"
   }]
 }
@@ -243,9 +243,9 @@ EOT_NESL_col
 ### 008-malformed-header
 
 ```sh nesl
-#!NESL [missing-at-sign: bad]
+#!nesl [missing-at-sign: bad]
 key = "value"
-#!END_NESL_bad
+#!end_bad
 ```
 
 ```json
@@ -257,8 +257,8 @@ key = "value"
     "column": 1,
     "length": 29,
     "blockId": null,
-    "content": "#!NESL [missing-at-sign: bad]",
-    "context": "#!NESL [missing-at-sign: bad]\nkey = \"value\"\n#!END_NESL_bad",
+    "content": "#!nesl [missing-at-sign: bad]",
+    "context": "#!nesl [missing-at-sign: bad]\nkey = \"value\"\n#!end_bad",
     "message": "Invalid NESL header format"
   }]
 }
@@ -267,9 +267,9 @@ key = "value"
 ### 009-invalid-block-id
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: a]
+#!nesl [@three-char-SHA-256: a]
 key = "value"
-#!END_NESL_a
+#!end_a
 ```
 
 ```json
@@ -281,8 +281,8 @@ key = "value"
     "column": 30,
     "length": 1,
     "blockId": null,
-    "content": "#!NESL [@three-char-SHA-256: a]",
-    "context": "#!NESL [@three-char-SHA-256: a]\nkey = \"value\"\n#!END_NESL_a",
+    "content": "#!nesl [@three-char-SHA-256: a]",
+    "context": "#!nesl [@three-char-SHA-256: a]\nkey = \"value\"\n#!end_a",
     "message": "Block ID must be exactly 3 characters"
   }]
 }
@@ -291,9 +291,9 @@ key = "value"
 ### 010-unclosed-quote
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: quo]
+#!nesl [@three-char-SHA-256: quo]
 key = "unclosed
-#!END_NESL_quo
+#!end_quo
 ```
 
 ```json
@@ -311,7 +311,7 @@ key = "unclosed
     "length": 9,
     "blockId": "quo",
     "content": "key = \"unclosed",
-    "context": "#!NESL [@three-char-SHA-256: quo]\nkey = \"unclosed\n#!END_NESL_quo",
+    "context": "#!nesl [@three-char-SHA-256: quo]\nkey = \"unclosed\n#!end_quo",
     "message": "Unclosed quoted string"
   }]
 }
@@ -320,9 +320,9 @@ key = "unclosed
 ### 011-empty-quoted-value
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: emp]
+#!nesl [@three-char-SHA-256: emp]
 empty = ""
-#!END_NESL_emp
+#!end_emp
 ```
 
 ```json
@@ -342,10 +342,10 @@ empty = ""
 ### 012-empty-heredoc
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: ehd]
-content = <<'EOT_NESL_ehd'
-EOT_NESL_ehd
-#!END_NESL_ehd
+#!nesl [@three-char-SHA-256: ehd]
+content = <<'EOT_ehd'
+EOT_ehd
+#!end_ehd
 ```
 
 ```json
@@ -365,9 +365,9 @@ EOT_NESL_ehd
 ### 013-max-length-key
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: max]
+#!nesl [@three-char-SHA-256: max]
 k_56789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345123 = "256 chars"
-#!END_NESL_max
+#!end_max
 ```
 
 ```json
@@ -387,9 +387,9 @@ k_567890123456789012345678901234567890123456789012345678901234567890123456789012
 ### 014-key-too-long
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: lng]
+#!nesl [@three-char-SHA-256: lng]
 k_567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123451234 = "257 chars"
-#!END_NESL_lng
+#!end_lng
 ```
 
 ```json
@@ -407,7 +407,7 @@ k_567890123456789012345678901234567890123456789012345678901234567890123456789012
     "length": 257,
     "blockId": "lng",
     "content": "k_567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123451234 = \"257 chars\"",
-    "context": "#!NESL [@three-char-SHA-256: lng]\nk_567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123451234 = \"257 chars\"\n#!END_NESL_lng",
+    "context": "#!nesl [@three-char-SHA-256: lng]\nk_567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123451234 = \"257 chars\"\n#!end_lng",
     "message": "Key exceeds 256 character limit"
   }]
 }
@@ -416,7 +416,7 @@ k_567890123456789012345678901234567890123456789012345678901234567890123456789012
 ### 015-unclosed-block
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: unc]
+#!nesl [@three-char-SHA-256: unc]
 key = "value"
 ```
 
@@ -437,7 +437,7 @@ key = "value"
     "length": 0,
     "blockId": "unc",
     "content": "",
-    "context": "#!NESL [@three-char-SHA-256: unc]\nkey = \"value\"",
+    "context": "#!nesl [@three-char-SHA-256: unc]\nkey = \"value\"",
     "message": "Block 'unc' not closed before EOF"
   }]
 }
@@ -446,9 +446,9 @@ key = "value"
 ### 016-mismatched-end
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: mis]
+#!nesl [@three-char-SHA-256: mis]
 key = "value"
-#!END_NESL_xyz
+#!end_xyz
 ```
 
 ```json
@@ -465,10 +465,10 @@ key = "value"
     "code": "MISMATCHED_END",
     "line": 3,
     "column": 1,
-    "length": 14,
+    "length": 9,
     "blockId": "mis",
-    "content": "#!END_NESL_xyz",
-    "context": "#!NESL [@three-char-SHA-256: mis]\nkey = \"value\"\n#!END_NESL_xyz",
+    "content": "#!end_xyz",
+    "context": "#!nesl [@three-char-SHA-256: mis]\nkey = \"value\"\n#!end_xyz",
     "message": "End marker 'xyz' doesn't match block ID 'mis'"
   }]
 }
@@ -477,13 +477,13 @@ key = "value"
 ### 017-heredoc-with-nesl-markers
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: shm]
-content = <<'EOT_NESL_shm'
-This contains #!NESL [@three-char-SHA-256: xyz]
-And also #!END_NESL_xyz
+#!nesl [@three-char-SHA-256: shm]
+content = <<'EOT_shm'
+This contains #!nesl [@three-char-SHA-256: xyz]
+And also #!end_xyz
 But they're just content
-EOT_NESL_shm
-#!END_NESL_shm
+EOT_shm
+#!end_shm
 ```
 
 ```json
@@ -491,7 +491,7 @@ EOT_NESL_shm
   "blocks": [{
     "id": "shm",
     "properties": {
-      "content": "This contains #!NESL [@three-char-SHA-256: xyz]\nAnd also #!END_NESL_xyz\nBut they're just content"
+      "content": "This contains #!nesl [@three-char-SHA-256: xyz]\nAnd also #!end_xyz\nBut they're just content"
     },
     "startLine": 1,
     "endLine": 7
@@ -503,9 +503,9 @@ EOT_NESL_shm
 ### 018-missing-key-name
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: edg]
+#!nesl [@three-char-SHA-256: edg]
 = "missing key"
-#!END_NESL_edg
+#!end_edg
 ```
 
 ```json
@@ -523,7 +523,7 @@ EOT_NESL_shm
     "length": 1,
     "blockId": "edg",
     "content": "= \"missing key\"",
-    "context": "#!NESL [@three-char-SHA-256: edg]\n= \"missing key\"\n#!END_NESL_edg",
+    "context": "#!nesl [@three-char-SHA-256: edg]\n= \"missing key\"\n#!end_edg",
     "message": "Assignment without key name"
   }]
 }
@@ -532,10 +532,10 @@ EOT_NESL_shm
 ### 019-escaped-quotes
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: esc]
+#!nesl [@three-char-SHA-256: esc]
 path = "C:\\Users\\test\\file.txt"
 msg = "He said \"hello\""
-#!END_NESL_esc
+#!end_esc
 ```
 
 ```json
@@ -556,13 +556,13 @@ msg = "He said \"hello\""
 ### 020-multiple-blocks
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: bl1]
+#!nesl [@three-char-SHA-256: bl1]
 key1 = "value1"
-#!END_NESL_bl1
+#!end_bl1
 
-#!NESL [@three-char-SHA-256: bl2]
+#!nesl [@three-char-SHA-256: bl2]
 key2 = "value2"
-#!END_NESL_bl2
+#!end_bl2
 ```
 
 ```json
@@ -589,13 +589,13 @@ key2 = "value2"
 ### 021-heredoc-empty-lines
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: hel]
-content = <<'EOT_NESL_hel'
+#!nesl [@three-char-SHA-256: hel]
+content = <<'EOT_hel'
 Line 1
 
 Line 3
-EOT_NESL_hel
-#!END_NESL_hel
+EOT_hel
+#!end_hel
 ```
 
 ```json
@@ -615,9 +615,9 @@ EOT_NESL_hel
 ### 022-invalid-assignment
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: inv]
+#!nesl [@three-char-SHA-256: inv]
 key := "wrong operator"
-#!END_NESL_inv
+#!end_inv
 ```
 
 ```json
@@ -635,7 +635,7 @@ key := "wrong operator"
     "length": 2,
     "blockId": "inv",
     "content": "key := \"wrong operator\"",
-    "context": "#!NESL [@three-char-SHA-256: inv]\nkey := \"wrong operator\"\n#!END_NESL_inv",
+    "context": "#!nesl [@three-char-SHA-256: inv]\nkey := \"wrong operator\"\n#!end_inv",
     "message": "Invalid assignment operator ':=' - only '=' is allowed"
   }]
 }
@@ -644,11 +644,11 @@ key := "wrong operator"
 ### 023-utf8-keys
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: utf]
+#!nesl [@three-char-SHA-256: utf]
 用户名 = "张三"
 données_count = "42"
 αβγ = "greek"
-#!END_NESL_utf
+#!end_utf
 ```
 
 ```json
@@ -670,10 +670,10 @@ données_count = "42"
 ### 024-invalid-utf8-keys
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: bad]
+#!nesl [@three-char-SHA-256: bad]
 key name = "spaces not allowed"
 key​value = "zero-width space"
-#!END_NESL_bad
+#!end_bad
 ```
 
 ```json
@@ -691,7 +691,7 @@ key​value = "zero-width space"
     "length": 8,
     "blockId": "bad",
     "content": "key name = \"spaces not allowed\"",
-    "context": "#!NESL [@three-char-SHA-256: bad]\nkey name = \"spaces not allowed\"\nkey​value = \"zero-width space\"\n#!END_NESL_bad",
+    "context": "#!nesl [@three-char-SHA-256: bad]\nkey name = \"spaces not allowed\"\nkey​value = \"zero-width space\"\n#!end_bad",
     "message": "Key contains invalid character ' ' at position 4"
   }, {
     "code": "INVALID_KEY",
@@ -700,7 +700,7 @@ key​value = "zero-width space"
     "length": 9,
     "blockId": "bad",
     "content": "key​value = \"zero-width space\"",
-    "context": "#!NESL [@three-char-SHA-256: bad]\nkey name = \"spaces not allowed\"\nkey​value = \"zero-width space\"\n#!END_NESL_bad",
+    "context": "#!nesl [@three-char-SHA-256: bad]\nkey name = \"spaces not allowed\"\nkey​value = \"zero-width space\"\n#!end_bad",
     "message": "Key contains invalid character '​' at position 4"
   }]
 }
@@ -709,10 +709,10 @@ key​value = "zero-width space"
 ### 025-whitespace-in-keys
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: wsp]
+#!nesl [@three-char-SHA-256: wsp]
 	key = "tab at start"
 key	name = "tab in middle"
-#!END_NESL_wsp
+#!end_wsp
 ```
 
 ```json
@@ -730,7 +730,7 @@ key	name = "tab in middle"
     "length": 4,
     "blockId": "wsp",
     "content": "\tkey = \"tab at start\"",
-    "context": "#!NESL [@three-char-SHA-256: wsp]\n\tkey = \"tab at start\"\nkey\tname = \"tab in middle\"\n#!END_NESL_wsp",
+    "context": "#!nesl [@three-char-SHA-256: wsp]\n\tkey = \"tab at start\"\nkey\tname = \"tab in middle\"\n#!end_wsp",
     "message": "Key contains invalid character '\t' at position 1"
   }, {
     "code": "INVALID_KEY",
@@ -739,7 +739,7 @@ key	name = "tab in middle"
     "length": 8,
     "blockId": "wsp",
     "content": "key\tname = \"tab in middle\"",
-    "context": "#!NESL [@three-char-SHA-256: wsp]\n\tkey = \"tab at start\"\nkey\tname = \"tab in middle\"\n#!END_NESL_wsp",
+    "context": "#!nesl [@three-char-SHA-256: wsp]\n\tkey = \"tab at start\"\nkey\tname = \"tab in middle\"\n#!end_wsp",
     "message": "Key contains invalid character '\t' at position 4"
   }]
 }
@@ -748,10 +748,10 @@ key	name = "tab in middle"
 ### 026-newline-in-quoted-string
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: nwl]
+#!nesl [@three-char-SHA-256: nwl]
 key = "line1
 line2"
-#!END_NESL_nwl
+#!end_nwl
 ```
 
 ```json
@@ -769,7 +769,7 @@ line2"
     "length": 6,
     "blockId": "nwl",
     "content": "key = \"line1",
-    "context": "#!NESL [@three-char-SHA-256: nwl]\nkey = \"line1\nline2\"\n#!END_NESL_nwl",
+    "context": "#!nesl [@three-char-SHA-256: nwl]\nkey = \"line1\nline2\"\n#!end_nwl",
     "message": "Unclosed quoted string"
   }, {
     "code": "MALFORMED_ASSIGNMENT",
@@ -778,7 +778,7 @@ line2"
     "length": 6,
     "blockId": "nwl",
     "content": "line2\"",
-    "context": "#!NESL [@three-char-SHA-256: nwl]\nkey = \"line1\nline2\"\n#!END_NESL_nwl",
+    "context": "#!nesl [@three-char-SHA-256: nwl]\nkey = \"line1\nline2\"\n#!end_nwl",
     "message": "Invalid line format in block 'nwl': not a valid key-value assignment or empty line"
   }]
 }
@@ -787,10 +787,10 @@ line2"
 ### 027-unclosed-heredoc
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: uhd]
-content = <<'EOT_NESL_uhd'
+#!nesl [@three-char-SHA-256: uhd]
+content = <<'EOT_uhd'
 Some content
-#!END_NESL_uhd
+#!end_uhd
 ```
 
 ```json
@@ -808,8 +808,8 @@ Some content
     "length": 0,
     "blockId": "uhd",
     "content": "",
-    "context": "#!NESL [@three-char-SHA-256: uhd]\ncontent = <<'EOT_NESL_uhd'\nSome content\n#!END_NESL_uhd",
-    "message": "Heredoc 'EOT_NESL_uhd' not closed before EOF"
+    "context": "#!nesl [@three-char-SHA-256: uhd]\ncontent = <<'EOT_uhd'\nSome content\n#!end_uhd",
+    "message": "Heredoc 'EOT_uhd' not closed before EOF"
   }]
 }
 ```
@@ -817,9 +817,9 @@ Some content
 ### 028-invalid-value-format
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: ivf]
+#!nesl [@three-char-SHA-256: ivf]
 key = unquoted
-#!END_NESL_ivf
+#!end_ivf
 ```
 
 ```json
@@ -837,7 +837,7 @@ key = unquoted
     "length": 8,
     "blockId": "ivf",
     "content": "key = unquoted",
-    "context": "#!NESL [@three-char-SHA-256: ivf]\nkey = unquoted\n#!END_NESL_ivf",
+    "context": "#!nesl [@three-char-SHA-256: ivf]\nkey = unquoted\n#!end_ivf",
     "message": "Value must be a quoted string or heredoc"
   }]
 }
@@ -846,9 +846,9 @@ key = unquoted
 ### 029-block-id-special-chars
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: a-b]
+#!nesl [@three-char-SHA-256: a-b]
 key = "value"
-#!END_NESL_a-b
+#!end_a-b
 ```
 
 ```json
@@ -860,8 +860,8 @@ key = "value"
     "column": 30,
     "length": 3,
     "blockId": null,
-    "content": "#!NESL [@three-char-SHA-256: a-b]",
-    "context": "#!NESL [@three-char-SHA-256: a-b]\nkey = \"value\"\n#!END_NESL_a-b",
+    "content": "#!nesl [@three-char-SHA-256: a-b]",
+    "context": "#!nesl [@three-char-SHA-256: a-b]\nkey = \"value\"\n#!end_a-b",
     "message": "Block ID must contain only alphanumeric characters"
   }]
 }
@@ -870,11 +870,11 @@ key = "value"
 ### 030-no-comments-variations
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: ncm]
+#!nesl [@three-char-SHA-256: ncm]
 //not a comment without space
 // not a comment with space
 key = "value" // inline not allowed
-#!END_NESL_ncm
+#!end_ncm
 ```
 
 ```json
@@ -894,7 +894,7 @@ key = "value" // inline not allowed
     "length": 29,
     "blockId": "ncm",
     "content": "//not a comment without space",
-    "context": "#!NESL [@three-char-SHA-256: ncm]\n//not a comment without space\n// not a comment with space\nkey = \"value\" // inline not allowed\n#!END_NESL_ncm",
+    "context": "#!nesl [@three-char-SHA-256: ncm]\n//not a comment without space\n// not a comment with space\nkey = \"value\" // inline not allowed\n#!end_ncm",
     "message": "Invalid line format in block 'ncm': not a valid key-value assignment or empty line"
   }, {
     "code": "MALFORMED_ASSIGNMENT",
@@ -903,7 +903,7 @@ key = "value" // inline not allowed
     "length": 27,
     "blockId": "ncm",
     "content": "// not a comment with space",
-    "context": "#!NESL [@three-char-SHA-256: ncm]\n//not a comment without space\n// not a comment with space\nkey = \"value\" // inline not allowed\n#!END_NESL_ncm",
+    "context": "#!nesl [@three-char-SHA-256: ncm]\n//not a comment without space\n// not a comment with space\nkey = \"value\" // inline not allowed\n#!end_ncm",
     "message": "Invalid line format in block 'ncm': not a valid key-value assignment or empty line"
   }, {
     "code": "TRAILING_CONTENT",
@@ -912,7 +912,7 @@ key = "value" // inline not allowed
     "length": 21,
     "blockId": "ncm",
     "content": "key = \"value\" // inline not allowed",
-    "context": "#!NESL [@three-char-SHA-256: ncm]\n//not a comment without space\n// not a comment with space\nkey = \"value\" // inline not allowed\n#!END_NESL_ncm",
+    "context": "#!nesl [@three-char-SHA-256: ncm]\n//not a comment without space\n// not a comment with space\nkey = \"value\" // inline not allowed\n#!end_ncm",
     "message": "Unexpected content after quoted value"
   }]
 }
@@ -921,13 +921,13 @@ key = "value" // inline not allowed
 ### 031-heredoc-with-end-marker
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: abc]
-content = <<'EOT_NESL_abc'
+#!nesl [@three-char-SHA-256: abc]
+content = <<'EOT_abc'
 Some content here
-#!END_NESL_abc
+#!end_abc
 More content
-EOT_NESL_abc
-#!END_NESL_abc
+EOT_abc
+#!end_abc
 ```
 
 ```json
@@ -935,7 +935,7 @@ EOT_NESL_abc
   "blocks": [{
     "id": "abc",
     "properties": {
-      "content": "Some content here\n#!END_NESL_abc\nMore content"
+      "content": "Some content here\n#!end_abc\nMore content"
     },
     "startLine": 1,
     "endLine": 7
@@ -947,11 +947,11 @@ EOT_NESL_abc
 ### 032-emoji-in-keys
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: emj]
+#!nesl [@three-char-SHA-256: emj]
 😀_key = "emoji at start"
 key_😀 = "emoji at end"
 normal = "control case"
-#!END_NESL_emj
+#!end_emj
 ```
 
 ```json
@@ -971,7 +971,7 @@ normal = "control case"
     "length": 6,
     "blockId": "emj",
     "content": "😀_key = \"emoji at start\"",
-    "context": "#!NESL [@three-char-SHA-256: emj]\n😀_key = \"emoji at start\"\nkey_😀 = \"emoji at end\"\nnormal = \"control case\"\n#!END_NESL_emj",
+    "context": "#!nesl [@three-char-SHA-256: emj]\n😀_key = \"emoji at start\"\nkey_😀 = \"emoji at end\"\nnormal = \"control case\"\n#!end_emj",
     "message": "Key contains invalid character '😀' at position 1"
   }, {
     "code": "INVALID_KEY",
@@ -980,7 +980,7 @@ normal = "control case"
     "length": 6,
     "blockId": "emj",
     "content": "key_😀 = \"emoji at end\"",
-    "context": "#!NESL [@three-char-SHA-256: emj]\n😀_key = \"emoji at start\"\nkey_😀 = \"emoji at end\"\nnormal = \"control case\"\n#!END_NESL_emj",
+    "context": "#!nesl [@three-char-SHA-256: emj]\n😀_key = \"emoji at start\"\nkey_😀 = \"emoji at end\"\nnormal = \"control case\"\n#!end_emj",
     "message": "Key contains invalid character '😀' at position 5"
   }]
 }
@@ -989,14 +989,14 @@ normal = "control case"
 ### 033-surrogate-pairs-in-values
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: spv]
+#!nesl [@three-char-SHA-256: spv]
 emoji = "👨‍👩‍👧‍👦"
 mathematical = "𝐀𝐁𝐂"
-content = <<'EOT_NESL_spv'
+content = <<'EOT_spv'
 Emoji: 👍🏽
 Math: 𝕏 = 𝕐
-EOT_NESL_spv
-#!END_NESL_spv
+EOT_spv
+#!end_spv
 ```
 
 ```json
@@ -1018,13 +1018,13 @@ EOT_NESL_spv
 ### 034-utf8-replacement-chars
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: rep]
+#!nesl [@three-char-SHA-256: rep]
 key = "contains � replacement"
 �_invalid = "key with replacement"
-content = <<'EOT_NESL_rep'
+content = <<'EOT_rep'
 Line with � char
-EOT_NESL_rep
-#!END_NESL_rep
+EOT_rep
+#!end_rep
 ```
 
 ```json
@@ -1045,7 +1045,7 @@ EOT_NESL_rep
     "length": 9,
     "blockId": "rep",
     "content": "�_invalid = \"key with replacement\"",
-    "context": "#!NESL [@three-char-SHA-256: rep]\nkey = \"contains � replacement\"\n�_invalid = \"key with replacement\"\ncontent = <<'EOT_NESL_rep'\nLine with � char",
+    "context": "#!nesl [@three-char-SHA-256: rep]\nkey = \"contains � replacement\"\n�_invalid = \"key with replacement\"\ncontent = <<'EOT_rep'\nLine with � char",
     "message": "Key contains invalid character '�' at position 1"
   }]
 }
@@ -1054,9 +1054,9 @@ EOT_NESL_rep
 ### 035-malformed-utf8-in-header
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: �bc]
+#!nesl [@three-char-SHA-256: �bc]
 key = "value"
-#!END_NESL_�bc
+#!end_�bc
 ```
 
 ```json
@@ -1068,8 +1068,8 @@ key = "value"
     "column": 30,
     "length": 3,
     "blockId": null,
-    "content": "#!NESL [@three-char-SHA-256: �bc]",
-    "context": "#!NESL [@three-char-SHA-256: �bc]\nkey = \"value\"\n#!END_NESL_�bc",
+    "content": "#!nesl [@three-char-SHA-256: �bc]",
+    "context": "#!nesl [@three-char-SHA-256: �bc]\nkey = \"value\"\n#!end_�bc",
     "message": "Block ID must contain only alphanumeric characters"
   }]
 }
@@ -1080,27 +1080,27 @@ key = "value"
 ```sh nesl
 random text before nesl blocks is fine
 
-#!NESL [@three-char-SHA-256: k7m]
+#!nesl [@three-char-SHA-256: k7m]
 action = "create_file"
 path = "/tmp/hello.txt"
-content = <<'EOT_NESL_k7m'
+content = <<'EOT_k7m'
 Hello world!
 how are you?
-EOT_NESL_k7m
-#!END_NESL_k7m
+EOT_k7m
+#!end_k7m
 
 random text between nesl blocks is fine
 
 # create the hello2 file for other reasons
 
-#!NESL [@three-char-SHA-256: h7d]
+#!nesl [@three-char-SHA-256: h7d]
 action = "create_file"
 path = "/tmp/hello2.txt"
-content = <<'EOT_NESL_h7d'
+content = <<'EOT_h7d'
 Hello other world!
  how are you?
-EOT_NESL_h7d
-#!END_NESL_h7d
+EOT_h7d
+#!end_h7d
 
 random text after nesl blocks is fine
 ```
@@ -1133,12 +1133,12 @@ random text after nesl blocks is fine
 ### 037-multiple-blocks-no-spacing
 
 ```sh nesl
-#!NESL [@three-char-SHA-256: a1b]
+#!nesl [@three-char-SHA-256: a1b]
 key1 = "value1"
-#!END_NESL_a1b
-#!NESL [@three-char-SHA-256: c2d]
+#!end_a1b
+#!nesl [@three-char-SHA-256: c2d]
 key2 = "value2"
-#!END_NESL_c2d
+#!end_c2d
 ```
 
 ```json
@@ -1165,16 +1165,16 @@ key2 = "value2"
 ### 038-text-looks-like-nesl
 
 ```sh nesl
-This line mentions #!NESL but isn't a header
+This line mentions #!nesl but isn't a header
 
-#!NESL [@three-char-SHA-256: tst]
-doc = <<'EOT_NESL_tst'
-Example of #!NESL [@three-char-SHA-256: fake]
-And #!END_NESL_fake
-EOT_NESL_tst
-#!END_NESL_tst
+#!nesl [@three-char-SHA-256: tst]
+doc = <<'EOT_tst'
+Example of #!nesl [@three-char-SHA-256: fake]
+And #!end_fake
+EOT_tst
+#!end_tst
 
-More text with #!END_NESL_xyz that isn't real
+More text with #!end_xyz that isn't real
 ```
 
 ```json
@@ -1182,7 +1182,7 @@ More text with #!END_NESL_xyz that isn't real
   "blocks": [{
     "id": "tst",
     "properties": {
-      "doc": "Example of #!NESL [@three-char-SHA-256: fake]\nAnd #!END_NESL_fake"
+      "doc": "Example of #!nesl [@three-char-SHA-256: fake]\nAnd #!end_fake"
     },
     "startLine": 3,
     "endLine": 8

@@ -3,7 +3,7 @@ import { HEREDOC_PREFIX } from '../patterns';
 
 /**
  * Validate heredoc delimiter matches expected format
- * Must be exactly 'EOT_NESL_' + blockId
+ * Must be exactly 'EOT_' + blockId
  */
 export function validateHeredocDelimiter(delimiter: string, blockId: string): ValidationResult {
   const expected = `${HEREDOC_PREFIX}${blockId}`;

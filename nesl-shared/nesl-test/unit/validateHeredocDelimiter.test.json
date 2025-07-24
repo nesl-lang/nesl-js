@@ -6,7 +6,7 @@
       "tests": [
         {
           "name": "correct-id",
-          "input": ["EOT_NESL_abc", "abc"],
+          "input": ["EOT_abc", "abc"],
           "expected": { "valid": true }
         }
       ]
@@ -16,42 +16,34 @@
       "tests": [
         {
           "name": "wrong-id",
-          "input": ["EOT_NESL_xyz", "abc"],
+          "input": ["EOT_xyz", "abc"],
           "expected": {
             "valid": false,
-            "error": "Heredoc delimiter must be 'EOT_NESL_abc'"
+            "error": "Heredoc delimiter must be 'EOT_abc'"
           }
         },
         {
           "name": "wrong-prefix",
-          "input": ["END_NESL_abc", "abc"],
+          "input": ["end_abc", "abc"],
           "expected": {
             "valid": false,
-            "error": "Heredoc delimiter must be 'EOT_NESL_abc'"
-          }
-        },
-        {
-          "name": "lowercase-prefix",
-          "input": ["eot_nesl_abc", "abc"],
-          "expected": {
-            "valid": false,
-            "error": "Heredoc delimiter must be 'EOT_NESL_abc'"
+            "error": "Heredoc delimiter must be 'EOT_abc'"
           }
         },
         {
           "name": "extra-suffix",
-          "input": ["EOT_NESL_abc_extra", "abc"],
+          "input": ["EOT_abc_extra", "abc"],
           "expected": {
             "valid": false,
-            "error": "Heredoc delimiter must be 'EOT_NESL_abc'"
+            "error": "Heredoc delimiter must be 'EOT_abc'"
           }
         },
         {
           "name": "partial-match",
-          "input": ["EOT_NESL_ab", "abc"],
+          "input": ["EOT_ab", "abc"],
           "expected": {
             "valid": false,
-            "error": "Heredoc delimiter must be 'EOT_NESL_abc'"
+            "error": "Heredoc delimiter must be 'EOT_abc'"
           }
         }
       ]

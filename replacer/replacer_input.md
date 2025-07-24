@@ -1,3 +1,10 @@
+=== PROCESSED: 2025-07-23 20:57:53 ===
+ERROR Block 1: No match found in /Users/stuart/repos/nesl-lang/nesl-js/src/types.ts
+ERROR Block 2: No match found in /Users/stuart/repos/nesl-lang/nesl-js/src/parsers/parseHeader.ts
+ERROR Block 3: No match found in /Users/stuart/repos/nesl-lang/nesl-js/src/parser.ts
+ERROR Block 4: No match found in /Users/stuart/repos/nesl-lang/nesl-js/src/parser.ts
+===
+
 === PROCESSED: 2025-07-23 13:25:36 ===
 ERROR Block 1: No match found in /Users/stuart/repos/nesl-lang/nesl-js/src/types.ts
 ERROR Block 2: No match found in /Users/stuart/repos/nesl-lang/nesl-js/src/parsers/parseHeader.ts
@@ -45,11 +52,11 @@ Revert parseHeader to original implementation without position tracking
 <<<SEARCH>>>
 /**
  * Parse NESL header line
- * Expected format: #!NESL [@three-char-SHA-256: XXX]
+ * Expected format: #!nesl [@three-char-SHA-256: XXX]
  * Returns block ID and its 0-based position in the line
  */
 export function parseHeader(line: string): HeaderResult {
-  const match = line.match(/^#!NESL \[@three-char-SHA-256: ([^\]]+)\]$/);
+  const match = line.match(/^#!nesl \[@three-char-SHA-256: ([^\]]+)\]$/);
   
   if (!match) {
     return { isValid: false };
@@ -57,7 +64,7 @@ export function parseHeader(line: string): HeaderResult {
   
   // Calculate position of the captured block ID
   // match.index is start of full match, find where capture group starts
-  const prefixLength = '#!NESL [@three-char-SHA-256: '.length;
+  const prefixLength = '#!nesl [@three-char-SHA-256: '.length;
   const blockIdPosition = match.index! + prefixLength;
   
   return {
@@ -69,10 +76,10 @@ export function parseHeader(line: string): HeaderResult {
 <<<REPLACE>>>
 /**
  * Parse NESL header line
- * Expected format: #!NESL [@three-char-SHA-256: XXX]
+ * Expected format: #!nesl [@three-char-SHA-256: XXX]
  */
 export function parseHeader(line: string): HeaderResult {
-  const match = line.match(/^#!NESL \[@three-char-SHA-256: ([^\]]+)\]$/);
+  const match = line.match(/^#!nesl \[@three-char-SHA-256: ([^\]]+)\]$/);
   
   if (!match) {
     return { isValid: false };
@@ -137,8 +144,8 @@ Update parser to calculate block ID position only when validation fails, avoidin
               state = 'IN_BLOCK';
             } else {
               // Calculate position based on known header format
-              const prefixLength = '#!NESL [@three-char-SHA-256: '.length;
-              const blockIdPosition = line.startsWith('#!NESL [@three-char-SHA-256: ') 
+              const prefixLength = '#!nesl [@three-char-SHA-256: '.length;
+              const blockIdPosition = line.startsWith('#!nesl [@three-char-SHA-256: ') 
                 ? prefixLength 
                 : 0;
               addError(
@@ -212,8 +219,8 @@ Update second header parsing location with same position calculation approach
               currentBlock = null;
               state = 'SEEKING_HEADER';
               // Calculate position based on known header format
-              const prefixLength = '#!NESL [@three-char-SHA-256: '.length;
-              const blockIdPosition = line.startsWith('#!NESL [@three-char-SHA-256: ') 
+              const prefixLength = '#!nesl [@three-char-SHA-256: '.length;
+              const blockIdPosition = line.startsWith('#!nesl [@three-char-SHA-256: ') 
                 ? prefixLength 
                 : 0;
               addError(

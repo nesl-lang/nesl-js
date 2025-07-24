@@ -1,7 +1,7 @@
 
 TODO 
 
-- replace EOT_NESL_... with EOT_... and replace END_NESL_... with just END_...
+- replace EOT_... with EOT_... and replace end_... with just END_...
 
 that extra _NESL_ is annoying and unnecessary
 

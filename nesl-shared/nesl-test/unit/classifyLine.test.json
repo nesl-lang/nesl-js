@@ -6,7 +6,7 @@
       "tests": [
         {
           "name": "basic-header",
-          "input": ["#!NESL [@three-char-SHA-256: abc]"],
+          "input": ["#!nesl [@three-char-SHA-256: abc]"],
           "expected": "header"
         }
       ]
@@ -16,12 +16,12 @@
       "tests": [
         {
           "name": "basic-end",
-          "input": ["#!END_NESL_abc"],
+          "input": ["#!end_abc"],
           "expected": "end_marker"
         },
         {
           "name": "end-with-trailing-space",
-          "input": ["#!END_NESL_xyz "],
+          "input": ["#!end_xyz "],
           "expected": "end_marker"
         }
       ]
@@ -46,7 +46,7 @@
         },
         {
           "name": "heredoc-assignment",
-          "input": ["content = <<'EOT_NESL_abc'"],
+          "input": ["content = <<'EOT_abc'"],
           "expected": "assignment"
         }
       ]
@@ -81,7 +81,7 @@
         },
         {
           "name": "malformed-header",
-          "input": ["#!NESL without brackets"],
+          "input": ["#!nesl without brackets"],
           "expected": "header"
         },
         {

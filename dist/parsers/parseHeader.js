@@ -3,10 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.parseHeader = parseHeader;
 /**
  * Parse NESL header line
- * Expected format: #!NESL [@three-char-SHA-256: XXX]
+ * Expected format: #!nesl [@three-char-SHA-256: XXX]
  */
 function parseHeader(line) {
-    const match = line.match(/^#!NESL \[@three-char-SHA-256: ([^\]]+)\]$/);
+    const match = line.match(/^#!nesl \[@three-char-SHA-256: ([^\]]+)\]$/);
     if (!match) {
         return { isValid: false };
     }

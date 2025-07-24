@@ -6,7 +6,7 @@
       "tests": [
         {
           "name": "simple-header",
-          "input": ["#!NESL [@three-char-SHA-256: abc]"],
+          "input": ["#!nesl [@three-char-SHA-256: abc]"],
           "expected": {
             "isValid": true,
             "blockId": "abc"
@@ -19,49 +19,49 @@
       "tests": [
         {
           "name": "no-brackets",
-          "input": ["#!NESL abc"],
+          "input": ["#!nesl abc"],
           "expected": {
             "isValid": false
           }
         },
         {
           "name": "missing-at-sign",
-          "input": ["#!NESL [three-char-SHA-256: abc]"],
+          "input": ["#!nesl [three-char-SHA-256: abc]"],
           "expected": {
             "isValid": false
           }
         },
         {
           "name": "wrong-keyword",
-          "input": ["#!NESL [@different-format: abc]"],
+          "input": ["#!nesl [@different-format: abc]"],
           "expected": {
             "isValid": false
           }
         },
         {
-          "name": "lowercase-nesl",
-          "input": ["#!nesl [@three-char-SHA-256: abc]"],
+          "name": "uppercase-nesl",
+          "input": ["#!NESL [@three-char-SHA-256: abc]"],
           "expected": {
             "isValid": false
           }
         },
         {
           "name": "extra-spaces",
-          "input": ["#!NESL  [@three-char-SHA-256: abc]"],
+          "input": ["#!nesl  [@three-char-SHA-256: abc]"],
           "expected": {
             "isValid": false
           }
         },
         {
           "name": "trailing-text",
-          "input": ["#!NESL [@three-char-SHA-256: abc] extra"],
+          "input": ["#!nesl [@three-char-SHA-256: abc] extra"],
           "expected": {
             "isValid": false
           }
         },
         {
           "name": "no-space-after-colon",
-          "input": ["#!NESL [@three-char-SHA-256:abc]"],
+          "input": ["#!nesl [@three-char-SHA-256:abc]"],
           "expected": {
             "isValid": false
           }

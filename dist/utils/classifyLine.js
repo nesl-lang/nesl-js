@@ -11,10 +11,10 @@ function classifyLine(line) {
         return 'empty';
     }
     // Check in priority order from config
-    if (trimmed.startsWith('#!END_NESL_')) {
+    if (trimmed.startsWith('#!end_')) {
         return 'end_marker';
     }
-    if (trimmed.startsWith('#!NESL ')) {
+    if (trimmed.startsWith('#!nesl ')) {
         return 'header';
     }
     if (trimmed.includes('=')) {

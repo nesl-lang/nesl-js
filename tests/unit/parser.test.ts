@@ -4,13 +4,13 @@ import type { ParseResult } from '../../src/types';
 
 describe('parseNesl unit tests', () => {
   it('should correctly parse test case 007 (heredoc-after-valid-end)', () => {
-    const input = `#!NESL [@three-char-SHA-256: col]
-content = <<'EOT_NESL_col'
+    const input = `#!nesl [@three-char-SHA-256: col]
+content = <<'EOT_col'
 This line is fine
-EOT_NESL_col
+EOT_col
 This breaks parsing
-EOT_NESL_col
-#!END_NESL_col`;
+EOT_col
+#!end_col`;
 
     const expected: ParseResult = {
       blocks: [{
@@ -28,16 +28,16 @@ EOT_NESL_col
         length: 19,
         blockId: 'col',
         content: 'This breaks parsing',
-        context: "This line is fine\nEOT_NESL_col\nThis breaks parsing\nEOT_NESL_col\n#!END_NESL_col",
+        context: "This line is fine\nEOT_col\nThis breaks parsing\nEOT_col\n#!end_col",
         message: "Invalid line format in block 'col': not a valid key-value assignment or empty line"
       }, {
         code: 'MALFORMED_ASSIGNMENT',
         line: 6,
         column: 1,
-        length: 12,
+        length: 7,
         blockId: 'col',
-        content: 'EOT_NESL_col',
-        context: "This line is fine\nEOT_NESL_col\nThis breaks parsing\nEOT_NESL_col\n#!END_NESL_col",
+        content: 'EOT_col',
+        context: "This line is fine\nEOT_col\nThis breaks parsing\nEOT_col\n#!end_col",
         message: "Invalid line format in block 'col': not a valid key-value assignment or empty line"
       }]
     };

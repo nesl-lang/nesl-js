@@ -73,8 +73,8 @@ export function parseNesl(content: string): ParseResult {
               state = 'IN_BLOCK';
             } else {
               // Calculate position based on known header format
-              const prefixLength = '#!NESL [@three-char-SHA-256: '.length;
-              const blockIdPosition = line.startsWith('#!NESL [@three-char-SHA-256: ') 
+              const prefixLength = '#!nesl [@three-char-SHA-256: '.length;
+              const blockIdPosition = line.startsWith('#!nesl [@three-char-SHA-256: ') 
                 ? prefixLength 
                 : 0;
               addError(
@@ -146,8 +146,8 @@ export function parseNesl(content: string): ParseResult {
               currentBlock = null;
               state = 'SEEKING_HEADER';
               // Calculate position based on known header format
-              const prefixLength = '#!NESL [@three-char-SHA-256: '.length;
-              const blockIdPosition = line.startsWith('#!NESL [@three-char-SHA-256: ') 
+              const prefixLength = '#!nesl [@three-char-SHA-256: '.length;
+              const blockIdPosition = line.startsWith('#!nesl [@three-char-SHA-256: ') 
                 ? prefixLength 
                 : 0;
               addError(

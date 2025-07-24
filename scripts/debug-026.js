@@ -1,10 +1,10 @@
 import { parseNesl } from '../src/parser.js';
 import fs from 'fs';
 
-const input = `#!NESL [@three-char-SHA-256: nwl]
+const input = `#!nesl [@three-char-SHA-256: nwl]
 key = "line1
 line2"
-#!END_NESL_nwl`;
+#!end_nwl`;
 
 console.log('=== INPUT ===');
 console.log(JSON.stringify(input));

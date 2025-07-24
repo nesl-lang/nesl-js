@@ -50,23 +50,23 @@
       "tests": [
         {
           "name": "valid-heredoc",
-          "input": ["content = <<'EOT_NESL_abc'"],
+          "input": ["content = <<'EOT_abc'"],
           "expected": {
             "success": true,
             "type": "heredoc",
             "key": "content",
-            "delimiter": "EOT_NESL_abc"
+            "delimiter": "EOT_abc"
           }
         },
         {
           "name": "heredoc-no-quotes",
-          "input": ["content = <<EOT_NESL_abc"],
+          "input": ["content = <<EOT_abc"],
           "expected": {
             "success": false,
             "error": {
               "code": "INVALID_VALUE",
               "position": 10,
-              "length": 14
+              "length": 9
             }
           }
         }

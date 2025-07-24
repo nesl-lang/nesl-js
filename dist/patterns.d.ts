@@ -2,7 +2,7 @@ export declare const BLOCK_ID_PATTERN: RegExp;
 export declare const KEY_START_PATTERN: RegExp;
 export declare const KEY_CHARS_PATTERN: RegExp;
 export declare const EXCLUDE_CHARS_PATTERN: RegExp;
-export declare const HEREDOC_PREFIX = "EOT_NESL_";
+export declare const HEREDOC_PREFIX = "EOT_";
 export declare const KEY_MAX_LENGTH = 256;
 export declare const BLOCK_ID_MIN_LENGTH = 2;
 export declare const BLOCK_ID_MAX_LENGTH = 8;
