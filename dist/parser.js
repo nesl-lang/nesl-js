@@ -140,7 +140,9 @@ function parseNesl(content) {
                                 if (hasLeadingWhitespace) {
                                     // Report error for leading whitespace
                                     const leadingChar = rawKey[0];
-                                    addError('INVALID_KEY', lineNum, `Key contains invalid character '${leadingChar}' at position 1`, 0, rawKey.trimEnd().length);
+                                    // Calculate length up to and including the key, but not trailing whitespace
+                                    const keyEndIndex = rawKey.trimEnd().length;
+                                    addError('INVALID_KEY', lineNum, `Key contains invalid character '${leadingChar}' at position 1`, 0, keyEndIndex);
                                 }
                                 else if (invalidChar) {
                                     addError('INVALID_KEY', lineNum, `Key contains invalid character '${invalidChar.char}' at position ${invalidChar.position + 1}`, 0, assignment.key.length);
@@ -169,7 +171,9 @@ function parseNesl(content) {
                                 if (hasLeadingWhitespace) {
                                     // Report error for leading whitespace
                                     const leadingChar = rawKey[0];
-                                    addError('INVALID_KEY', lineNum, `Key contains invalid character '${leadingChar}' at position 1`, 0, rawKey.trimEnd().length);
+                                    // Calculate length up to and including the key, but not trailing whitespace
+                                    const keyEndIndex = rawKey.trimEnd().length;
+                                    addError('INVALID_KEY', lineNum, `Key contains invalid character '${leadingChar}' at position 1`, 0, keyEndIndex);
                                 }
                                 else if (invalidChar) {
                                     addError('INVALID_KEY', lineNum, `Key contains invalid character '${invalidChar.char}' at position ${invalidChar.position + 1}`, 0, assignment.key.length);
