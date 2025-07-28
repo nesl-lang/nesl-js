@@ -1,1 +1,0 @@
-// This file is no longer needed - tests are loaded dynamically in vitest

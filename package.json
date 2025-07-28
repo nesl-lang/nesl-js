@@ -1,18 +1,27 @@
 {
-  "name": "nesl-js",
+  "name": "nesl",
   "version": "0.1.10",
   "description": "JavaScript parser for NESL format",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "prebuild": "npm run generate:patterns",
     "build": "tsc",
+    "prepublishOnly": "npm run test && npm run build",
     "generate:patterns": "node scripts/generate-patterns.js",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "clean": "rm -rf dist"
   },
+  "keywords": ["nesl", "parser", "language"],
+  "author": "Your Name",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nesl-lang/nesl-js.git"
