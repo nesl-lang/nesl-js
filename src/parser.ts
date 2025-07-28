@@ -175,12 +175,14 @@ export function parseNesl(content: string): ParseResult {
                 if (hasLeadingWhitespace) {
                   // Report error for leading whitespace
                   const leadingChar = rawKey[0];
+                  // Calculate length up to and including the key, but not trailing whitespace
+                  const keyEndIndex = rawKey.trimEnd().length;
                   addError(
                     'INVALID_KEY',
                     lineNum,
                     `Key contains invalid character '${leadingChar}' at position 1`,
                     0,
-                    rawKey.trimEnd().length
+                    keyEndIndex
                   );
                 } else if (invalidChar) {
                   addError(
@@ -224,12 +226,14 @@ export function parseNesl(content: string): ParseResult {
                 if (hasLeadingWhitespace) {
                   // Report error for leading whitespace
                   const leadingChar = rawKey[0];
+                  // Calculate length up to and including the key, but not trailing whitespace
+                  const keyEndIndex = rawKey.trimEnd().length;
                   addError(
                     'INVALID_KEY',
                     lineNum,
                     `Key contains invalid character '${leadingChar}' at position 1`,
                     0,
-                    rawKey.trimEnd().length
+                    keyEndIndex
                   );
                 } else if (invalidChar) {
                   addError(

@@ -3,6 +3,45 @@ import { parseNesl } from '../../src/parser';
 import type { ParseResult } from '../../src/types';
 
 describe('parseNesl unit tests', () => {
+  it('should report correct error length for keys with leading whitespace', () => {
+    const input = `#!nesl [@three-char-SHA-256: abc]
+ key = "value"
+#!end_abc`;
+
+    const result = parseNesl(input);
+    
+    expect(result.errors).toHaveLength(1);
+    expect(result.errors[0].code).toBe('INVALID_KEY');
+    expect(result.errors[0].column).toBe(1);
+    expect(result.errors[0].length).toBe(4); // ' key' = 4 chars
+  });
+
+  it('should report correct error length for keys with leading and trailing whitespace', () => {
+    const input = `
+#!nesl [@three-char-SHA-256: abc]
+ key   = "value"
+#!end_abc`;
+
+    const result = parseNesl(input);
+    
+    expect(result.errors).toHaveLength(1);
+    expect(result.errors[0].code).toBe('INVALID_KEY');
+    expect(result.errors[0].column).toBe(1);
+    expect(result.errors[0].length).toBe(4); // ' key' = 4 chars (leading space + key, not trailing spaces)
+  });
+
+  it('should report correct error length for keys with only trailing whitespace', () => {
+    const input = `#!nesl [@three-char-SHA-256: abc]
+key   = "value"
+#!end_abc`;
+
+    const result = parseNesl(input);
+    
+    // This should pass - no leading whitespace means no error
+    expect(result.errors).toHaveLength(0);
+    expect(result.blocks[0].properties.key).toBe('value');
+  });
+
   it('should correctly parse test case 007 (heredoc-after-valid-end)', () => {
     const input = `#!nesl [@three-char-SHA-256: col]
 content = <<'EOT_col'

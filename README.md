@@ -188,7 +188,6 @@ console.log(result.errors[0]);
 ## Limitations
 
 - File size limit: 100MB
-- Block IDs: 2-8 characters (currently enforced as exactly 3)
 - Key length: 256 characters maximum
 - Values must be strings (no numbers, booleans, or objects)
 - No comments supported
