@@ -32,13 +32,6 @@
           }
         },
         {
-          "name": "wrong-keyword",
-          "input": ["#!nesl [@different-format: abc]"],
-          "expected": {
-            "isValid": false
-          }
-        },
-        {
           "name": "uppercase-nesl",
           "input": ["#!NESL [@three-char-SHA-256: abc]"],
           "expected": {

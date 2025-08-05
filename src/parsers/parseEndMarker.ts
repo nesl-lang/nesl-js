@@ -5,13 +5,17 @@ import type { EndMarkerResult } from '../types';
  * Expected format: #!end_XXX
  */
 export function parseEndMarker(line: string): EndMarkerResult {
-  const match = line.match(/^#!end_([A-Za-z0-9]{2,8})$/);   
+  // const match = line.match(/^#!end_([A-Za-z0-9]{2,8})$/);
+  // need to secretly allow optional apostrophe after the end delimter.   another common LLM mistake
+  // TODO: When warning system is implemented, add warning for non-standard end markers
+  const match = line.match(/^#!end_([A-Za-z0-9]{2,8})'?$/);
 
-  
+
+
   if (!match) {
     return { isEnd: false };
   }
-  
+
   return {
     isEnd: true,
     blockId: match[1]

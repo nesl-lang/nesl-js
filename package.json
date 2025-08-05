@@ -1,6 +1,6 @@
 {
   "name": "nesl",
-  "version": "0.1.12-beta.0",
+  "version": "0.1.12-beta.1",
   "description": "JavaScript parser for NESL format",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

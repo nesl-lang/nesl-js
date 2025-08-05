@@ -100,8 +100,10 @@ name = "example"
 ```sh nesl
 #!nesl [@three-char-SHA-256: h3r]
 content = <<'EOT_h3r'
+
 Line one
 Line two
+
 EOT_h3r
 #!end_h3r
 ```
@@ -111,10 +113,10 @@ EOT_h3r
   "blocks": [{
     "id": "h3r",
     "properties": {
-      "content": "Line one\nLine two"
+      "content": "\nLine one\nLine two\n"
     },
     "startLine": 1,
-    "endLine": 6
+    "endLine": 8
   }],
   "errors": []
 }

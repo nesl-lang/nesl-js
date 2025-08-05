@@ -57,6 +57,9 @@ export function parseNesl(content: string): ParseResult {
     const line = lines[i];
     const lineType = classifyLine(line);
 
+    // // ADD THIS DEBUG LINE HERE:
+    // console.log(`Line ${lineNum}: "${line}" (type: ${lineType}, state: ${state})`);
+
     switch (state) {
       case 'SEEKING_HEADER': {
         if (lineType === 'header') {
@@ -74,8 +77,8 @@ export function parseNesl(content: string): ParseResult {
             } else {
               // Calculate position based on known header format
               const prefixLength = '#!nesl [@three-char-SHA-256: '.length;
-              const blockIdPosition = line.startsWith('#!nesl [@three-char-SHA-256: ') 
-                ? prefixLength 
+              const blockIdPosition = line.startsWith('#!nesl [@three-char-SHA-256: ')
+                ? prefixLength
                 : 0;
               addError(
                 'INVALID_BLOCK_ID',
@@ -147,8 +150,8 @@ export function parseNesl(content: string): ParseResult {
               state = 'SEEKING_HEADER';
               // Calculate position based on known header format
               const prefixLength = '#!nesl [@three-char-SHA-256: '.length;
-              const blockIdPosition = line.startsWith('#!nesl [@three-char-SHA-256: ') 
-                ? prefixLength 
+              const blockIdPosition = line.startsWith('#!nesl [@three-char-SHA-256: ')
+                ? prefixLength
                 : 0;
               addError(
                 'INVALID_BLOCK_ID',
@@ -161,14 +164,14 @@ export function parseNesl(content: string): ParseResult {
           }
         } else if (lineType === 'assignment') {
           const assignment = parseAssignment(line);
-          
+
           if (assignment.success) {
             if (assignment.type === 'key-value') {
               // Check for leading whitespace in the original line
               const equalIndex = line.indexOf('=');
               const rawKey = line.substring(0, equalIndex);
               const hasLeadingWhitespace = rawKey.length > 0 && rawKey[0] !== rawKey.trimStart()[0];
-              
+
               const keyValidation = validateKey(assignment.key);
               if (!keyValidation.valid || hasLeadingWhitespace) {
                 const invalidChar = findInvalidCharPosition(assignment.key);
@@ -219,7 +222,7 @@ export function parseNesl(content: string): ParseResult {
               const equalIndex = line.indexOf('=');
               const rawKey = line.substring(0, equalIndex);
               const hasLeadingWhitespace = rawKey.length > 0 && rawKey[0] !== rawKey.trimStart()[0];
-              
+
               const keyValidation = validateKey(assignment.key);
               if (!keyValidation.valid || hasLeadingWhitespace) {
                 const invalidChar = findInvalidCharPosition(assignment.key);
@@ -253,7 +256,7 @@ export function parseNesl(content: string): ParseResult {
                   );
                 }
               }
-              
+
               if (keyValidation.valid && !hasLeadingWhitespace && assignment.key in currentBlock.properties) {
                 addError(
                   'DUPLICATE_KEY',
@@ -263,7 +266,7 @@ export function parseNesl(content: string): ParseResult {
                   assignment.key.length
                 );
               }
-              
+
               // Process heredoc if key is valid (duplicate or not)
               if (keyValidation.valid) {
                 const delimiterValidation = validateHeredocDelimiter(assignment.delimiter, currentBlock.id);
@@ -356,17 +359,43 @@ export function parseNesl(content: string): ParseResult {
         break;
       }
 
+      // TODO: When warning system is implemented, add warning for non-standard heredoc format
+      // Warning: Delimiter should be on its own line for standard heredoc format
       case 'IN_HEREDOC': {
         if (!heredocInfo || !currentBlock) break;
 
-        if (line === heredocInfo.delimiter) {
-          // End of heredoc
-          const content = heredocInfo.content.join('\n');
-          currentBlock.properties[heredocInfo.key] = content;
-          heredocInfo = null;
-          state = 'IN_BLOCK';
+        // Check if delimiter appears anywhere in the line
+        const delimiterIndex = line.indexOf(heredocInfo.delimiter);
+
+        if (delimiterIndex !== -1) {
+          // Check if it's a standalone delimiter (standard case) or inline (LLM mistake)
+          const beforeDelimiter = line.substring(0, delimiterIndex);
+          const afterDelimiter = line.substring(delimiterIndex + heredocInfo.delimiter.length);
+
+          // Make sure we're not matching the delimiter in the heredoc opening syntax
+          const isHeredocOpening = beforeDelimiter.includes('<<');
+
+          if (!isHeredocOpening && delimiterIndex === 0 && afterDelimiter === '') {
+            // Standard case: delimiter alone on line
+            const content = heredocInfo.content.join('\n');
+            currentBlock.properties[heredocInfo.key] = content;
+            heredocInfo = null;
+            state = 'IN_BLOCK';
+          } else if (!isHeredocOpening && (afterDelimiter === '' || afterDelimiter === "'")) {
+            // LLM mistake case: delimiter at end of content line
+            if (beforeDelimiter) {
+              heredocInfo.content.push(beforeDelimiter);
+            }
+            const content = heredocInfo.content.join('\n');
+            currentBlock.properties[heredocInfo.key] = content;
+            heredocInfo = null;
+            state = 'IN_BLOCK';
+          } else {
+            // Regular content line or heredoc opening line
+            heredocInfo.content.push(line);
+          }
         } else {
-          // All lines in heredoc are content
+          // Regular content line
           heredocInfo.content.push(line);
         }
         break;
@@ -415,7 +444,7 @@ function getErrorMessage(code: string, line: string, blockId?: string | null): s
     case 'TRAILING_CONTENT':
       return 'Unexpected content after quoted value';
     case 'MALFORMED_ASSIGNMENT':
-      return blockId 
+      return blockId
         ? `Invalid line format in block '${blockId}': not a valid key-value assignment or empty line`
         : 'Invalid assignment format';
     default:
